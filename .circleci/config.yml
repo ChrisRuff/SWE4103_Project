@@ -6,9 +6,15 @@ jobs:
     steps:
         - checkout
         - run:
-            name: Install dependencies
+            name: Install Frontend Environment
             command: cd frontend && npm ci
         - run:
-            name: Run tests
+            name: Install C# Environment
+            command: sudo apt-get update && sudo apt-get install -y apt-transport-https && wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && sudo dpkg -i packages-microsoft-prod.deb && sudo apt-get update && sudo apt-get install -y dotnet-sdk-3.1
+        - run:
+            name: Run React tests
             command: cd frontend && npm test
+        - run:
+            name: Run C# tests
+            command: dotnet test test/test.csproj
 
