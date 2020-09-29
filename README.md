@@ -17,7 +17,22 @@ Backend is now working as well! Although no CI is working for it right now.
 
 You can now connect to the development server by typing localhost:5000 into your web browser
 
-## Windows ##
+### MacOS ###
+* Install dotnet. You can do this easily by installing [Homebrew package manager](https://brew.sh/) and running the following command:
+>`brew cask install dotnet`
+
+* Now you must install a .Net Core SDK found [here](https://aka.ms/dotnet-download).
+
+* Then run these commands:
+>`export ASPNETCORE_Environment=Development && dotnet build`
+
+>`cd frontend && npm ci && cd ..`
+
+>`dotnet run`
+
+You can now connect to the development server by typing localhost:5001 into your web browser
+
+### Windows ###
 I'm not sure yet ¯\\_(ツ)_/¯.
 
 To find out how to build and run the front end see [this link](./frontend)
