@@ -2,8 +2,7 @@
 
 Presented to you by TEAM 2!
 
-Frontend is hooked up with circleci and will build, and run the tests every time master is pushed to. 
-Backend is now working as well! Although no CI is working for it right now.
+CircleCI will run on each merge request to ensure the build works correctly. 
 
 ## Running the project ##
 ### Linux ###
@@ -15,7 +14,7 @@ Backend is now working as well! Although no CI is working for it right now.
 
 >`dotnet run`
 
-You can now connect to the development server by typing localhost:5000 into your web browser
+You can now connect to the development server by typing localhost:5000 into your web browser 
 
 ### MacOS ###
 * Install dotnet. You can do this easily by installing [Homebrew package manager](https://brew.sh/) and running the following command:
