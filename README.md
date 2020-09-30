@@ -8,9 +8,9 @@ CircleCI will run on each merge request to ensure the build works correctly.
 ### Linux ###
 * Install dotnet as well as aspnet-runtime. 
 * Run these commands:
->`export ASPNETCORE_Environment=Development && dotnet build`
-
 >`cd frontend && npm ci && cd ..`
+
+>`export ASPNETCORE_Environment=Development && dotnet build`
 
 >`dotnet run`
 
