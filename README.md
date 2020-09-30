@@ -37,4 +37,18 @@ I'm not sure yet ¯\\_(ツ)_/¯.
 To find out how to build and run the front end see [this link](./frontend)
 If you have any questions running the frontend please ask for help from someone on the team! 
 
+
+### Running tests ###
+#### Frontend tests ####
+To run tests for frontend execute:
+>`cd frontend && npm test`
+
+This will take you to a new window that allows you to run tests.
+
+#### Backend tests ####
+To run tests for backend execute:
+>`dotnet test test/`
+
+This will run all the unit tests contained within the test folder.
+
 # Happy developing! #
