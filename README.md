@@ -38,6 +38,7 @@ Two different ways:
 *Follow the instructions from the Linux section above
 *You may need to update your npm using before running dotnet run
 >`npm install -g npm`
+
 NOTE: With Ubuntu in order to get to your Documents directory, for example, you have to first do (with your own Username)
 >`cd /mnt/c/Users/Maddy/Documents/`
 
@@ -46,8 +47,11 @@ NOTE: With Ubuntu in order to get to your Documents directory, for example, you 
 *Download Nodejs - https://nodejs.org/en/ (14.13.0 Current)
 *In command prompt do 
 >`cd frontend`
+
 >`npm ci`
+
 >`cd ..`
+
 >`dotnet run`
 
 You can now connect to the development server by typing localhost:5000 into your web browser 
