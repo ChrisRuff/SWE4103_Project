@@ -34,18 +34,18 @@ You can now connect to the development server by typing localhost:5001 into your
 ### Windows ###
 Two different ways:
 1. Using Ubuntu (a Linux command prompt application easily available for Windows)
-*Download Ubuntu from the Microsoft store
-*Follow the instructions from the Linux section above
-*You may need to update your npm using before running dotnet run
+* Download Ubuntu from the Microsoft store
+* Follow the instructions from the Linux section above
+* You may need to update your npm using before running dotnet run
 >`npm install -g npm`
 
 NOTE: With Ubuntu in order to get to your Documents directory, for example, you have to first do (with your own Username)
 >`cd /mnt/c/Users/Maddy/Documents/`
 
 2. On Windows
-*Download .NET - https://dotnet.microsoft.com/download (.NET Core 3.1 downloads)
-*Download Nodejs - https://nodejs.org/en/ (14.13.0 Current)
-*In command prompt do 
+* Download .NET - https://dotnet.microsoft.com/download (.NET Core 3.1 downloads)
+* Download Nodejs - https://nodejs.org/en/ (14.13.0 Current)
+* In command prompt do 
 >`cd frontend`
 
 >`npm ci`
