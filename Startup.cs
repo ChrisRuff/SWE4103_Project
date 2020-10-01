@@ -44,7 +44,7 @@ namespace backend
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+						app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
@@ -52,9 +52,7 @@ namespace backend
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
 
             app.UseSpa(spa =>
@@ -66,6 +64,8 @@ namespace backend
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
         }
+
     }
 }
