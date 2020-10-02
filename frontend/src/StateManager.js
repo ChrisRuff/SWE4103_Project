@@ -1,3 +1,4 @@
+
 export var StateManager = {
     exampleData: null,
     setExampleData(data) {
