@@ -17,10 +17,11 @@ function App() {
 	// Asynchronous call using fetch
 	AspNetConnector.callExampleEndpointFetch().then(data => { console.log(data[0].message) });
 	
-	// Synchronous call using XMLHttpRequest
+	/* Synchronous call using XMLHttpRequest
 	var res = AspNetConnector.callExampleEndpointXML();
 	console.log(res[0].message);
-	
+	*/
+
 	// ###########################################################
 
   return (
