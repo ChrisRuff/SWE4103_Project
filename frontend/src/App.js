@@ -1,29 +1,30 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { AspNetConnector } from './AspNetConnector.js';
+import { StateManager } from './StateManager.js'; 
 
 function App() {
 
 	// ###########################################################
-	// TODO: Create StateManager
-	//				- A place to set data that may be useful in other 
-	//					 parts of the program
-	//        - A place to get data from other parts of the program
-
-	// TODO: Create AspNetConnector
-	//				- A universal connector to the backend containing
-	//					 functions to get data from all endpoints
-	
 	// How to call an enpoint and print it to the web console
 	// Press Ctrl-Shift-C then click console on Windows/Linux
 	// or Setings -> More Tools -> Developer Tools then click console
-	fetch('apiexample/get')
-        .then(res => res.json())
-        .then((data) => {
-					console.log(data) 
-				})
-        .catch()
-
+	
+	// Asynchronous call using fetch
+	AspNetConnector.callExampleEndpointFetch().then(data => { console.log(data[0].message) });
+	
+	/* Synchronous call using XMLHttpRequest
+	var res = AspNetConnector.callExampleEndpointXML();
+	console.log(res[0].message);
+	*/
+	
+	// Storing data in the StateManager is an easy way to pass data from
+	// one react component to another
+	StateManager.setExampleData("Data to be used in another component.");
+	
+	var exData = StateManager.getExampleData();
+	console.log(exData);
 	// ###########################################################
 
   return (
