@@ -10,9 +10,9 @@ CircleCI will run on each merge request to ensure the build works correctly.
 * Run these commands:
 >`cd frontend && npm ci && cd ..`
 
->`export ASPNETCORE_Environment=Development && dotnet build`
+>`export ASPNETCORE_Environment=Development && make build`
 
->`dotnet run`
+>`make run`
 
 You can now connect to the development server by typing localhost:5000 into your web browser 
 
@@ -27,7 +27,7 @@ You can now connect to the development server by typing localhost:5000 into your
 
 >`cd frontend && npm ci && cd ..`
 
->`dotnet run`
+>`dotnet run --project backend/backend.csproj`
 
 You can now connect to the development server by typing localhost:5001 into your web browser
 
@@ -52,7 +52,7 @@ NOTE: With Ubuntu in order to get to your Documents directory, for example, you 
 
 >`cd ..`
 
->`dotnet run`
+>`dotnet run --project backend/backend.csproj`
 
 You can now connect to the development server by typing localhost:5000 into your web browser 
 
@@ -62,16 +62,18 @@ To find out how to build and run the front end see [this link](./frontend)
 If you have any questions running the frontend please ask for help from someone on the team! 
 
 
-### Running tests ###
-#### Frontend tests ####
+## Running tests ##
+Running `make test` will run all tests in the project (frontend and backend)
+
+### Frontend tests ###
 To run tests for frontend execute:
 >`cd frontend && npm test`
 
 This will take you to a new window that allows you to run tests.
 
-#### Backend tests ####
+### Backend tests ###
 To run tests for backend execute:
->`dotnet test test/`
+>`dotnet test`
 
 This will run all the unit tests contained within the test folder.
 
