@@ -3,6 +3,7 @@ jobs:
   build:
     docker: 
       - image: circleci/node:8
+      - image: 'circleci/mongo:latest'
     steps:
         - checkout
         - run:
