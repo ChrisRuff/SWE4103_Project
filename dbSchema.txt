@@ -5,9 +5,9 @@ db.createCollection('profs');
 db.students.insert({
     "name":"chris ruff", 
     "absents": [
-								{"class": "SWE4103", 
-								 "num": 0}
-							 ], 
+	{"class": "SWE4103", 
+	 "num": 0}
+	], 
     "email":"cruff@unb.ca"
     });
 
