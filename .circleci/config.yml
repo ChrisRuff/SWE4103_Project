@@ -16,5 +16,5 @@ jobs:
             command: cd frontend && npm test
         - run:
             name: Run C# tests
-            command: dotnet test test/test.csproj
+            command: make test
 
