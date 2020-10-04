@@ -32,21 +32,21 @@ namespace backend
 			students = database.GetCollection<BsonDocument>("students");
 		}
 
-		public bool AddStudent(string name, string[] classes, string email)
+		public bool AddStudent(string name, string[] classNames, string email)
 		{
-			// Create an array of all the recorded absents the student has
-			// (this is also a list of all the classes the student is in)
-			BsonArray absents = new BsonArray(classes.Length); 
-			for(int i = 0; i < classes.Length; ++i)
+			// Create an array of all the classes the student has
+			BsonArray classes = new BsonArray(classNames.Length); 
+			for(int i = 0; i < classNames.Length; ++i)
 			{
-				absents.Add(new BsonDocument{ {"name", classes[i]}, {"num", 0} });
+				classes.Add(new BsonDocument{ {"name", classNames[i]}, {"absents", 0}, 
+						{ "seat", new BsonDocument{{"x", -1}, {"y", -1}}}});
 			}
 
 			// Create the student document
 			BsonDocument newStudent = new BsonDocument
 			{
 				{ "name", name },
-				{ "absents", absents },
+				{ "classes", classes },
 				{ "email", email }
 			};
 
@@ -79,10 +79,38 @@ namespace backend
 			FilterDefinition<BsonDocument> query = 
 				Builders<BsonDocument>.Filter.Eq("email", studentEmail);
 
+			var classDoc = new BsonDocument{{"name", className}, {"absents", 0}};
+			classDoc.Add("seat", new BsonDocument{{"x", -1}, {"y", -1}});
+
 			// Create a update routine that will add a class 
 			// (with absents field to the student document)
 			UpdateDefinition<BsonDocument> update = 
-				Builders<BsonDocument>.Update.AddToSet("absents", new BsonDocument{{"name", className}, {"num", 0}});
+				Builders<BsonDocument>.Update.AddToSet("classes", classDoc);
+
+			new BsonDocument{{"a", 2}};
+			// Actually update the database if query finds result
+			if(students.Find(query).CountDocuments() > 0)
+			{
+				students.UpdateOne(query, update);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public bool AddSeat(string studentEmail, string className, int x, int y)
+		{
+			// Create a filter that finds the student and selects the correct class
+			var filter = Builders<BsonDocument>.Filter;
+			FilterDefinition<BsonDocument> query = 
+				filter.And(filter.Eq("email", studentEmail), 
+				filter.Eq("classes.name", className));
+
+			// Set the value of the seat to x and y
+			UpdateDefinition<BsonDocument> update = 
+				Builders<BsonDocument>.Update.Set("classes.$.seat", new BsonDocument{{"x", x}, {"y", y}});
 
 			// Actually update the database if query finds result
 			if(students.Find(query).CountDocuments() > 0)
@@ -96,18 +124,40 @@ namespace backend
 			}
 		}
 
+		public int[] GetSeat(string studentEmail, string className)
+		{
+			// Create a filter that finds the student
+			FilterDefinition<BsonDocument> query = 
+				Builders<BsonDocument>.Filter.Eq("email", studentEmail);
+
+			// Find the student and search for the right class
+			var found = students.Find(query).First()["classes"].AsBsonArray;
+			foreach(var i in found)
+			{
+				if(i["name"] == className)
+				{
+					// If you find the right class return the seat
+					return new int[]{(int)i["seat"]["x"], (int)i["seat"]["y"]};
+				}
+			}
+
+			// If you can't find the class throw an error
+			// TODO: Custom exception
+			throw new System.Exception("Could not find seat");
+		}
+
 		public bool IsAbsent(string studentEmail, string className)
 		{
 			// Create a filter that finds the student and selects the 
-			// correct course within the absents array
+			// correct course within the classes array
 			var filter = Builders<BsonDocument>.Filter;
 			FilterDefinition<BsonDocument> query = 
 				filter.And(filter.Eq("email", studentEmail), 
-				filter.Eq("absents.name", className));
+				filter.Eq("classes.name", className));
 
 			// Increment the value found by the query by one
 			UpdateDefinition<BsonDocument> update = 
-				Builders<BsonDocument>.Update.Inc("absents.$.num", 1);
+				Builders<BsonDocument>.Update.Inc("classes.$.absents", 1);
 
 			// Actually do the work if it exists
 			if(students.Find(query).CountDocuments() > 0)
