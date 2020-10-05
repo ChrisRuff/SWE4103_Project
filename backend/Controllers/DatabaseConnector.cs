@@ -34,6 +34,15 @@ namespace backend
 
 		public bool AddStudent(string name, string[] classNames, string email)
 		{
+			// Create a filter that will find the student with the given email
+			FilterDefinition<BsonDocument> query 
+				= Builders<BsonDocument>.Filter.Eq("email", email);
+			if(students.Find(query).CountDocuments() > 0)
+			{
+				return false;
+			}
+
+
 			// Create an array of all the classes the student has
 			BsonArray classes = new BsonArray(classNames.Length); 
 			for(int i = 0; i < classNames.Length; ++i)

@@ -55,6 +55,10 @@ namespace test
 			DatabaseConnector.Connector.AddStudent(
 					"Stephen Cole - Test", new string[]{"SWE4103"}, "scole_test@unb.ca"); 
 
+			// Ensure double adding a student returns false
+			Assert.False(DatabaseConnector.Connector.AddStudent(
+					"Stephen Cole - Test", new string[]{"SWE4103"}, "scole_test@unb.ca")); 
+
 			int[] seat;
 
 			// If a student doesn't have a seat return -1, -1 with no exception
