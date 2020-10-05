@@ -44,7 +44,7 @@ function App() {
 	}]
 
 	// Add an array of student objects to the db
-	students = AspNetConnector.addStudents(students);
+	AspNetConnector.addStudents(students);
   // ###########################################################
 
   function handleLogout() {

@@ -23,15 +23,12 @@ namespace backend
     [HttpPost, Route("api/student/add")]
     public List<StudentDTO> Post(List<StudentDTO> students)
     {
-     	string studentName = students[0].studentName;
-			string[] classNames = students[0].classNames;
-			string email = students[0].email;
-			
-			// Return bool
-			bool res = DatabaseConnector.Connector.AddStudent(studentName, classNames, email);
-			
-			students[0].response = true;
-	
+			for (int i=0; i < students.Count; i++)
+			{
+				// Return bool
+				bool res = DatabaseConnector.Connector.AddStudent(students[i].studentName, students[i].classNames, students[i].email);
+				students[i].response = res;
+			}
       return students;
     }
   }
