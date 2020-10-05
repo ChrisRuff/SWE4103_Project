@@ -18,6 +18,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+		"test:ci": "jest --ci --runInBand --reporters=default --reporters=jest-junit",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -34,5 +35,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+	"jest-junit": {
+    "suiteName": "jest tests",
+    "outputDirectory": "../test-results/junit/",
+    "outputName": "results.xml",
+    "uniqueOutputName": "false",
+    "reportTestSuiteErrors": "true",
+    "classNameTemplate": "{classname}-{title}",
+    "titleTemplate": "{classname}-{title}",
+    "ancestorSeparator": " › ",
+    "usePathForSuiteName": "true"
   }
 }
