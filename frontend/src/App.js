@@ -38,7 +38,7 @@ function App() {
 
   var students = [{
     "studentName": "cruff",
-    "classNames": ["SWE4103"],
+    "classes":[{"className": "SWE4103", "seat":{"x":1,"y":1}}], 
     "email": "cruffy_test@unb.net",
     "response": false
   }]

@@ -18,16 +18,8 @@ export var AspNetConnector = {
             		return JSON.parse(request.response);
         	}
     	},
-		
-	/*	Students datastructure see /Controllers/Models/StudentDTO.cs
-	*
-	*	students = [{
-	*		studentName: "wow",
-	*		classNames: ["cool"],
-	*		email: "wowzers",
-	*		response: false
-	*	}]
-	*/
+	
+	// Adds a student to the DB
 	addStudents: function(students) {
 			
 		var request = new XMLHttpRequest();
