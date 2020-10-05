@@ -2,8 +2,7 @@ version: 2.1
 jobs:
   build:
     docker: 
-      - image: circleci/node:8
-      - image: 'circleci/mongo:latest'
+      - image: circleci/node:11.10
     steps:
         - checkout
         - run:
@@ -14,10 +13,19 @@ jobs:
             command: sudo apt-get update && sudo apt-get install -y apt-transport-https && wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && sudo dpkg -i packages-microsoft-prod.deb && sudo apt-get update && sudo apt-get install -y dotnet-sdk-3.1
         - run:
             name: Run React tests
-            command: mkdir -p test-results/jest && cd frontend && npm test
+            command: mkdir -p test-results/junit && cd frontend && npm run test -- --ci --testResultsProcessor="jest-junit" && mv junit.xml ../test-results/junit/
         - run:
-            name: Run C# tests
-            command: mkdir -p test-results/xunit && dotnet test 
+            name: Build C#
+            command: dotnet build
+        - run:
+            name: Test C#
+            command: dotnet test --no-build --logger "trx"
+        - run:
+            name: test results
+            command: |
+              mkdir -p test-results/dotnet
+              dotnet tool install -g trx2junit
+              ~/.dotnet/tools/trx2junit backend-test/TestResults/*.trx
+              mv backend-test/TestResults/*.xml test-results/dotnet/
         - store_test_results:
             path: test-results
-

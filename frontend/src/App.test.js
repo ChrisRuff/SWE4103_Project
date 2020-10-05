@@ -4,7 +4,17 @@ import App from './App';
 import { BrowserRouter as Router } from "react-router-dom";
 
 test('renders learn react link', () => {
-  const { getByText } = render(<Router> <App /> </Router>);
+  const { getByText } = render(getApp());
   const linkElement = getByText(/Login/i);
   expect(linkElement).toBeInTheDocument();
 });
+
+function getApp()
+{
+	return (
+		<div> 
+			<Router> 
+				<App /> 
+			</Router> 
+		</div>);
+}
