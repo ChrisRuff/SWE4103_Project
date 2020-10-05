@@ -5,6 +5,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 test('renders learn react link', () => {
   const { getByText } = render(<Router> <App /> </Router>);
-  const linkElement = getByText(/Login/i);
+  const linkElement = getByText(/notindoc/i);
   expect(linkElement).toBeInTheDocument();
+
 });
