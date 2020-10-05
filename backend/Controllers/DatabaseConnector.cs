@@ -23,7 +23,7 @@ namespace backend
 		private DatabaseConnector()
 		{
 			// TODO: Hook up to a atlas mongo db
-			var mongo = new MongoClient();
+			var mongo = new MongoClient("mongodb+srv://admin:admin@cluster0.hzsao.mongodb.net/SWE4103_Project?retryWrites=true&w=majority");
 
 			// Create connections to the various tables we'll need
 			database = mongo.GetDatabase("attendance");
