@@ -23,7 +23,7 @@ namespace backend
 		private DatabaseConnector()
 		{
 			// TODO: Hook up to a atlas mongo db
-			var mongo = new MongoClient();
+			var mongo = new MongoClient("mongodb+srv://admin:admin@cluster0.hzsao.mongodb.net/SWE4103_Project?retryWrites=true&w=majority");
 
 			// Create connections to the various tables we'll need
 			database = mongo.GetDatabase("attendance");
@@ -34,6 +34,15 @@ namespace backend
 
 		public bool AddStudent(string name, string[] classNames, string email)
 		{
+			// Create a filter that will find the student with the given email
+			FilterDefinition<BsonDocument> query 
+				= Builders<BsonDocument>.Filter.Eq("email", email);
+			if(students.Find(query).CountDocuments() > 0)
+			{
+				return false;
+			}
+
+
 			// Create an array of all the classes the student has
 			BsonArray classes = new BsonArray(classNames.Length); 
 			for(int i = 0; i < classNames.Length; ++i)
