@@ -26,7 +26,7 @@ namespace backend
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "frontend/build";
+                configuration.RootPath = "../frontend/build";
             });
         }
 
@@ -57,7 +57,7 @@ namespace backend
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "frontend";
+                spa.Options.SourcePath = "../frontend";
 
                 if (env.IsDevelopment())
                 {
