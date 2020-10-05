@@ -32,7 +32,7 @@ namespace backend
 			students = database.GetCollection<BsonDocument>("students");
 		}
 
-		public bool AddStudent(string name, string[] classNames, string email)
+		public bool AddStudent(string name, string email)
 		{
 			// Create a filter that will find the student with the given email
 			FilterDefinition<BsonDocument> query 
@@ -43,19 +43,10 @@ namespace backend
 			}
 
 
-			// Create an array of all the classes the student has
-			BsonArray classes = new BsonArray(classNames.Length); 
-			for(int i = 0; i < classNames.Length; ++i)
-			{
-				classes.Add(new BsonDocument{ {"name", classNames[i]}, {"absents", 0}, 
-						{ "seat", new BsonDocument{{"x", -1}, {"y", -1}}}});
-			}
-
 			// Create the student document
 			BsonDocument newStudent = new BsonDocument
 			{
 				{ "name", name },
-				{ "classes", classes },
 				{ "email", email }
 			};
 
@@ -96,7 +87,6 @@ namespace backend
 			UpdateDefinition<BsonDocument> update = 
 				Builders<BsonDocument>.Update.AddToSet("classes", classDoc);
 
-			new BsonDocument{{"a", 2}};
 			// Actually update the database if query finds result
 			if(students.Find(query).CountDocuments() > 0)
 			{
