@@ -17,5 +17,29 @@ export var AspNetConnector = {
         if (request.status === 200) { // That's HTTP for 'ok'
             return JSON.parse(request.response);
         }
-    }
+    },
+		
+		/*	Students datastructure see /Controllers/Models/StudentDTO.cs
+		 *
+		 *	students = [{
+		 *		studentName: "wow",
+		 *		classNames: ["cool"],
+		 *		email: "wowzers",
+		 *		response: false
+		 *	}]
+		 */
+		addStudents: function(students) {
+			
+			var request = new XMLHttpRequest();
+        
+			request.open('POST', 'api/student/add', true);
+			request.setRequestHeader('Content-type', 'application/json');
+			request.send(JSON.stringify(students));
+			
+			request.onload = function() {
+				if (request.status === 200) { // That's HTTP for 'ok'
+      		console.log(JSON.parse(request.response));
+				}
+			}
+		}
 }

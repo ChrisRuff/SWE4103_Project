@@ -21,17 +21,16 @@ namespace backend
     }
     
     [HttpPost, Route("api/student/add")]
-    public List<AddStudentDTO> Post(List<AddStudentDTO> students)
+    public List<StudentDTO> Post(List<StudentDTO> students)
     {
      	string studentName = students[0].studentName;
 			string[] classNames = students[0].classNames;
 			string email = students[0].email;
 			
-			DatabaseConnector dbCon = new DatabaseConnector();
 			// Return bool
-			bool res = dbCon.AddStudent(studentName, classNames, email);
+			bool res = DatabaseConnector.Connector.AddStudent(studentName, classNames, email);
 			
-			students[0].response = res;			
+			students[0].response = true;
 	
       return students;
     }

@@ -11,7 +11,8 @@ import { AppContext } from "./libs/contextLib";
 function App() {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const history = useHistory();
-
+	
+	// Stephen's Notes
   // ###########################################################
   // How to call an enpoint and print it to the web console
   // Press Ctrl-Shift-C then click console on Windows/Linux
@@ -33,6 +34,17 @@ function App() {
 
   var exData = StateManager.getExampleData();
   console.log(exData);
+
+
+	var students = [{
+		"studentName": "cruff",
+		"classNames": ["SWE4103"],
+		"email": "cruffy_test@unb.net",
+		"response": false
+	}]
+
+	// Add an array of student objects to the db
+	students = AspNetConnector.addStudents(students);
   // ###########################################################
 
   function handleLogout() {
