@@ -36,16 +36,16 @@ function App() {
   console.log(exData);
 
 
-	var students = [{
-		"studentName": "cruff",
-		"classNames": ["SWE4103"],
-		"email": "cruffy_test@unb.net",
-		"response": false
-	}]
+  var students = [{
+    "studentName": "cruff",
+    "classNames": ["SWE4103"],
+    "email": "cruffy_test@unb.net",
+    "response": false
+  }]
 
-	// Add an array of student objects to the db
-	AspNetConnector.addStudents(students);
-  // ###########################################################
+  // Add an array of student objects to the db
+  AspNetConnector.addStudents(students);
+// ###########################################################
 
   function handleLogout() {
     // TODO: logout user using AspNetConnector
