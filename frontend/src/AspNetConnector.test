@@ -1,0 +1,10 @@
+
+  var new_seat = [{
+    "studentName": "zlewis",
+    "classes": [{"className": "CS1073", "seat": {"x": 4,"y": 7}}],
+    "email": "zlewis_test@unb.net",
+    "response": false
+  }]
+
+  // Add seats
+  AspNetConnector.addSeats(new_seat);

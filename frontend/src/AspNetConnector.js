@@ -33,5 +33,21 @@ export var AspNetConnector = {
       				console.log(JSON.parse(request.response));
 			}
 		}
+	},
+	
+	// Adds a seat to the DB
+	addSeats: function(students) {
+			
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/student/seat/add', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(students));
+			
+		request.onload = function() {
+			if (request.status === 200) { // That's HTTP for 'ok'
+      				console.log(JSON.parse(request.response));
+			}
+		}
 	}
 }
