@@ -43,10 +43,6 @@ function App() {
     "response": false
   }]
 
-
-  // Add seats
-  AspNetConnector.addSeats(new_seat);
-
   // Add an array of student objects to the db
   AspNetConnector.addStudents(students);
 // ###########################################################
