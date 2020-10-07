@@ -26,6 +26,7 @@ export var AspNetConnector = {
    * 	"studentName": "cruff",
    * 	"classes":[{"className": "SWE4103", "seat":{"x":1,"y":1}}], 
    * 	"email": "cruffy_test@unb.net",
+	 * 	"password": "password",
    * 	"response": false
    * }]
 	 *
@@ -54,6 +55,7 @@ export var AspNetConnector = {
 	* 	"studentName": "zlewis",
 	* 	"classes": [{"className": "CS1073", "seat": {"x": 4,"y": 7}}],
 	* 	"email": "zlewis_test@unb.net",
+	* 	"password": "password1",
 	* 	"response": false
 	* }]
 	*

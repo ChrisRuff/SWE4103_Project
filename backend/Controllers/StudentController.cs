@@ -25,7 +25,7 @@ namespace backend
         {
             for (int i = 0; i < students.Count; i++)
             {
-                bool res = DatabaseConnector.Connector.AddStudent(students[i].studentName, students[i].email);
+                bool res = DatabaseConnector.Connector.AddStudent(students[i].studentName, students[i].email, students[i].pass);
                 students[i].response = res;
             }
             return students;
