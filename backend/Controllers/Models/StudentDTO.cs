@@ -8,6 +8,7 @@ namespace backend.Controllers.Models
 		public ClassDTO[] classes { get; set; }
 		public string email { get; set; }
 		public bool response { get; set; }
+		public string pass { get; set; }
   }
 } 
 

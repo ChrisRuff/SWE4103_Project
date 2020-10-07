@@ -15,24 +15,28 @@ namespace backend
 		// instance of the database connection at a time
 		private static DatabaseConnector connector = null;
 
+		private MongoClient client;
 		private IMongoDatabase database;
-		private IMongoCollection<BsonDocument> classes;
-		private IMongoCollection<BsonDocument> profs;
 		private IMongoCollection<BsonDocument> students;
+		private IMongoCollection<BsonDocument> profs;
 
 		private DatabaseConnector()
 		{
-			// TODO: Hook up to a atlas mongo db
-			var mongo = new MongoClient("mongodb+srv://admin:admin@cluster0.hzsao.mongodb.net/SWE4103_Project?retryWrites=true&w=majority");
+			// mongo "mongodb+srv://cluster0.hzsao.mongodb.net/SWE4103_Project" --username admin
+			client = new MongoClient("mongodb+srv://admin:admin@cluster0.hzsao.mongodb.net/SWE4103_Project?retryWrites=true&w=majority");
 
 			// Create connections to the various tables we'll need
-			database = mongo.GetDatabase("attendance");
-			classes = database.GetCollection<BsonDocument>("classes");
-			profs = database.GetCollection<BsonDocument>("profs");
+			database = client.GetDatabase("attendance");
 			students = database.GetCollection<BsonDocument>("students");
+			profs = database.GetCollection<BsonDocument>("profs");
 		}
 
-		public bool AddStudent(string name, string email)
+		public bool CheckPass(string name, string pass)
+		{
+			return true;
+		}
+
+		public bool AddStudent(string name, string email, string pass)
 		{
 			// Create a filter that will find the student with the given email
 			FilterDefinition<BsonDocument> query 
@@ -48,6 +52,7 @@ namespace backend
 			{
 				{ "name", name },
 				{ "email", email }
+				//{ "pass", pass }
 			};
 
 			// Insert it into the database
@@ -170,6 +175,11 @@ namespace backend
 			}
 		}
 
+		public void Wipe()
+		{
+			client.DropDatabase("attendance");
+			students = database.GetCollection<BsonDocument>("students");
+		}
 
 		public static DatabaseConnector Connector
 		{

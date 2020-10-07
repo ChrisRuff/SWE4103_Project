@@ -76,3 +76,5 @@ _[Ss]cripts
 *.dot[Cc]over
 
 frontend/junit.xml
+
+frontend/results.xml
