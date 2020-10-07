@@ -14,7 +14,7 @@ namespace test
 
 			// Add test student
 			DatabaseConnector.Connector.AddStudent(
-					"Stephen Cole - Test", "scole_test@unb.ca"); 
+					"Stephen Cole - Test", "scole_test@unb.ca", "pass"); 
 			
 			// Ensure that it can be removed and it returns successful only on first attempt
 			bool succeeded1 = DatabaseConnector.Connector.RemoveStudent("scole_test@unb.ca");
@@ -32,7 +32,7 @@ namespace test
 
 			// Add test student
 			DatabaseConnector.Connector.AddStudent(
-					"Stephen Cole - Test", "scole_test@unb.ca"); 
+					"Stephen Cole - Test", "scole_test@unb.ca", "pass"); 
 
 			// Add a new class (CS2043) to Stephens courses
 			Assert.True(DatabaseConnector.Connector.AddClass("scole_test@unb.ca", "CS2043"));
@@ -53,11 +53,11 @@ namespace test
 
 			// Add test student
 			DatabaseConnector.Connector.AddStudent(
-					"Stephen Cole - Test", "scole_test@unb.ca"); 
+					"Stephen Cole - Test", "scole_test@unb.ca", "pass"); 
 
 			// Ensure double adding a student returns false
 			Assert.False(DatabaseConnector.Connector.AddStudent(
-					"Stephen Cole - Test", "scole_test@unb.ca")); 
+					"Stephen Cole - Test", "scole_test@unb.ca", "pass")); 
 			Assert.True(DatabaseConnector.Connector.AddClass("scole_test@unb.ca", "SWE4103"));
 
 			int[] seat;

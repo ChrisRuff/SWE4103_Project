@@ -18,6 +18,7 @@ namespace backend
 		private MongoClient client;
 		private IMongoDatabase database;
 		private IMongoCollection<BsonDocument> students;
+		private IMongoCollection<BsonDocument> profs;
 
 		private DatabaseConnector()
 		{
@@ -27,9 +28,15 @@ namespace backend
 			// Create connections to the various tables we'll need
 			database = client.GetDatabase("attendance");
 			students = database.GetCollection<BsonDocument>("students");
+			profs = database.GetCollection<BsonDocument>("profs");
 		}
 
-		public bool AddStudent(string name, string email)
+		public bool CheckPass(string name, string pass)
+		{
+			return true;
+		}
+
+		public bool AddStudent(string name, string email, string pass)
 		{
 			// Create a filter that will find the student with the given email
 			FilterDefinition<BsonDocument> query 
@@ -45,6 +52,7 @@ namespace backend
 			{
 				{ "name", name },
 				{ "email", email }
+				//{ "pass", pass }
 			};
 
 			// Insert it into the database
