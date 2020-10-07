@@ -36,6 +36,11 @@ namespace backend
         {
             for (int i = 0; i < students.Count; i++)
             {
+                if(!DatabaseConnector.Connector.CheckPass(students[i].email, students[i].pass))
+                {
+                    students[i].response = false;
+                    continue;
+                }
                 for (int j = 0; j < students[i].classes.Length; j++)
                 {
                     bool res = DatabaseConnector.Connector.AddSeat(students[i].email, 
