@@ -15,20 +15,17 @@ namespace backend
 		// instance of the database connection at a time
 		private static DatabaseConnector connector = null;
 
+		private MongoClient client;
 		private IMongoDatabase database;
-		private IMongoCollection<BsonDocument> classes;
-		private IMongoCollection<BsonDocument> profs;
 		private IMongoCollection<BsonDocument> students;
 
 		private DatabaseConnector()
 		{
 			// mongo "mongodb+srv://cluster0.hzsao.mongodb.net/SWE4103_Project" --username admin
-			var mongo = new MongoClient("mongodb+srv://admin:admin@cluster0.hzsao.mongodb.net/SWE4103_Project?retryWrites=true&w=majority");
+			client = new MongoClient("mongodb+srv://admin:admin@cluster0.hzsao.mongodb.net/SWE4103_Project?retryWrites=true&w=majority");
 
 			// Create connections to the various tables we'll need
-			database = mongo.GetDatabase("attendance");
-			classes = database.GetCollection<BsonDocument>("classes");
-			profs = database.GetCollection<BsonDocument>("profs");
+			database = client.GetDatabase("attendance");
 			students = database.GetCollection<BsonDocument>("students");
 		}
 
@@ -170,6 +167,11 @@ namespace backend
 			}
 		}
 
+		public void Wipe()
+		{
+			client.DropDatabase("attendance");
+			students = database.GetCollection<BsonDocument>("students");
+		}
 
 		public static DatabaseConnector Connector
 		{
