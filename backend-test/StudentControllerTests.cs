@@ -19,7 +19,7 @@ namespace test
 				DatabaseConnector.Connector.RemoveStudent(testStudents[0].email);
 				var request = controller.AddStudent(testStudents);
 
-				Assert.Equal(request[0].response, true);
+				Assert.True(request[0].response);
 			}
 
 			private List<StudentDTO> GetTestStudents()
