@@ -21,7 +21,7 @@ namespace backend
         }
 
         [HttpPost, Route("api/student/add")]
-        public List<StudentDTO> Post(List<StudentDTO> students)
+        public List<StudentDTO> AddStudent(List<StudentDTO> students)
         {
             for (int i = 0; i < students.Count; i++)
             {
