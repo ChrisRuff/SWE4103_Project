@@ -4,48 +4,12 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
 import "./App.css";
 import { AspNetConnector } from "./AspNetConnector.js";
-import { StateManager } from "./StateManager.js";
 import Routes from "./Routes";
 import { AppContext } from "./libs/contextLib";
 
 function App() {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const history = useHistory();
-	
-	// Stephen's Notes
-  // ###########################################################
-  // How to call an enpoint and print it to the web console
-  // Press Ctrl-Shift-C then click console on Windows/Linux
-  // or Setings -> More Tools -> Developer Tools then click console
-
-  // Asynchronous call using fetch
-  AspNetConnector.callExampleEndpointFetch().then((data) => {
-    console.log(data[0].message);
-  });
-
-  /* Synchronous call using XMLHttpRequest
-	var res = AspNetConnector.callExampleEndpointXML();
-	console.log(res[0].message);
-	*/
-
-  // Storing data in the StateManager is an easy way to pass data from
-  // one react component to another
-  StateManager.setExampleData("Data to be used in another component.");
-
-  var exData = StateManager.getExampleData();
-  console.log(exData);
-
-
-  var students = [{
-    "studentName": "cruff",
-    "classNames": ["SWE4103"],
-    "email": "cruffy_test@unb.net",
-    "response": false
-  }]
-
-  // Add an array of student objects to the db
-  AspNetConnector.addStudents(students);
-// ###########################################################
 
   function handleLogout() {
     // TODO: logout user using AspNetConnector
