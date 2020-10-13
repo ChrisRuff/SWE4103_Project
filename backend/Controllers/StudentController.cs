@@ -50,5 +50,21 @@ namespace backend
             }
             return students;
         }
+
+        [HttpPost, Route("api/student/seat/get")]
+        public StudentDTO GetSeatAPI(StudentDTO student)
+        {
+            if (!DatabaseConnector.Connector.CheckPass(student.email, student.pass))
+                student.response = false;
+            else
+                for (int i = 0; i < student.classes.Length; i++)
+                {
+                    int[] res = DatabaseConnector.Connector.GetSeat(student.email,
+                        student.classes[i].className);
+                    student.classes[i].seat.x = res[0];
+                    student.classes[i].seat.y = res[1];
+                }
+            return student;
+        }
     }
 }
