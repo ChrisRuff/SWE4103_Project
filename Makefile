@@ -1,8 +1,9 @@
 run: 
-	if [ ! -d "frontend/node_modules" ]; then cd frontend && npm ci && cd ..; fi
-	dotnet run --project backend/backend.csproj
+	dotnet build 
+	dotnet run --project backend/backend.csproj --no-build
 test:
-	cd frontend && npm test -- --watchAll=false && cd .. && dotnet test
+	dotnet build 
+	cd frontend && npm test -- --watchAll=false && cd .. && dotnet test --no-build
 build:
 	dotnet build 
 clean:
