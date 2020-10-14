@@ -36,16 +36,20 @@ namespace backend
         {
             for (int i = 0; i < students.Count; i++)
             {
-                if(!DatabaseConnector.Connector.CheckPass(students[i].email, students[i].pass))
+                if (!DatabaseConnector.Connector.CheckPass(students[i].email, students[i].pass))
                 {
                     students[i].response = false;
                     continue;
                 }
-                for (int j = 0; j < students[i].classes.Length; j++)
+                else
                 {
-                    bool res = DatabaseConnector.Connector.AddSeat(students[i].email, 
-                        students[i].classes[j].className, students[i].classes[j].seat.x, students[i].classes[j].seat.y);
-                    students[i].response &= res;
+                    students[i].response = true;
+                    for (int j = 0; j < students[i].classes.Length; j++)
+                    {
+                        bool res = DatabaseConnector.Connector.AddSeat(students[i].email,
+                            students[i].classes[j].className, students[i].classes[j].seat.x, students[i].classes[j].seat.y);
+                        students[i].response &= res;
+                    }
                 }
             }
             return students;
@@ -57,13 +61,41 @@ namespace backend
             if (!DatabaseConnector.Connector.CheckPass(student.email, student.pass))
                 student.response = false;
             else
+            {
+                student.response = true;
+                try
+                {
+                    for (int i = 0; i < student.classes.Length; i++)
+                    {
+                        int[] res = DatabaseConnector.Connector.GetSeat(student.email,
+                            student.classes[i].className);
+                        student.classes[i].seat.x = res[0];
+                        student.classes[i].seat.y = res[1];
+                    }
+                }
+                catch (Exception e)
+                {
+                    student.response = false;
+                }
+            }
+            return student;
+        }
+
+        [HttpPost, Route("api/student/class/absence/get")]
+        public StudentDTO IsAbsentAPI(StudentDTO student)
+        {
+            if (!DatabaseConnector.Connector.CheckPass(student.email, student.pass))
+                student.response = false;
+            else
+            {
+                student.response = true;
                 for (int i = 0; i < student.classes.Length; i++)
                 {
-                    int[] res = DatabaseConnector.Connector.GetSeat(student.email,
+                    bool res = DatabaseConnector.Connector.IsAbsent(student.email,
                         student.classes[i].className);
-                    student.classes[i].seat.x = res[0];
-                    student.classes[i].seat.y = res[1];
+                    student.response &= res;
                 }
+            }
             return student;
         }
 
