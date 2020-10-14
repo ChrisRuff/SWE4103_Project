@@ -29,7 +29,8 @@ export default function Login() {
     try {
       // TODO: Use AspNetConnector to sign in
       userHasAuthenticated(true);
-      history.push("/");
+      // Push to Instructor view for now
+      history.push("/InstructorHome");
     } catch (e) {
       onError(e);
       setIsLoading(false);
