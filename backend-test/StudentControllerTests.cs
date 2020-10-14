@@ -25,11 +25,21 @@ namespace test
 		[Fact]
 		public void GetSeat()
 		{
-			var testStudent = GetTestStudent();
+			var testStudent = GetTestStudents();
 			var controller = new StudentController(_logger);
-			var request = controller.GetSeatAPI(testStudent);
+			var request = controller.GetSeatAPI(testStudent[0]);
 
-			Assert.True(request.response);
+			Assert.False(request.response);
+		}
+
+		[Fact]
+		public void IsAbsent()
+		{
+			var testStudent = GetTestStudents();
+			var controller = new StudentController(_logger);
+			var request = controller.GetSeatAPI(testStudent[0]);
+
+			Assert.False(request.response);
 		}
 
 		private List<StudentDTO> GetTestStudents()
@@ -46,36 +56,6 @@ namespace test
 					});
 
 			return testStudents;
-		}
-
-		private StudentDTO GetTestStudent()
-		{
-			var testSeat =
-					new SeatDTO
-					{
-						x = -1,
-						y = -1
-					};
-
-			ClassDTO[] testClass = {
-				new ClassDTO
-				{
-					className = "TEST1001",
-					seat = testSeat
-				}
-			};
-
-			var testStudent =
-					new StudentDTO
-					{
-						studentName = "Test Student",
-						classes = testClass,
-						email = "email@email.com",
-						pass = "password",
-						response = false
-					};
-
-			return testStudent;
 		}
 	}
 }
