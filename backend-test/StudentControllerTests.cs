@@ -21,7 +21,26 @@ namespace test
 
 			Assert.True(request[0].response);
 		}
+		//remove student test
+		[Fact]
+		public void RemoveStudent()
+        {
+			var testStudents = GetTestStudents();
+			var controller = new StudentController(_logger);
+			DatabaseConnector.Connector.RemoveStudent(testStudents[0].email);
+			var request = controller.AddStudent(testStudents);
+			
 
+					
+			if (request[0].response)
+            {
+				var request2 = controller.RemoveStudent(testStudents);
+				Assert.True(request2[0].response);
+			}
+			
+		}
+
+		/*
 		[Fact]
 		public void GetSeat()
 		{
@@ -31,6 +50,7 @@ namespace test
 
 			Assert.True(request.response);
 		}
+		*/
 
 		private List<StudentDTO> GetTestStudents()
 		{
