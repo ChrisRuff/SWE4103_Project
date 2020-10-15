@@ -1,9 +1,9 @@
 import React from "react";
-import "./Home.css";
+import "./UnauthenticatedHome.css";
 
-export default function Home() {
+export default function UnauthenticatedHome() {
   return (
-    <div className="Home">
+    <div className="UnauthenticatedHome">
       <div className="lander">
         <h1>Attendance Tracker</h1>
         <p>An app for SWE4103</p>

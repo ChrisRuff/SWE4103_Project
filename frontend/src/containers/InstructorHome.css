@@ -1,0 +1,21 @@
+.InstructorHome .lander {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.InstructorHome .lander h1 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+}
+
+.InstructorHome .lander p {
+  color: #999;
+}
+
+.seats {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
