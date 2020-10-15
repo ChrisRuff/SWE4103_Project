@@ -21,7 +21,7 @@ namespace test
 
 			Assert.True(request[0].response);
 		}
-		//remove student test
+		
 		[Fact]
 		public void RemoveStudent()
         {
@@ -40,7 +40,7 @@ namespace test
 			
 		}
 
-		/*
+		
 		[Fact]
 		public void GetSeat()
 		{
@@ -48,7 +48,7 @@ namespace test
 			var controller = new StudentController(_logger);
 			var request = controller.GetSeatAPI(testStudent[0]);
 
-			Assert.False(request.response);
+			Assert.True(request.response);
 		}
 
 		[Fact]
@@ -58,9 +58,9 @@ namespace test
 			var controller = new StudentController(_logger);
 			var request = controller.GetSeatAPI(testStudent[0]);
 
-			Assert.False(request.response);
+			Assert.True(request.response);
 		}
-		*/
+
 
 		private List<StudentDTO> GetTestStudents()
 		{
@@ -69,7 +69,20 @@ namespace test
 					new StudentDTO
 					{
 						studentName = "Test Student",
-						classes = null,
+						classes = new ClassDTO[]
+						{
+							new ClassDTO
+							{
+								className = "TEST1001",
+								width = 100,
+								height = 32,
+								seat = new SeatDTO
+								{
+									x = 5,
+									y = 10
+								}
+							}
+						},
 						email = "email@email.com",
 						pass = "password",
 						response = false
@@ -77,5 +90,20 @@ namespace test
 
 			return testStudents;
 		}
+
+		[Fact]
+		public void AddClass()
+        {
+			var testStudents = GetTestStudents();
+			var controller = new StudentController(_logger);
+			DatabaseConnector.Connector.RemoveStudent(testStudents[0].email);
+			var request = controller.AddStudent(testStudents);
+			if (request[0].response)
+            {
+				var request2 = controller.AddClass(testStudents);
+				Assert.True(request2[0].response);
+			}
+				
+        }
 	}
 }

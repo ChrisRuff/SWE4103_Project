@@ -55,7 +55,8 @@ namespace backend
 			{
 				{ "name", name },
 				{ "email", email },
-				{ "pass", pass }
+				{ "pass", pass },
+				{ "classes", new BsonArray{}}
 			};
 
 			// Insert it into the database

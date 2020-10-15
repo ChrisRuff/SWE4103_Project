@@ -109,18 +109,22 @@ namespace backend
             }
             return students;
         }
-        /*
+        
         [HttpPost, Route("api/student/class/add")]
         public List<StudentDTO> AddClass(List<StudentDTO> students)
         {
             for (int i = 0; i < students.Count; i++)
             {
-                bool res = DatabaseConnector.Connector.AddClass(students[i].email,students[i].classes);
-                students[i].response = res;
+                
+                for (int j = 0; j < students[i].classes.Length; j++)
+                {
+                    bool res = DatabaseConnector.Connector.AddClass(students[i].email, students[i].classes[j].className);
+                    students[i].response = res;
+                }
             }
             return students;
         }
-        */
+        
 
     }
 }
