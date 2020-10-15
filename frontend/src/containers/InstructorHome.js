@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Button, DropdownButton } from "react-bootstrap";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import "./InstructorHome.css";
@@ -56,6 +57,13 @@ export default function InstructorHome() {
 
   return (
     <div>
+      <div className="layoutHeader">
+        <DropdownButton id="dropdown-basic-button" title="Dropdown button">
+          
+        </DropdownButton>
+        <Button variant="light">Add</Button>
+        <Button variant="light">Submit</Button>
+      </div>
       <Grid className="seats" container spacing={2}>
         <Grid className="seats" col={1} container item xs={12} spacing={3}>
           <FormRow />
@@ -88,6 +96,10 @@ export default function InstructorHome() {
           <FormRow />
         </Grid>
       </Grid>
+      <div className = "layoutFooter">
+        <Button variant="light">Edit Seat Plan</Button>
+        <Button variant="light">More Options...</Button>
+      </div>
     </div>
   );
 }
