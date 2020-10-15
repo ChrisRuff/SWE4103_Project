@@ -187,7 +187,7 @@ namespace backend
 			var studentsFound = students.Find(query);
 			if(studentsFound.CountDocuments() <= 0)
 			{
-				return null;
+				throw new System.Exception("Could not find student");
 			}
 			var student = studentsFound.First();
 			StudentDTO data = new StudentDTO();

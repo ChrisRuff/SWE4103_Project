@@ -73,15 +73,15 @@ namespace backend
                         student.classes[i].seat.y = res[1];
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     student.response = false;
                 }
             }
             return student;
         }
-
-        [HttpPost, Route("api/student/class/absence/get")]
+        /*
+        [HttpPost, Route("api/student/absence/get")]
         public StudentDTO IsAbsentAPI(StudentDTO student)
         {
             if (!DatabaseConnector.Connector.CheckPass(student.email, student.pass))
@@ -98,7 +98,7 @@ namespace backend
             }
             return student;
         }
-
+        */
         [HttpPost, Route("api/student/remove")]
         public List<StudentDTO> RemoveStudent(List<StudentDTO> students)
         {
@@ -109,7 +109,7 @@ namespace backend
             }
             return students;
         }
-        
+
         [HttpPost, Route("api/student/class/add")]
         public List<StudentDTO> AddClass(List<StudentDTO> students)
         {
@@ -126,5 +126,63 @@ namespace backend
         }
         
 
+        [HttpPost, Route("api/student/get")]
+        public StudentDTO GetStudentAPI(StudentDTO student)
+        {
+            try
+            {
+                if (!DatabaseConnector.Connector.CheckPass(student.email, student.pass))
+                    student.response = false;
+                else
+                {
+                    student = DatabaseConnector.Connector.GetStudent(student.email);
+                    student.response = true;
+                }
+            }
+            catch (Exception)
+            {
+                student.response = false;   
+            }
+            return student;
+        }
+
+        [HttpPost, Route("api/student/class/add")]
+        public ClassDTO MakeClassAPI(ClassDTO classDTO)
+        {
+            bool res = DatabaseConnector.Connector.MakeClass(classDTO.className,
+                classDTO.width, classDTO.height);
+            classDTO.response = res;
+
+            return classDTO;
+        }
+
+        [HttpPost, Route("api/student/seat/disable")]
+        public ClassDTO DisableSeatAPI(ClassDTO classDTO)
+        {
+            bool res = DatabaseConnector.Connector.DisableSeat(classDTO.className,
+                classDTO.seat.x, classDTO.seat.y);
+            classDTO.response = res;
+
+            return classDTO;
+        }
+
+        [HttpPost, Route("api/student/seat/reserve")]
+        public ClassDTO ReserveSeatAPI(ClassDTO classDTO)
+        {
+            bool res = DatabaseConnector.Connector.ReserveSeat(classDTO.className,
+                classDTO.seat.x, classDTO.seat.y);
+            classDTO.response = res;
+
+            return classDTO;
+        }
+
+        [HttpPost, Route("api/student/class/remove")]
+        public ClassDTO RemoveClassAPI(ClassDTO classDTO)
+        {
+            bool res = DatabaseConnector.Connector.RemoveClass(classDTO.className);
+            classDTO.response = res;
+
+            return classDTO;
+        }
     }
 }
