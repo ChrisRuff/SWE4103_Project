@@ -19,3 +19,22 @@
   justify-content: center;
   align-items: center;
 }
+
+.layoutHeader >div {
+  margin-right: 65%;
+  padding: 15px;
+} 
+
+.layoutHeader > button{
+  margin: 0px 15px
+}
+
+.layoutFooter{
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  padding: 15px;
+}
+.layoutFooter > button{
+  margin: 5px;
+} 
