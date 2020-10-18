@@ -18,18 +18,18 @@ export default function InstructorHome() {
 
   const classes = useStyles();
   const createLayout = (numRows, numCols) => {
-    const layout = [];
-    const cols = [];
+  const layout = [];
+  const cols = [];
 
-		for (var j = 0; j < numCols; j++) {
+  for (var j = 0; j < numCols; j++) {
 
-			const rows = [];
-			for (var i = 0; i < numRows; i++) {
-				rows.push(
-						<div key={i} className="seat">
-							<Seat key={i} x={i} y={j} className={classes.paper}>Seat</Seat>
-						</div>
-				);
+    const rows = [];
+    for (var i = 0; i < numRows; i++) {
+      rows.push(
+	<div key={i} className="seat">
+	  <Seat key={i} x={i} y={j} className={classes.paper}>Seat</Seat>
+	</div>
+      );
 			}
     
       cols.push(
