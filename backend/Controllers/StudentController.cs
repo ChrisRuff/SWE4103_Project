@@ -37,6 +37,7 @@ namespace backend
             for (int i = 0; i < students.Count; i++)
             {
                 if (!DatabaseConnector.Connector.CheckPassStudent(students[i].email, students[i].pass))
+
                 {
                     students[i].response = false;
                     continue;
@@ -118,9 +119,8 @@ namespace backend
                 
                 for (int j = 0; j < students[i].classes.Length; j++)
                 {
-                    bool res = DatabaseConnector.Connector.AddSeat(students[i].email, 
-                        students[i].classes[j].className, students[i].classes[j].seat.x, students[i].classes[j].seat.y);
-                    students[i].response &= res;
+                    bool res = DatabaseConnector.Connector.AddClass(students[i].email, students[i].classes[j].className);
+                    students[i].response = res;
                 }
             }
             return students;

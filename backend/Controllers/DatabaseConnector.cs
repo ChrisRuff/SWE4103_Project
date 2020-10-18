@@ -33,6 +33,7 @@ namespace backend
 			profs = database.GetCollection<BsonDocument>("profs");
 			classes = database.GetCollection<BsonDocument>("classes");
 		}
+
 		public void Wipe()
 		{
 			client.DropDatabase("attendance");
