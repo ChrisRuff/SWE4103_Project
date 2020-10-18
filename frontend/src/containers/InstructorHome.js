@@ -37,11 +37,9 @@ export default function InstructorHome() {
     }
     layout.push(
       <div className="root">
-        <div className="outerLayout">
         <Grid container spacing={3}>
           {cols}
         </Grid>
-        </div>
       </div>
     );
     return layout;

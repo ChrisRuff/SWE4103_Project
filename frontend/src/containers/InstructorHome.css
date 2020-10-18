@@ -38,9 +38,6 @@
 .layoutFooter > button {
   margin: 5px 0px;
 }
-.outerLayout {
-  width: 1800;
-}
 
 .root {
   overflow: scroll;
@@ -48,6 +45,7 @@
   margin: auto;
   height: min-content;
   max-height: 600px;
+  padding: 5px;
 }
 
 .seat {
