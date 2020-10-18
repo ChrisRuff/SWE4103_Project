@@ -13,8 +13,8 @@ namespace test
 			while(DatabaseConnector.Connector.RemoveStudent("scole_test@unb.ca"));
 
 			// Add test student
-			DatabaseConnector.Connector.AddStudent(
-					"Stephen Cole - Test", new string[]{"SWE4103"}, "scole_test@unb.ca"); 
+			Assert.True(DatabaseConnector.Connector.AddStudent(
+					"Stephen Cole - Test", "scole_test@unb.ca", "pass")); 
 			
 			// Ensure that it can be removed and it returns successful only on first attempt
 			bool succeeded1 = DatabaseConnector.Connector.RemoveStudent("scole_test@unb.ca");
@@ -32,7 +32,7 @@ namespace test
 
 			// Add test student
 			DatabaseConnector.Connector.AddStudent(
-					"Stephen Cole - Test", new string[]{"SWE4103"}, "scole_test@unb.ca"); 
+					"Stephen Cole - Test", "scole_test@unb.ca", "pass"); 
 
 			// Add a new class (CS2043) to Stephens courses
 			Assert.True(DatabaseConnector.Connector.AddClass("scole_test@unb.ca", "CS2043"));
@@ -53,7 +53,12 @@ namespace test
 
 			// Add test student
 			DatabaseConnector.Connector.AddStudent(
-					"Stephen Cole - Test", new string[]{"SWE4103"}, "scole_test@unb.ca"); 
+					"Stephen Cole - Test", "scole_test@unb.ca", "pass"); 
+
+			// Ensure double adding a student returns false
+			Assert.False(DatabaseConnector.Connector.AddStudent(
+					"Stephen Cole - Test", "scole_test@unb.ca", "pass")); 
+			Assert.True(DatabaseConnector.Connector.AddClass("scole_test@unb.ca", "SWE4103"));
 
 			int[] seat;
 
@@ -99,6 +104,79 @@ namespace test
 				caught = true;
 			}
 			Assert.True(caught);
+		}
+    
+		[Fact]
+		public void MakeClassAndDisableSeat()
+		{
+			DatabaseConnector.Connector.RemoveClass("CS2043");
+			Assert.True(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
+			Assert.False(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
+
+			Assert.True(DatabaseConnector.Connector.DisableSeat("CS2043", 1, 1));
+			Assert.False(DatabaseConnector.Connector.DisableSeat("CS2043", 1, 1));
+		}
+
+		public void GetStudent()
+		{
+			// Ensure there aren't any test coles out there 
+			while(DatabaseConnector.Connector.RemoveStudent("scole_test@unb.ca"));
+
+			// Add test student
+			DatabaseConnector.Connector.AddStudent(
+					"Stephen Cole - Test", "scole_test@unb.ca", "pass"); 
+			DatabaseConnector.Connector.AddClass("scole_test@unb.ca", "CS2043");
+			DatabaseConnector.Connector.AddClass("scole_test@unb.ca", "SWE4103");
+			DatabaseConnector.Connector.AddSeat("scole_test@unb.ca", "CS2043", 1, 1);
+			DatabaseConnector.Connector.AddSeat("scole_test@unb.ca", "SWE4103", 2, 5);
+
+			var stephen = DatabaseConnector.Connector.GetStudent("scole_test@unb.ca");
+
+			Assert.True(stephen.studentName == "Stephen Cole - Test");
+			Assert.True(stephen.email == "scole_test@unb.ca");
+			Assert.True(stephen.pass == "pass");
+
+			Assert.True(stephen.classes[0].className == "CS2043");
+			Assert.True(stephen.classes[0].seat.x == 1);
+			Assert.True(stephen.classes[0].seat.y == 1);
+			Assert.True(stephen.classes[1].className == "SWE4103");
+			Assert.True(stephen.classes[1].seat.x == 2);
+			Assert.True(stephen.classes[1].seat.y == 5);
+			
+			DatabaseConnector.Connector.RemoveStudent("scole_test@unb.ca");
+		}
+
+		[Fact]
+		public void MakeClassAndReserve()
+		{
+			DatabaseConnector.Connector.RemoveClass("CS2043");
+
+			Assert.True(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
+			Assert.False(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
+
+			Assert.True(DatabaseConnector.Connector.ReserveSeat("CS2043", 1, 1));
+			Assert.False(DatabaseConnector.Connector.ReserveSeat("CS2043", 1, 1));
+			Assert.False(DatabaseConnector.Connector.ReserveSeat("CS2043", 10, 10));
+			Assert.False(DatabaseConnector.Connector.ReserveSeat("CS243", 10, 10));
+
+			Assert.True(DatabaseConnector.Connector.RemoveClass("CS2043"));
+
+		}
+		[Fact]
+		public void MakeClassAndDisable()
+		{
+			DatabaseConnector.Connector.RemoveClass("CS2043");
+			DatabaseConnector.Connector.RemoveClass("CS243");
+
+			Assert.True(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
+			Assert.False(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
+
+			Assert.True(DatabaseConnector.Connector.DisableSeat("CS2043", 1, 1));
+			Assert.False(DatabaseConnector.Connector.DisableSeat("CS2043", 1, 1));
+			Assert.False(DatabaseConnector.Connector.DisableSeat("CS2043", 10, 10));
+			Assert.False(DatabaseConnector.Connector.DisableSeat("CS243", 10, 10));
+
+			Assert.True(DatabaseConnector.Connector.RemoveClass("CS2043"));
 		}
 	}
 }
