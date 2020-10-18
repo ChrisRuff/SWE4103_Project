@@ -4,12 +4,10 @@ import { Button, Dropdown, DropdownButton } from "react-bootstrap";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import "./InstructorHome.css";
+import { Grow } from "@material-ui/core";
 
 export default function InstructorHome() {
   const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
     paper: {
       padding: theme.spacing(1),
       textAlign: "center",
@@ -28,26 +26,31 @@ export default function InstructorHome() {
 			rows.push(<Paper className={classes.paper}>Seat</Paper>);
 		}
 
+    for (var i = 0; i < numRows; i++) {
+      rows.push(
+          <div className="seat">
+          <Paper className={classes.paper}>Seat</Paper>
+          </div>
+      );
+    }
+    for (var j = 0; j < numCols; j++) {
+      cols.push(
+        <Grid item className="row" col={j} xs={12} spacing={3}>
+          {rows}
+        </Grid>
+      );
+    }
     layout.push(
-      <div className="container">
-				<ul className="seat-grid">
-					<div className="seat-row">
-						<li className="seat">test</li>
-						<li className="seat">test</li>
-						<li className="seat">test</li>
-					</div>
-					<div className="seat-row">
-						<li className="seat">test</li>
-						<li className="seat">test</li>
-						<li className="seat">test</li>
-					</div>	
-				</ul>
+      <div className="root">
+        <Grid container spacing={3}>
+          {cols}
+        </Grid>
       </div>
     );
     return layout;
   };
 
-  const layout = createLayout(5, 5);
+  const layout = createLayout(25, 25);
 
   return (
     <div>
