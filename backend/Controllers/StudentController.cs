@@ -36,7 +36,8 @@ namespace backend
         {
             for (int i = 0; i < students.Count; i++)
             {
-                if (!DatabaseConnector.Connector.CheckPass(students[i].email, students[i].pass))
+                if (!DatabaseConnector.Connector.CheckPassStudent(students[i].email, students[i].pass))
+
                 {
                     students[i].response = false;
                     continue;
@@ -58,7 +59,7 @@ namespace backend
         [HttpPost, Route("api/student/seat/get")]
         public StudentDTO GetSeatAPI(StudentDTO student)
         {
-            if (!DatabaseConnector.Connector.CheckPass(student.email, student.pass))
+            if (!DatabaseConnector.Connector.CheckPassStudent(student.email, student.pass))
                 student.response = false;
             else
             {
@@ -84,7 +85,7 @@ namespace backend
         [HttpPost, Route("api/student/absence/get")]
         public StudentDTO IsAbsentAPI(StudentDTO student)
         {
-            if (!DatabaseConnector.Connector.CheckPass(student.email, student.pass))
+            if (!DatabaseConnector.Connector.CheckPassStudent(student.email, student.pass))
                 student.response = false;
             else
             {
@@ -131,7 +132,7 @@ namespace backend
         {
             try
             {
-                if (!DatabaseConnector.Connector.CheckPass(student.email, student.pass))
+                if (!DatabaseConnector.Connector.CheckPassStudent(student.email, student.pass))
                     student.response = false;
                 else
                 {
