@@ -8,11 +8,6 @@ import { Grow } from "@material-ui/core";
 
 export default function InstructorHome() {
   const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-      flexWrap: 'wrap',
-      overflow: 'scroll',
-    },
     paper: {
       padding: theme.spacing(1),
       textAlign: "center",
@@ -28,20 +23,20 @@ export default function InstructorHome() {
 
     for (var i = 0; i < numRows; i++) {
       rows.push(
-        <Grid row={i} item xs={0.5}>
+          <div className="seat">
           <Paper className={classes.paper}>Seat</Paper>
-        </Grid>
+          </div>
       );
     }
     for (var j = 0; j < numCols; j++) {
       cols.push(
-        <Grid className="seats" col={j} container item xs={12} spacing={3}>
+        <Grid item className="row" col={j} xs={12} spacing={3}>
           {rows}
         </Grid>
       );
     }
     layout.push(
-      <div style = {{ width: '85%', marginLeft: '15%' }} className={classes.root}>
+      <div className="root">
         <div className="outerLayout">
         <Grid container spacing={3}>
           {cols}
@@ -52,7 +47,7 @@ export default function InstructorHome() {
     return layout;
   };
 
-  const layout = createLayout(25, 10);
+  const layout = createLayout(25, 25);
 
   return (
     <div>

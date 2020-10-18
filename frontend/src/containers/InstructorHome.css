@@ -12,7 +12,7 @@
   color: #999;
 }
 
-.seats {
+.row {
   height: 100%;
   width: 100%;
   display: flex;
@@ -23,22 +23,33 @@
 .layoutHeader > div {
   margin-right: 65%;
   padding: 15px;
-} 
-
-.layoutHeader > button{
-  margin: 0px 15px
 }
 
-.layoutFooter{
+.layoutHeader > button {
+  margin: 0px 15px;
+}
+
+.layoutFooter {
   display: flex;
   flex-direction: column;
   width: 200px;
   padding: 15px;
 }
-.layoutFooter > button{
+.layoutFooter > button {
   margin: 5px 0px;
-} 
+}
 .outerLayout {
-  padding: 25px;
-  width: 1800px;
+  width: 1800;
+}
+
+.root {
+  overflow: scroll;
+  width: 800px;
+  margin: auto;
+  height: min-content;
+  max-height: 600px;
+}
+
+.seat {
+  margin: auto;
 }
