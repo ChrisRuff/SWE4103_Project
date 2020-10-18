@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+
 using backend.Controllers.Models;
+
 
 using MongoDB.Driver;
 using MongoDB.Bson;
@@ -15,7 +17,6 @@ namespace backend
 		// Connector is a singleton because we only want one 
 		// instance of the database connection at a time
 		private static DatabaseConnector connector = null;
-
 		private MongoClient client;
 		private IMongoDatabase database;
 		private IMongoCollection<BsonDocument> students;
@@ -41,6 +42,7 @@ namespace backend
 			classes = database.GetCollection<BsonDocument>("classes");
 			profs = database.GetCollection<BsonDocument>("profs");
 		}
+
 		public static DatabaseConnector Connector
 		{
 			// If there exists an active communication then use it

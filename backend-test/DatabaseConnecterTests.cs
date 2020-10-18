@@ -124,6 +124,7 @@ namespace test
 			}
 			Assert.True(caught);
 		}
+    
 		[Fact]
 		public void MakeClassAndDisableSeat()
 		{
