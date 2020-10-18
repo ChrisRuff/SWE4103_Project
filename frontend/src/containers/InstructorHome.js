@@ -22,26 +22,26 @@ export default function InstructorHome() {
     const layout = [];
     const rows = [];
     const cols = [];
+		
 
-    for (var i = 0; i < numRows; i++) {
-      rows.push(
-        <Grid row={i} item xs={1}>
-          <Paper className={classes.paper}>Seat</Paper>
-        </Grid>
-      );
-    }
-    for (var j = 0; j < numCols; j++) {
-      cols.push(
-        <Grid className="seats" col={j} container item xs={12} spacing={3}>
-          {rows}
-        </Grid>
-      );
-    }
+		for(var j=0; j < numRows; j++){
+			rows.push(<Paper className={classes.paper}>Seat</Paper>);
+		}
+
     layout.push(
-      <div className={classes.root}>
-        <Grid container spacing={3}>
-          {cols}
-        </Grid>
+      <div className="container">
+				<ul className="seat-grid">
+					<div className="seat-row">
+						<li className="seat">test</li>
+						<li className="seat">test</li>
+						<li className="seat">test</li>
+					</div>
+					<div className="seat-row">
+						<li className="seat">test</li>
+						<li className="seat">test</li>
+						<li className="seat">test</li>
+					</div>	
+				</ul>
       </div>
     );
     return layout;
