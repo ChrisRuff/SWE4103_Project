@@ -18,7 +18,7 @@ export default class Seat extends Component {
 	
 	render() {
 		return (
-			<Paper onClick = {() => this.handleClick()}>yes</Paper>
+			<Paper onClick = {() => this.handleClick()}>Seat</Paper>
 		);
 	}
 }
