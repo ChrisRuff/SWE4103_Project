@@ -1,10 +1,11 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Dropdown, DropdownButton } from "react-bootstrap";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import "./InstructorHome.css";
 import { Grow } from "@material-ui/core";
+import Seat from "../components/Seat.js"
 
 export default function InstructorHome() {
   const useStyles = makeStyles((theme) => ({
@@ -18,30 +19,28 @@ export default function InstructorHome() {
   const classes = useStyles();
   const createLayout = (numRows, numCols) => {
     const layout = [];
-    const rows = [];
     const cols = [];
-		
 
-		for(var j=0; j < numRows; j++){
-			rows.push(<Paper className={classes.paper}>Seat</Paper>);
-		}
+		for (var j = 0; j < numCols; j++) {
 
-    for (var i = 0; i < numRows; i++) {
-      rows.push(
-          <div className="seat">
-          <Paper className={classes.paper}>Seat</Paper>
-          </div>
-      );
-    }
-    for (var j = 0; j < numCols; j++) {
+			const rows = [];
+			for (var i = 0; i < numRows; i++) {
+				rows.push(
+						<div key={i} className="seat">
+							<Seat key={i} x={i} y={j} className={classes.paper}>Seat</Seat>
+						</div>
+				);
+			}
+    
       cols.push(
-        <Grid item className="row" col={j} xs={12} spacing={3}>
+        <Grid item key={j} className="row" col={j} xs={12} spacing={3}>
           {rows}
         </Grid>
       );
     }
+
     layout.push(
-      <div className="root">
+      <div key="root" className="root">
         <Grid container spacing={3}>
           {cols}
         </Grid>
