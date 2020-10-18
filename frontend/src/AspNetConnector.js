@@ -75,5 +75,44 @@ export var AspNetConnector = {
 		request.send(JSON.stringify(students));
 		
 		return request;
-	}	
+	},
+	addProf: function(profs) {
+		var request = new XMLHttpRequest();
+
+		request.open('POST', 'api/prof/add', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(profs));
+
+		return request;
+	},
+	removeProf: function(profs) {
+		var request = new XMLHttpRequest();
+
+		request.open('POST', 'api/prof/remove', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(profs));
+
+		return request;
+	},
+	profAddClass: function(profs)
+	{
+		var request = new XMLHttpRequest();
+
+		request.open('POST', 'api/prof/class/add', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(profs));
+
+		return request;
+	},
+	profGetClasses: function(profs)
+	{
+		var request = new XMLHttpRequest();
+
+		request.open('POST', 'api/prof/class/get', false);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(profs));
+
+		return request;
+	}
+
 }

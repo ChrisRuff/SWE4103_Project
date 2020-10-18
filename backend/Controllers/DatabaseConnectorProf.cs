@@ -41,11 +41,11 @@ namespace backend
 		}
 		public bool RemoveProf(string email)
 		{
-			// Create a filter that will find the student with the given email
+			// Create a filter that will find the prof with the given email
 			FilterDefinition<BsonDocument> query 
 				= Builders<BsonDocument>.Filter.Eq("email", email);
 
-			// Actually delete the student if query finds result
+			// Actually delete the prof if query finds result
 			if(profs.Find(query).CountDocuments() > 0)
 			{
 				profs.DeleteOne(query);
@@ -58,14 +58,13 @@ namespace backend
 		}
 		public bool AddClassProf(string email, string className)
 		{
-			// Create a filter that will find the student with the given email
+			// Create a filter that will find the prof with the given email
 			FilterDefinition<BsonDocument> query = 
 				Builders<BsonDocument>.Filter.Eq("email", email);
 
 			var classDoc = new BsonDocument{{"name", className}};
 
 			// Create a update routine that will add a class 
-			// (with absents field to the student document)
 			UpdateDefinition<BsonDocument> update = 
 				Builders<BsonDocument>.Update.AddToSet("classes", classDoc);
 

@@ -1,11 +1,16 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Dropdown, DropdownButton } from "react-bootstrap";
+import { Button, Dropdown, DropdownButton, MenuItem} from "react-bootstrap";
+import { AspNetConnector } from "../AspNetConnector.js";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import "./InstructorHome.css";
+import { StateManager } from "../StateManager.js"
 
 export default function InstructorHome() {
+
+	const [title, setTitle] = useState("--");
+
   const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -48,14 +53,34 @@ export default function InstructorHome() {
   };
 
   const layout = createLayout(5, 5);
+	const prof = [{
+		"name":"Dawn",
+		"email":"dawn@unb.ca",
+		"pass":"pass",
+		"classes": [{"className": "SWE4103"}, {"className": "CS2043"}]
+	}]
+	AspNetConnector.addProf(prof);
+	AspNetConnector.profAddClass(prof);
+
+	let classList = JSON.parse(AspNetConnector.profGetClasses(prof).response);
+	const handleSelect = (eventKey, event) => {
+		StateManager.setSelectedClass(classList[eventKey]);
+		setTitle(classList[eventKey]);
+	}
 
   return (
     <div>
       <div className="layoutHeader">
-        <DropdownButton
-          id="dropdown-basic-button"
-          title="Dropdown button"
-        ></DropdownButton>
+				<DropdownButton 
+					title={StateManager.getSelectedClass()}
+					id="classDropdown"
+					onSelect={handleSelect.bind(this)}>
+					{classList.map((opt, i) => (
+						<MenuItem key={i} eventKey={i}>
+							{opt}
+						</MenuItem>
+					))}
+				</DropdownButton>);
         <Button variant="light">Add</Button>
         <Button variant="light">Submit</Button>
       </div>
