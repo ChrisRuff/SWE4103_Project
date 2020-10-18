@@ -20,6 +20,11 @@ export default function InstructorHome() {
     const layout = [];
     const rows = [];
     const cols = [];
+		
+
+		for(var j=0; j < numRows; j++){
+			rows.push(<Paper className={classes.paper}>Seat</Paper>);
+		}
 
     for (var i = 0; i < numRows; i++) {
       rows.push(

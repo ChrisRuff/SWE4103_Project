@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+
 using backend.Controllers.Models;
+
 
 using MongoDB.Driver;
 using MongoDB.Bson;
@@ -15,7 +17,6 @@ namespace backend
 		// Connector is a singleton because we only want one 
 		// instance of the database connection at a time
 		private static DatabaseConnector connector = null;
-
 		private MongoClient client;
 		private IMongoDatabase database;
 		private IMongoCollection<BsonDocument> students;
@@ -48,6 +49,7 @@ namespace backend
 			{
 				return false;
 			}
+
 
 
 			// Create the student document
@@ -95,6 +97,7 @@ namespace backend
 			// (with absents field to the student document)
 			UpdateDefinition<BsonDocument> update = 
 				Builders<BsonDocument>.Update.AddToSet("classes", classDoc);
+
 
 			// Actually update the database if query finds result
 			if(students.Find(query).CountDocuments() > 0)
@@ -178,6 +181,7 @@ namespace backend
 				return false;
 			}
 		}
+
 		public StudentDTO GetStudent(string email)
 		{
 			// Create a filter that finds the student
@@ -317,7 +321,7 @@ namespace backend
 				return false;
 			}
 		}
-
+    
 		public static DatabaseConnector Connector
 		{
 			// If there exists an active communication then use it

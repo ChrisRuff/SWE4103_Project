@@ -2,6 +2,7 @@ version: 2.1
 jobs:
   build:
     docker: 
+
       - image: circleci/node:11.10
     steps:
         - checkout
@@ -29,3 +30,4 @@ jobs:
               mv backend-test/TestResults/*.xml test-results/dotnet/
         - store_test_results:
             path: test-results
+
