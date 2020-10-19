@@ -18,22 +18,22 @@ export default function InstructorHome() {
 
   const classes = useStyles();
   const createLayout = (numRows, numCols) => {
-  const layout = [];
-  const cols = [];
+    const layout = [];
+    const cols = [];
 
-  for (var j = 0; j < numCols; j++) {
+    for (var j = 0; j < numCols; j++) {
 
-    const rows = [];
-    for (var i = 0; i < numRows; i++) {
-      rows.push(
-	<div key={i} className="seat">
-	  <Seat key={i} x={i} y={j} className={classes.paper}>Seat</Seat>
-	</div>
-      );
-			}
-    
+      const rows = [];
+      for (var i = 0; i < numRows; i++) {
+        rows.push(
+          <div key={i} className="seat">
+            <Seat key={i} x={i} y={j} />
+          </div>
+        );
+      }
+      
       cols.push(
-        <Grid item key={j} className="row" col={j} xs={12} spacing={3}>
+        <Grid item key={j} className="row" col={j} xs={12}>
           {rows}
         </Grid>
       );
@@ -49,7 +49,7 @@ export default function InstructorHome() {
     return layout;
   };
 
-  const layout = createLayout(25, 25);
+  const layout = createLayout(5, 5);
 
   return (
     <div>
@@ -58,7 +58,7 @@ export default function InstructorHome() {
           id="dropdown-basic-button"
           title="Dropdown button"
         ></DropdownButton>
-        <Button variant="light">Add</Button>
+        <Button width='min-content' height='min-content' variant="light">Add</Button>
         <Button variant="light">Submit</Button>
       </div>
       <Fragment>{layout}</Fragment>
