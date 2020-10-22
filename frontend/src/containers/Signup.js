@@ -11,26 +11,36 @@ import { useAppContext } from "../libs/contextLib";
 import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
 import "./Signup.css";
+import { Radio, RadioGroup, FormControlLabel } from "@material-ui/core";
 
 export default function Signup() {
+
+  const history = useHistory();
+  const [newUser, setNewUser] = useState(null);
+  const [accountState, setValue] = useState(null);
+  const { userHasAuthenticated } = useAppContext();
+  const [isLoading, setIsLoading] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
     email: "",
     password: "",
     confirmPassword: "",
     confirmationCode: "",
+    account: "", //accountState needs to be set to fields.account
   });
-  const history = useHistory();
-  const [newUser, setNewUser] = useState(null);
-  const { userHasAuthenticated } = useAppContext();
-  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
 
   function validateForm() {
+    console.log (accountState); //prints out correct account but not on fields.account
     return (
       fields.email.length > 0 &&
       fields.password.length > 0 &&
-      fields.password === fields.confirmPassword
+      fields.password === fields.confirmPassword &&
+      fields.account != null
     );
-  }
+  } 
 
   function validateConfirmationForm() {
     return fields.confirmationCode.length > 0;
@@ -109,6 +119,14 @@ export default function Signup() {
             value={fields.confirmPassword}
           />
         </FormGroup>
+        <RadioGroup aria-label="Account"  value={accountState} onChange={handleChange}>
+          <FormControlLabel value = "student"
+            control={<Radio />}
+            label={<span style={{ fontSize: '14px' }}>Student</span>}/>
+          <FormControlLabel value = "professor"
+            control={<Radio />}
+            label={<span style={{ fontSize: '14px' }}>Professor</span>}/>
+        </RadioGroup>
         <LoaderButton
           block
           type="submit"
