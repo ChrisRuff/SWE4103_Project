@@ -50,7 +50,7 @@ export default function InstructorHome() {
   };
 
   const layout = createLayout(5, 5);
-
+	console.log(layout[0].props.children.props.children)
   return (
     <div>
       <div className="layoutHeader">
