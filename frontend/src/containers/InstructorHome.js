@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Dropdown, DropdownButton } from "react-bootstrap";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import "./InstructorHome.css";
-import { Grow } from "@material-ui/core";
-import Seat from "../components/Seat.js"
+import Seat from "../components/Seat.js";
+import {AspNetConnector} from "../AspNetConnector.js";
+import {StateManager} from "../StateManager.js";
 
 export default function InstructorHome() {
   const useStyles = makeStyles((theme) => ({
@@ -17,24 +17,28 @@ export default function InstructorHome() {
   }));
 
   const classes = useStyles();
+
   const createLayout = (numRows, numCols) => {
+		StateManager.setRows(numRows);
+		StateManager.setCols(numCols);
+
     const layout = [];
-    const cols = [];
+    const rows = [];
 
-    for (var j = 0; j < numCols; j++) {
+    for (var j = 0; j < numRows; j++) {
 
-      const rows = [];
-      for (var i = 0; i < numRows; i++) {
-        rows.push(
+      const cols = [];
+      for (var i = 0; i < numCols; i++) {
+        cols.push(
           <div key={i} className="seat">
             <Seat key={i} x={i} y={j} />
           </div>
         );
       }
       
-      cols.push(
+      rows.push(
         <Grid item key={j} className="row" col={j} xs={12}>
-          {rows}
+          {cols}
         </Grid>
       );
     }
@@ -42,15 +46,34 @@ export default function InstructorHome() {
     layout.push(
       <div key="root" className="root">
         <Grid container spacing={3}>
-          {cols}
+          {rows}
         </Grid>
       </div>
     );
     return layout;
   };
 
-  const layout = createLayout(5, 5);
-	console.log(layout[0].props.children.props.children)
+  const layout = createLayout(5, 6);
+
+	const makeClass = () => {
+		deleteClass()
+
+		var cols = layout[0].props.children.props.children[0].props.children.length;
+		var rows = layout[0].props.children.props.children.length;
+		var className = "Test";
+		var newClass = [{"className": className, "height": cols, "width": rows}]
+		AspNetConnector.makeClass(newClass);	
+	}
+	
+	const deleteClass = () => {
+		var className = "Test";
+		var newClass = [{"className": className}]
+		AspNetConnector.removeClass(newClass);
+		console.log(StateManager.getSeat(0,0));
+	}
+
+		
+
   return (
     <div>
       <div className="layoutHeader">
@@ -59,7 +82,7 @@ export default function InstructorHome() {
           title="Dropdown button"
         ></DropdownButton>
         <Button width='min-content' height='min-content' variant="light">Add</Button>
-        <Button variant="light">Submit</Button>
+        <Button onClick={makeClass} variant="light">Submit</Button>
       </div>
       <Fragment>{layout}</Fragment>
       <div className="layoutFooter">
