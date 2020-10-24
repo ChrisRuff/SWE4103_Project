@@ -67,7 +67,7 @@ namespace backend
             {
                 try
                 {
-                    if (!DatabaseConnector.Connector.CheckPass(students[i].email, students[i].pass))
+                    if (!DatabaseConnector.Connector.CheckPassStudent(students[i].email, students[i].pass))
                     {
                         students[i].response = false;
                         continue;
@@ -86,5 +86,15 @@ namespace backend
             return students;
         }
 
+        [HttpPost, Route("api/student/login")]
+        public List<StudentDTO> LoginStudent(List<StudentDTO> students)
+        {
+            for (int i = 0; i < students.Count; i++)
+            {
+                bool res = DatabaseConnector.Connector.CheckPassStudent(students[i].email, students[i].pass);
+                students[i].response = res;
+            }
+            return students;
+        }
     }
 }

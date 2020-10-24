@@ -88,6 +88,29 @@ namespace test
 			Assert.True(request[0].response);
 		}
 
+		[Fact]
+		public void AddAndLoginStudent()
+		{
+			var testStudents = GetTestStudents();
+			var studentController = new StudentController(_logger);
+
+			// add prof
+			var request = studentController.AddStudent(testStudents);
+			Assert.True(request[0].response);
+
+			// add prof again and fail
+			request = studentController.AddStudent(testStudents);
+			Assert.False(request[0].response);
+
+			// login prof
+			request = studentController.LoginStudent(testStudents);
+			Assert.True(request[0].response);
+
+			// cleanup
+			request = studentController.RemoveStudent(testStudents);
+			Assert.True(request[0].response);
+		}
+
 		private List<StudentDTO> GetTestStudents()
 		{
 			var testStudents = new List<StudentDTO>();

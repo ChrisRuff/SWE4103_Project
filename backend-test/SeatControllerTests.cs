@@ -68,7 +68,6 @@ namespace test
 
 			// cleanup
 			request = classController.RemoveClassAPI(testClass);
-			Assert.True(request[0].response);
 		}
 
 		[Fact]
