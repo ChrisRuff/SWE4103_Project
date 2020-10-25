@@ -113,6 +113,16 @@ export var AspNetConnector = {
 		request.send(JSON.stringify(profs));
 
 		return request;
+	},
+	getClasses: function(classes)
+	{
+		var request = new XMLHttpRequest();
+
+		request.open('POST', 'api/class/get', false);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(classes));
+
+		return request;
 	}
 
 }

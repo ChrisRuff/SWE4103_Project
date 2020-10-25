@@ -58,7 +58,7 @@ export default function InstructorHome() {
 		"email":"dawn@unb.ca",
 		"pass":"pass",
 		"classes": [{"className": "SWE4103"}, {"className": "CS2043"}]
-	}]
+	}];
 	AspNetConnector.addProf(prof);
 	AspNetConnector.profAddClass(prof);
 
@@ -66,6 +66,7 @@ export default function InstructorHome() {
 	const handleSelect = (eventKey, event) => {
 		StateManager.setSelectedClass(classList[eventKey]);
 		setTitle(classList[eventKey]);
+		StateManager.setClassLayout(AspNetConnector.getClasses([{"className": classList[eventKey]}]));
 	}
 
   return (

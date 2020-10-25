@@ -1,6 +1,7 @@
 
 export var StateManager = {
     exampleData: null,
+		classLayout: null,
 		selectedClass: "--",
     setExampleData(data) {
         this.exampleData = data;
@@ -13,5 +14,12 @@ export var StateManager = {
 		},
 		getSelectedClass(){
 			return this.selectedClass;
+		},
+		setClassLayout(layout){
+			this.classLayout = layout;
+		},
+		getClassLayout(){
+			return this.classLayout
 		}
+		
 }
