@@ -12,6 +12,7 @@ import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
 import "./Signup.css";
 import { Radio, RadioGroup, FormControlLabel } from "@material-ui/core";
+import { StateManager } from "../StateManager";
 
 export default function Signup() {
 
@@ -25,15 +26,16 @@ export default function Signup() {
     password: "",
     confirmPassword: "",
     confirmationCode: "",
-    account: "", //accountState needs to be set to fields.account
+    account: "", //student account or professor account
   });
 
   const handleChange = (event) => {
+    fields.account = event.target.value;  
+    StateManager.setAccountState(event.target.value);
     setValue(event.target.value);
   };
 
   function validateForm() {
-    console.log (accountState); //prints out correct account but not on fields.account
     return (
       fields.email.length > 0 &&
       fields.password.length > 0 &&

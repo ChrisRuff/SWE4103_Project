@@ -1,10 +1,11 @@
 
 export var StateManager = {
     exampleData: null,
-    setExampleData(data) {
-        this.exampleData = data;
+    accountState: null,
+    setAccountState(state) {
+        this.accountState = state;
     },
-    getExampleData() {
-        return this.exampleData;
+    getAccountState() {
+        return this.accountState;
     }
 }
