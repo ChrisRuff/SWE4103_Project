@@ -21,6 +21,16 @@ namespace backend
             _logger = logger;
         }
 
+        [HttpPost, Route("api/class/get")]
+		public List<ClassDTO> GetClass(List<ClassDTO> classes)
+		{
+			for(int i = 0; i < classes.Count; ++i)
+			{
+				classes[i] = DatabaseConnector.Connector.GetClass(classes[i].className);
+			}
+			return classes;
+		}
+        
         [HttpPost, Route("api/class/add")]
         public List<ClassDTO> MakeClassAPI(List<ClassDTO> classDTOs)
         {

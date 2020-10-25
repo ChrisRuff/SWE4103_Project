@@ -67,7 +67,7 @@ namespace backend
         {
           try
           {
-            if (!DatabaseConnector.Connector.CheckPass(students[i].email, students[i].pass))
+            if (!DatabaseConnector.Connector.CheckPassStudent(students[i].email, students[i].pass))
             {
               students[i].response = false;
               continue;

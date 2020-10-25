@@ -122,7 +122,7 @@ export var AspNetConnector = {
 		request.send(JSON.stringify(classes));
 
 		return request;
-	}
+	},
 
 	/* 
 	var students = [{

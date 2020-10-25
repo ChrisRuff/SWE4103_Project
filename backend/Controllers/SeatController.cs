@@ -25,7 +25,7 @@ namespace backend
         {
             for (int i = 0; i < students.Count; i++)
             {
-                if (!DatabaseConnector.Connector.CheckPass(students[i].email, students[i].pass))
+                if (!DatabaseConnector.Connector.CheckPassStudent(students[i].email, students[i].pass))
                 {
                     students[i].response = false;
                     continue;
@@ -49,7 +49,7 @@ namespace backend
         {
             for (int i = 0; i < students.Count; i++)
             {
-                if (!DatabaseConnector.Connector.CheckPass(students[i].email, students[i].pass))
+                if (!DatabaseConnector.Connector.CheckPassStudent(students[i].email, students[i].pass))
                 {
                     students[i].response = false;
                     continue;

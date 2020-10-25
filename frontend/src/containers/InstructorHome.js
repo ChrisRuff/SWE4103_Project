@@ -22,12 +22,12 @@ export default function InstructorHome() {
 		StateManager.setRows(numRows);
 		StateManager.setCols(numCols);
 
-    const layout = [];
-    const rows = [];
+    let layout = [];
+    let rows = [];
 
     for (var j = 0; j < numRows; j++) {
 
-		const cols = [];
+		let cols = [];
 		for (var i = 0; i < numCols; i++) {
 			cols.push(
 			<div key={i} className="seat">
@@ -63,12 +63,12 @@ export default function InstructorHome() {
 		StateManager.setRows(classDTO.height);
 		StateManager.setCols(classDTO.width);
 
-    const layout = [];
-    const rows = [];
+    let layout = [];
+    let rows = [];
 
     for (var j = 0; j < classDTO.height; j++) {
 
-	const cols = [];
+	let cols = [];
 	for (var i = 0; i < classDTO.width; i++) {
 
 		// Find type of seat from classDTO
@@ -177,7 +177,7 @@ export default function InstructorHome() {
 		}
 	}
 
-  const layout = createLayout(5, 5);
+	//layout = createLayout(5, 5);
 	const prof = [{
 		"name":"Dawn",
 		"email":"dawn@unb.ca",
@@ -193,34 +193,34 @@ export default function InstructorHome() {
 		setTitle(classList[eventKey]);
 		StateManager.setClassLayout(AspNetConnector.getClasses([{"className": classList[eventKey]}]));
 	}
-  
-  const deleteClass = () => {
+
+	const deleteClass = () => {
 		var className = "TestClass";
 		var newClass = [{"className": className}]
 		AspNetConnector.removeClass(newClass);
-  }
-  
+	}
+
 return (
     <div>
-      <div className="layoutHeader">
-				<DropdownButton 
-					title={StateManager.getSelectedClass()}
-					id="classDropdown"
-					onSelect={handleSelect.bind(this)}>
-					{classList.map((opt, i) => (
-						<MenuItem key={i} eventKey={i}>
-							{opt}
-						</MenuItem>
-					))}
-				</DropdownButton>);
+		<div className="layoutHeader">
+			<DropdownButton 
+				title={StateManager.getSelectedClass()}
+				id="classDropdown"
+				onSelect={handleSelect.bind(this)}>
+				{classList.map((opt, i) => (
+					<MenuItem key={i} eventKey={i}>
+						{opt}
+					</MenuItem>
+				))}
+			</DropdownButton>);
         <Button onClick={test} variant="light">Add</Button>
         <Button onClick={makeClass} variant="light">Submit</Button>
-      </div>
-      <Fragment>{layout}</Fragment>
-      <div className="layoutFooter">
-        <Button variant="light">Edit Seat Plan</Button>
-        <Button variant="light">More Options...</Button>
-      </div>
+		</div>
+		<Fragment>{layout}</Fragment>
+		<div className="layoutFooter">
+			<Button variant="light">Edit Seat Plan</Button>
+			<Button variant="light">More Options...</Button>
+		</div>
     </div>
 );
 }
