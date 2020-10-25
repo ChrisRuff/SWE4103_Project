@@ -151,7 +151,6 @@ namespace backend
 			FilterDefinition<BsonDocument> query 
 				= Builders<BsonDocument>.Filter.Eq("name", className);
 
-
 			// If no classes were found throw exception
 			var foundClasses = classes.Find(query);
 			if(foundClasses.CountDocuments() <= 0)
@@ -204,6 +203,33 @@ namespace backend
 				MrClassy.AccessibleSeats[i] = seat;
 			}
 			return MrClassy;
+		}
+		public bool WipeSeats(string name)
+		{
+			// Create a filter that will find the class with the given email
+			FilterDefinition<BsonDocument> query 
+				= Builders<BsonDocument>.Filter.Eq("name", name);
+			
+			var foundClasses = classes.Find(query);
+			if(foundClasses.CountDocuments() <= 0)
+			{
+				return false;
+			}
+
+			var foundClass = foundClasses.First();
+
+			UpdateDefinition<BsonDocument> update = 
+				Builders<BsonDocument>.Update.Set("aSeats", new BsonArray{});
+			classes.UpdateOne(query, update);
+
+			update = 
+				Builders<BsonDocument>.Update.Set("rSeats", new BsonArray{});
+			classes.UpdateOne(query, update);
+
+			update = 
+				Builders<BsonDocument>.Update.Set("dSeats", new BsonArray{});
+			classes.UpdateOne(query, update);
+			return true;
 		}
 	}
 }

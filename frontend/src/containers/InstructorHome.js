@@ -53,8 +53,14 @@ export default function InstructorHome() {
     return layout;
 	};
 
+	const prof = [{
+		"name":"Dawn",
+		"email":"dawn@unb.ca",
+		"pass":"pass",
+		"classes": []
+	}];
 	const classes = useStyles();
-	const [layout, setLayout] = useState(createLayout(5,6));
+	const [layout, setLayout] = useState(createLayout(5,5));
 
 
 	
@@ -123,18 +129,14 @@ export default function InstructorHome() {
 	};
 
 	const makeClass = () => {
-		deleteClass()
 		var cols = layout[0].props.children.props.children[0].props.children.length;
 		var rows = layout[0].props.children.props.children.length;
 		var className = title;
-		var newClass = [{"className": className, "height": cols, "width": rows}]
+		var newClass = [{"className": className, "height": cols, "width": rows}];
 		AspNetConnector.makeClass(newClass);	
+		AspNetConnector.profAddClass([{"email": prof[0].email, "classes" : [{"className": title}]}]);
+		//AspNetConnector.wipeSeats([{"className": title}]);
 		addSeats();
-	}
-	const deleteClass = () => {
-		var className = title;
-		var newClass = [{"className": className}]
-		AspNetConnector.removeClass(newClass);
 	}
 	
 	const addSeats = () => {
@@ -158,25 +160,19 @@ export default function InstructorHome() {
 
 				AspNetConnector.disableSeat(classDTO);
 			}
-			/*
 			else if(currentLayout[i].seatType == "accessible"){
-				var seat = [{"x": currentLayout[i].x, "y": currentLayout[i].y}]
-				classDTO.seat = seat;
+				var accessibleSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y};
+				console.log(accessibleSeat);
+				classDTO[0].seat = accessibleSeat;
 
 				AspNetConnector.makeSeatAccessible(classDTO);
 			}	
-			*/
 		}
 	}
 
-	const prof = [{
-		"name":"Dawn",
-		"email":"dawn@unb.ca",
-		"pass":"pass",
-		"classes": [{"className": "SWE4103"}, {"className": "CS2043"}]
-	}];
 	AspNetConnector.addProf(prof);
 	AspNetConnector.profAddClass(prof);
+	AspNetConnector.wipeSeats([{"className": title}]);
 
 	let classList = JSON.parse(AspNetConnector.profGetClasses(prof).response);
 	const handleSelect = (eventKey, event) => {
@@ -189,6 +185,7 @@ export default function InstructorHome() {
 			console.log(StateManager.getClassLayout());
 			setLayout(loadLayout(classLayout[0]));
 		}
+		console.log(StateManager.getSeats());
 	}
 	const newClass = () =>
 	{

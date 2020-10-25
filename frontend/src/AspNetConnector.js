@@ -195,7 +195,7 @@ export var AspNetConnector = {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/class/add', true);
+		request.open('POST', 'api/class/add', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
@@ -216,7 +216,7 @@ export var AspNetConnector = {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/seat/disable', true);
+		request.open('POST', 'api/student/seat/disable', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
@@ -237,7 +237,7 @@ export var AspNetConnector = {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/class/remove', true);
+		request.open('POST', 'api/student/class/remove', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
@@ -258,9 +258,28 @@ export var AspNetConnector = {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/seat/reserve', true);
+		request.open('POST', 'api/student/seat/reserve', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
+		
+		return request;
+	},
+	makeSeatAccessible: function(students) {
+			
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/student/seat/accessible', false);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(students));
+		
+		return request;
+	},
+	wipeSeats: function(classDTO) {
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/class/seat/wipe', false);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(classDTO));
 		
 		return request;
 	}
