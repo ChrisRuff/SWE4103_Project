@@ -1,18 +1,32 @@
 
 export var StateManager = {
-    exampleData: null,
-		x: 0,
-		y: 0,
-		numRows: 0,
-		numCols: 0,
-		seats: [],
-    setExampleData(data) {
-        this.exampleData = data;
-    },
-    getExampleData() {
-        return this.exampleData;
-    },
-	addSeat(x, y, seatType, seat) {
+  exampleData: null,
+	classLayout: null,
+	selectedClass: "--",
+	x: 0,
+	y: 0,
+	numRows: 0,
+	numCols: 0,
+  seats: [],
+  setExampleData(data) {
+    this.exampleData = data;
+  },
+  getExampleData() {
+    return this.exampleData;
+  },
+	getSelectedClass(data){
+		this.selectedClass = data;
+	},
+	getSelectedClass(){
+		return this.selectedClass;
+	},
+	setClassLayout(layout){
+		this.classLayout = layout;
+	},
+	getClassLayout(){
+		return this.classLayout
+	},
+  addSeat(x, y, seatType, seat) {
 		this.seats.push({"seatType": seatType, "x": x, "y": y, "seat": seat});
 
 		if(this.seats.length > this.numCols * this.numRows)

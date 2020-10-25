@@ -1,13 +1,15 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Dropdown, DropdownButton } from "react-bootstrap";
+import { Button, Dropdown, DropdownButton, MenuItem} from "react-bootstrap";
+import { AspNetConnector } from "../AspNetConnector.js";
 import Grid from "@material-ui/core/Grid";
 import "./InstructorHome.css";
+import { StateManager } from "../StateManager.js"
 import Seat from "../components/Seat.js";
-import {AspNetConnector} from "../AspNetConnector.js";
-import {StateManager} from "../StateManager.js";
 
 export default function InstructorHome() {
+
+	const [title, setTitle] = useState("--");
 	const useStyles = makeStyles((theme) => ({
 		paper: {
 			padding: theme.spacing(1),
@@ -175,27 +177,50 @@ export default function InstructorHome() {
 		}
 	}
 
-	const deleteClass = () => {
+  const layout = createLayout(5, 5);
+	const prof = [{
+		"name":"Dawn",
+		"email":"dawn@unb.ca",
+		"pass":"pass",
+		"classes": [{"className": "SWE4103"}, {"className": "CS2043"}]
+	}];
+	AspNetConnector.addProf(prof);
+	AspNetConnector.profAddClass(prof);
+
+	let classList = JSON.parse(AspNetConnector.profGetClasses(prof).response);
+	const handleSelect = (eventKey, event) => {
+		StateManager.setSelectedClass(classList[eventKey]);
+		setTitle(classList[eventKey]);
+		StateManager.setClassLayout(AspNetConnector.getClasses([{"className": classList[eventKey]}]));
+	}
+  
+  const deleteClass = () => {
 		var className = "TestClass";
 		var newClass = [{"className": className}]
 		AspNetConnector.removeClass(newClass);
-	}
-
+  }
+  
 return (
     <div>
-		<div className="layoutHeader">
-			<DropdownButton
-			id="dropdown-basic-button"
-			title="Dropdown button"
-			></DropdownButton>
-			<Button onClick={test} width='min-content' height='min-content' variant="light">Add</Button>
-			<Button onClick={makeClass} variant="light">Submit</Button>
-		</div>
-		<Fragment>{layout}</Fragment>
-		<div className="layoutFooter">
-			<Button variant="light">Edit Seat Plan</Button>
-			<Button variant="light">More Options...</Button>
-		</div>
+      <div className="layoutHeader">
+				<DropdownButton 
+					title={StateManager.getSelectedClass()}
+					id="classDropdown"
+					onSelect={handleSelect.bind(this)}>
+					{classList.map((opt, i) => (
+						<MenuItem key={i} eventKey={i}>
+							{opt}
+						</MenuItem>
+					))}
+				</DropdownButton>);
+        <Button onClick={test} variant="light">Add</Button>
+        <Button onClick={makeClass} variant="light">Submit</Button>
+      </div>
+      <Fragment>{layout}</Fragment>
+      <div className="layoutFooter">
+        <Button variant="light">Edit Seat Plan</Button>
+        <Button variant="light">More Options...</Button>
+      </div>
     </div>
 );
 }
