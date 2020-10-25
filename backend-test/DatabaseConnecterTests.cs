@@ -125,17 +125,6 @@ namespace test
 			Assert.True(caught);
 		}
     
-		[Fact]
-		public void MakeClassAndDisableSeat()
-		{
-			DatabaseConnector.Connector.RemoveClass("CS2043");
-			Assert.True(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
-			Assert.False(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
-
-			Assert.True(DatabaseConnector.Connector.DisableSeat("CS2043", 1, 1));
-			Assert.False(DatabaseConnector.Connector.DisableSeat("CS2043", 1, 1));
-		}
-
 		public void GetStudent()
 		{
 			// Ensure there aren't any test coles out there 
@@ -196,6 +185,22 @@ namespace test
 			Assert.False(DatabaseConnector.Connector.DisableSeat("CS243", 10, 10));
 
 			Assert.True(DatabaseConnector.Connector.RemoveClass("CS2043"));
+		}
+		[Fact]
+		public void MakeClassAndAccessible()
+		{
+			DatabaseConnector.Connector.RemoveClass("CS2043");
+
+			Assert.True(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
+			Assert.False(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
+
+			Assert.True(DatabaseConnector.Connector.AccessibleSeat("CS2043", 1, 1));
+			Assert.False(DatabaseConnector.Connector.AccessibleSeat("CS2043", 1, 1));
+			Assert.False(DatabaseConnector.Connector.AccessibleSeat("CS2043", 10, 10));
+			Assert.False(DatabaseConnector.Connector.AccessibleSeat("CS243", 10, 10));
+
+			Assert.True(DatabaseConnector.Connector.RemoveClass("CS2043"));
+
 		}
 
 		[Fact]
