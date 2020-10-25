@@ -19,6 +19,7 @@ export default function InstructorHome() {
 	}));
 
 	const createLayout = (numRows, numCols) => {
+		StateManager.wipeSeats();
 		StateManager.setRows(numRows);
 		StateManager.setCols(numCols);
 
@@ -104,7 +105,7 @@ export default function InstructorHome() {
 			}
 		}
 		// Add seat with specified seat type
-        cols.push(
+		cols.push(
 			<div key={i} className="seat">
 				<Seat x={i} y={j} seatType={type}/>
 			</div>
@@ -112,9 +113,9 @@ export default function InstructorHome() {
 	}
 	
 	rows.push(
-        <Grid item className="row" key={j} col={j} xs={12}>
+		<Grid item className="row" key={j} col={j} xs={12}>
 			{cols}
-        </Grid>
+		</Grid>
 	);
     }
 
@@ -135,12 +136,12 @@ export default function InstructorHome() {
 		var newClass = [{"className": className, "height": cols, "width": rows}];
 		AspNetConnector.makeClass(newClass);	
 		AspNetConnector.profAddClass([{"email": prof[0].email, "classes" : [{"className": title}]}]);
-		//AspNetConnector.wipeSeats([{"className": title}]);
 		addSeats();
 	}
 	
 	const addSeats = () => {
 		var currentLayout = StateManager.getSeats();
+		AspNetConnector.wipeSeats([{"className": title}]);
 
 		for( var i=0; i<currentLayout.length; i++){
 			let classDTO = [{
@@ -162,7 +163,6 @@ export default function InstructorHome() {
 			}
 			else if(currentLayout[i].seatType == "accessible"){
 				var accessibleSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y};
-				console.log(accessibleSeat);
 				classDTO[0].seat = accessibleSeat;
 
 				AspNetConnector.makeSeatAccessible(classDTO);
@@ -172,7 +172,6 @@ export default function InstructorHome() {
 
 	AspNetConnector.addProf(prof);
 	AspNetConnector.profAddClass(prof);
-	AspNetConnector.wipeSeats([{"className": title}]);
 
 	let classList = JSON.parse(AspNetConnector.profGetClasses(prof).response);
 	const handleSelect = (eventKey, event) => {
