@@ -5,7 +5,6 @@ import { AspNetConnector } from "../AspNetConnector.js";
 import Grid from "@material-ui/core/Grid";
 import "./InstructorHome.css";
 import { StateManager } from "../StateManager.js"
-import {AspNetConnector} from "../AspNetConnector.js";
 import Seat from "../components/Seat.js";
 
 export default function InstructorHome() {
