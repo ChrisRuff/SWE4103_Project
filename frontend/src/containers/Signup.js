@@ -26,7 +26,7 @@ export default function Signup() {
     password: "",
     confirmPassword: "",
     confirmationCode: "",
-    account: "", //student account or professor account
+    account: "",    //student account or professor account
   });
 
   const handleChange = (event) => {
@@ -36,11 +36,13 @@ export default function Signup() {
   };
 
   function validateForm() {
+    //testing to check if it works
+    //console.log(fields.account); 
     return (
       fields.email.length > 0 &&
       fields.password.length > 0 &&
       fields.password === fields.confirmPassword &&
-      fields.account != null
+      fields.account !== ""     //makes sure a type of account is selected
     );
   } 
 
