@@ -40,37 +40,6 @@ namespace test
 			
 		}
 
-		[Fact]
-		public void AddAndGetSeat()
-		{
-			var testStudent = GetTestStudents();
-			var controller = new StudentController(_logger);
-			controller.RemoveStudent(testStudent);
-
-			// attempt to get seat
-			var request2 = controller.GetSeatAPI(testStudent[0]);
-			Assert.False(request2.response);
-
-			// add student
-			var request = controller.AddStudent(testStudent);
-			Assert.True(request[0].response);
-
-			// add class for student
-			request = controller.AddClass(testStudent);
-			Assert.True(request[0].response);
-
-			// add seat
-			request = controller.AddSeatAPI(testStudent);
-			Assert.True(request[0].response);
-
-			// get seat
-			request2 = controller.GetSeatAPI(testStudent[0]);
-			Assert.True(request2.response);
-
-			// cleanup
-			request = controller.RemoveStudent(testStudent);
-			Assert.True(request[0].response);
-		}
 		/*
 		[Fact]
 		public void IsAbsentInvalid()
@@ -103,89 +72,20 @@ namespace test
 
 			// attempt to get student
 			controller.RemoveStudent(testStudent);
-			var request = controller.GetStudentAPI(testStudent[0]);
-			Assert.False(request.response);
+			var request = controller.GetStudentAPI(testStudent);
+			Assert.False(request[0].response);
 
 			// add student
-			var request2 = controller.AddStudent(testStudent);
-			Assert.True(request2[0].response);
+			request = controller.AddStudent(testStudent);
+			Assert.True(request[0].response);
 
 			// get student
-			request = controller.GetStudentAPI(testStudent[0]);
-			Assert.True(request.response);
+			request = controller.GetStudentAPI(testStudent);
+			Assert.True(request[0].response);
 
 			// cleanup
-			request2 = controller.RemoveStudent(testStudent);
-			Assert.True(request2[0].response);
-		}
-
-		[Fact]
-		public void DisableSeat()
-		{
-			var testClass = GetTestClass();
-			var controller = new StudentController(_logger);
-
-			// add class
-			var request = controller.MakeClassAPI(testClass);
-			Assert.True(request.response);
-
-			// disable a seat
-			request = controller.DisableSeatAPI(testClass);
-			Assert.True(request.response);
-
-			// attempt to disable same seat
-			request = controller.DisableSeatAPI(testClass);
-			Assert.False(request.response);
-
-			// cleanup
-			request = controller.RemoveClassAPI(testClass);
-			Assert.True(request.response);
-		}
-
-		[Fact]
-		public void ReserveSeat()
-		{
-			var testClass = GetTestClass();
-			var controller = new StudentController(_logger);
-
-			// add class
-			var request = controller.MakeClassAPI(testClass);
-			Assert.True(request.response);
-
-			// reserve a seat
-			request = controller.ReserveSeatAPI(testClass);
-			Assert.True(request.response);
-
-			// attempt to reserve same seat
-			request = controller.ReserveSeatAPI(testClass);
-			Assert.False(request.response);
-
-			// cleanup
-			request = controller.RemoveClassAPI(testClass);
-			Assert.True(request.response);
-		}
-
-		[Fact]
-		public void MakeAndRemoveClass()
-		{
-			var testClass = GetTestClass();
-			var controller = new StudentController(_logger);
-
-			// add class
-			var request = controller.MakeClassAPI(testClass);
-			Assert.True(request.response);
-
-			// attempt to add class again
-			request = controller.MakeClassAPI(testClass);
-			Assert.False(request.response);
-
-			// delete class
-			request = controller.RemoveClassAPI(testClass);
-			Assert.True(request.response);
-
-			// attempt to delete class again
-			request = controller.RemoveClassAPI(testClass);
-			Assert.False(request.response);
+			request = controller.RemoveStudent(testStudent);
+			Assert.True(request[0].response);
 		}
 
 		[Fact]
@@ -223,30 +123,12 @@ namespace test
 								}
 							}
 						},
-						email = "email@email.com",
+						email = "email1@gmail.com",
 						pass = "password",
 						response = false
 					});
 
 			return testStudents;
-		}
-
-		private ClassDTO GetTestClass()
-		{
-			var testClass =
-					new ClassDTO
-					{
-						className = "TEST1001",
-						width = 100,
-						height = 32,
-						seat = new SeatDTO
-						{
-							x = 5,
-							y = 10
-						}
-					};
-
-			return testClass;
 		}
 	}
 }
