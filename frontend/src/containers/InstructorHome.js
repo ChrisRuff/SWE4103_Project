@@ -126,10 +126,15 @@ export default function InstructorHome() {
 		deleteClass()
 		var cols = layout[0].props.children.props.children[0].props.children.length;
 		var rows = layout[0].props.children.props.children.length;
-		var className = "TestClass";
+		var className = title;
 		var newClass = [{"className": className, "height": cols, "width": rows}]
 		AspNetConnector.makeClass(newClass);	
 		addSeats();
+	}
+	const deleteClass = () => {
+		var className = title;
+		var newClass = [{"className": className}]
+		AspNetConnector.removeClass(newClass);
 	}
 	
 	const addSeats = () => {
@@ -137,7 +142,7 @@ export default function InstructorHome() {
 
 		for( var i=0; i<currentLayout.length; i++){
 			let classDTO = [{
-				"className": "TestClass",
+				"className": title,
 				"seat": null
 			}]
 
@@ -185,12 +190,14 @@ export default function InstructorHome() {
 			setLayout(loadLayout(classLayout[0]));
 		}
 	}
-
-	const deleteClass = () => {
-		var className = "TestClass";
-		var newClass = [{"className": className}]
-		AspNetConnector.removeClass(newClass);
+	const newClass = () =>
+	{
+		let name = prompt("New Class Name");
+		setLayout(createLayout(5,5));
+		StateManager.setSelectedClass(name);
+		setTitle(name);
 	}
+
 
 return (
     <div>
@@ -205,7 +212,7 @@ return (
 					</MenuItem>
 				))}
 			</DropdownButton>);
-        <Button variant="light">Add</Button>
+        <Button onClick={newClass} variant="light">Add</Button>
         <Button onClick={makeClass} variant="light">Submit</Button>
 		</div>
 		<Fragment>{layout}</Fragment>
