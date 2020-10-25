@@ -122,19 +122,6 @@ export default function InstructorHome() {
     return layout;
 	};
 
-	const test = () => {
-		let ClassDTO = {
-			"disabledSeats": [{"x": 1, "y": 1}], 
-			"height": 5,
-			"width": 3,
-			"reservedSeats": [{"x": 2, "y": 1}],
-			"accessibleSeats": [{"x": 2, "y": 2}]
-		}
-
-		setLayout(loadLayout(ClassDTO));
-
-	}
-
 	const makeClass = () => {
 		deleteClass()
 		var cols = layout[0].props.children.props.children[0].props.children.length;
@@ -177,7 +164,6 @@ export default function InstructorHome() {
 		}
 	}
 
-	//layout = createLayout(5, 5);
 	const prof = [{
 		"name":"Dawn",
 		"email":"dawn@unb.ca",
@@ -191,7 +177,13 @@ export default function InstructorHome() {
 	const handleSelect = (eventKey, event) => {
 		StateManager.setSelectedClass(classList[eventKey]);
 		setTitle(classList[eventKey]);
-		StateManager.setClassLayout(AspNetConnector.getClasses([{"className": classList[eventKey]}]));
+		let classLayout = JSON.parse(AspNetConnector.getClasses([{"className": classList[eventKey]}]).response);
+		if(classLayout[0].response)
+		{
+			StateManager.setClassLayout(classLayout[0]);
+			console.log(StateManager.getClassLayout());
+			setLayout(loadLayout(classLayout[0]));
+		}
 	}
 
 	const deleteClass = () => {
@@ -213,7 +205,7 @@ return (
 					</MenuItem>
 				))}
 			</DropdownButton>);
-        <Button onClick={test} variant="light">Add</Button>
+        <Button variant="light">Add</Button>
         <Button onClick={makeClass} variant="light">Submit</Button>
 		</div>
 		<Fragment>{layout}</Fragment>

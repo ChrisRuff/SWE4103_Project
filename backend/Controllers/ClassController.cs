@@ -22,14 +22,22 @@ namespace backend
         }
 
         [HttpPost, Route("api/class/get")]
-		public List<ClassDTO> GetClass(List<ClassDTO> classes)
-		{
-			for(int i = 0; i < classes.Count; ++i)
-			{
-				classes[i] = DatabaseConnector.Connector.GetClass(classes[i].className);
-			}
-			return classes;
-		}
+				public List<ClassDTO> GetClass(List<ClassDTO> classes)
+				{
+					for(int i = 0; i < classes.Count; ++i)
+					{
+						try
+						{
+							classes[i] = DatabaseConnector.Connector.GetClass(classes[i].className);
+							classes[i].response = true;
+						}
+						catch(System.Exception)
+						{
+							classes[i].response = false;
+						}
+					}
+					return classes;
+				}
         
         [HttpPost, Route("api/class/add")]
         public List<ClassDTO> MakeClassAPI(List<ClassDTO> classDTOs)
