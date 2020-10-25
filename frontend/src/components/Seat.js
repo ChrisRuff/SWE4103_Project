@@ -9,17 +9,17 @@ export default class Seat extends Component {
 		super(props);
 		this.y = StateManager.getY();
 		this.x = StateManager.getX();
-		if(props.seatType == null || props.seatType == "")
+		if(props.seatType == null || props.seatType === "")
 		{
 			this.state = {
-							seatType: "available",
-					};
+				seatType: "available",
+			};
 		}
 		else
 		{
 			this.state = {
-							seatType: props.seatType,
-					};
+				seatType: props.seatType,
+			};
 		}
 		StateManager.incX();
 	}
@@ -51,7 +51,7 @@ export default class Seat extends Component {
 				break;
 			default:
 				this.disable();
-		  } 
+		} 
 	}
 	
 	render() {
