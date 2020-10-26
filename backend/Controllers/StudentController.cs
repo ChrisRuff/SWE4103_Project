@@ -30,6 +30,7 @@ namespace backend
             }
             return students;
         }
+<<<<<<< HEAD
 
         [HttpPost, Route("api/student/seat/add")]
         public List<StudentDTO> AddSeatAPI(List<StudentDTO> students)
@@ -81,6 +82,8 @@ namespace backend
             }
             return student;
         }
+=======
+>>>>>>> b7ba8f0938707611319191f2d7fc0d9e7e74311b
         /*
         [HttpPost, Route("api/student/absence/get")]
         public StudentDTO IsAbsentAPI(StudentDTO student)
@@ -110,26 +113,37 @@ namespace backend
             }
             return students;
         }
-
-        [HttpPost, Route("api/student/class/add")]
-        public List<StudentDTO> AddClass(List<StudentDTO> students)
+        
+        [HttpPost, Route("api/student/get")]
+        public List<StudentDTO> GetStudentAPI(List<StudentDTO> students)
         {
             for (int i = 0; i < students.Count; i++)
             {
-                
-                for (int j = 0; j < students[i].classes.Length; j++)
+                try
                 {
-                    bool res = DatabaseConnector.Connector.AddClass(students[i].email, students[i].classes[j].className);
-                    students[i].response = res;
+                    if (!DatabaseConnector.Connector.CheckPassStudent(students[i].email, students[i].pass))
+                    {
+                        students[i].response = false;
+                        continue;
+                    }
+                    else
+                    {
+                        students[i] = DatabaseConnector.Connector.GetStudent(students[i].email);
+                        students[i].response = true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    students[i].response = false;
                 }
             }
             return students;
         }
-        
 
-        [HttpPost, Route("api/student/get")]
-        public StudentDTO GetStudentAPI(StudentDTO student)
+        [HttpPost, Route("api/student/login")]
+        public List<StudentDTO> LoginStudent(List<StudentDTO> students)
         {
+<<<<<<< HEAD
             try
             {
                 if (!DatabaseConnector.Connector.CheckPassStudent(student.email, student.pass))
@@ -141,49 +155,14 @@ namespace backend
                 }
             }
             catch (Exception)
+=======
+            for (int i = 0; i < students.Count; i++)
+>>>>>>> b7ba8f0938707611319191f2d7fc0d9e7e74311b
             {
-                student.response = false;   
+                bool res = DatabaseConnector.Connector.CheckPassStudent(students[i].email, students[i].pass);
+                students[i].response = res;
             }
-            return student;
-        }
-
-        [HttpPost, Route("api/student/class/add")]
-        public ClassDTO MakeClassAPI(ClassDTO classDTO)
-        {
-            bool res = DatabaseConnector.Connector.MakeClass(classDTO.className,
-                classDTO.width, classDTO.height);
-            classDTO.response = res;
-
-            return classDTO;
-        }
-
-        [HttpPost, Route("api/student/seat/disable")]
-        public ClassDTO DisableSeatAPI(ClassDTO classDTO)
-        {
-            bool res = DatabaseConnector.Connector.DisableSeat(classDTO.className,
-                classDTO.seat.x, classDTO.seat.y);
-            classDTO.response = res;
-
-            return classDTO;
-        }
-
-        [HttpPost, Route("api/student/seat/reserve")]
-        public ClassDTO ReserveSeatAPI(ClassDTO classDTO)
-        {
-            bool res = DatabaseConnector.Connector.ReserveSeat(classDTO.className,
-                classDTO.seat.x, classDTO.seat.y);
-            classDTO.response = res;
-
-            return classDTO;
-        }
-
-        [HttpPost, Route("api/student/class/remove")]
-        public ClassDTO RemoveClassAPI(ClassDTO classDTO)
-        {
-            bool res = DatabaseConnector.Connector.RemoveClass(classDTO.className);
-            classDTO.response = res;
-
-            return classDTO;
+            return students;
         }
     }
 }
