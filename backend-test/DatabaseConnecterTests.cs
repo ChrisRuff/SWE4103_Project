@@ -177,5 +177,26 @@ namespace test
 
 			Assert.True(DatabaseConnector.Connector.RemoveClass("CS2043"));
 		}
+		[Fact]
+		public void ProfLogin()
+		{
+			DatabaseConnector.Connector.AddProf("Tester", "test@gmail.com", "password");
+			DatabaseConnector.Connector.RemoveProf("wrong@gmail.com");
+			Assert.True(DatabaseConnector.Connector.CheckPassProf("test@gmail.com", "password"));
+			Assert.True(DatabaseConnector.Connector.CheckPassProf("test@gmail.com", "password"));
+			Assert.False(DatabaseConnector.Connector.CheckPassProf("test@gmail.com", "passwor"));
+			Assert.False(DatabaseConnector.Connector.CheckPassProf("wrong@gmail.com", "passwor"));
+		}
+
+		[Fact]
+		public void StudentLogin()
+		{
+			DatabaseConnector.Connector.AddStudent("Tester", "test@gmail.com", "password");
+			DatabaseConnector.Connector.RemoveStudent("wrong@gmail.com");
+			Assert.True(DatabaseConnector.Connector.CheckPassStudent("test@gmail.com", "password"));
+			Assert.True(DatabaseConnector.Connector.CheckPassStudent("test@gmail.com", "password"));
+			Assert.False(DatabaseConnector.Connector.CheckPassStudent("test@gmail.com", "passwor"));
+			Assert.False(DatabaseConnector.Connector.CheckPassStudent("wrong@gmail.com", "passwor"));
+		}
 	}
 }
