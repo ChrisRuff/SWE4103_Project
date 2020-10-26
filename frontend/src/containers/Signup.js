@@ -25,8 +25,8 @@ export default function Signup() {
     email: "",
     password: "",
     confirmPassword: "",
-    confirmationCode: "",
-    account: "",    //student account or professor account
+    //confirmationCode: "", 
+    account: "",    
   });
 
   const handleChange = (event) => {
@@ -42,13 +42,13 @@ export default function Signup() {
       fields.email.length > 0 &&
       fields.password.length > 0 &&
       fields.password === fields.confirmPassword &&
-      fields.account !== ""     //makes sure a type of account is selected
+      fields.account !== ""     
     );
   } 
 
-  function validateConfirmationForm() {
-    return fields.confirmationCode.length > 0;
-  }
+  //function validateConfirmationForm() {
+    //return fields.confirmationCode.length > 0;
+  //}
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -63,11 +63,11 @@ export default function Signup() {
 
   // This will only be utilized if we want to send new users
   // an emailed confirmation code when signing up
-  async function handleConfirmationSubmit(event) {
-    event.preventDefault();
+  //async function handleConfirmationSubmit(event) {
+    //event.preventDefault();
 
-    setIsLoading(true);
-  }
+    //setIsLoading(true);
+  //}
 
   function renderConfirmationForm() {
     return (

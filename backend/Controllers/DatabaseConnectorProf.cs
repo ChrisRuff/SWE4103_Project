@@ -13,9 +13,6 @@ namespace backend
 	{
 		public bool CheckPassProf(string email, string pass)
 		{
-<<<<<<< HEAD
-			return true;
-=======
 			FilterDefinition<BsonDocument> query 
 				= Builders<BsonDocument>.Filter.Eq("email", email);
 			var qResults = profs.Find(query);
@@ -32,7 +29,6 @@ namespace backend
 			{
 				return false;
 			}
->>>>>>> b7ba8f0938707611319191f2d7fc0d9e7e74311b
 		}
 		public bool AddProf(string name, string email, string pass)
 		{
