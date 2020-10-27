@@ -3,7 +3,6 @@ import { Link, useHistory } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
 import "./App.css";
-import { AspNetConnector } from "./AspNetConnector.js";
 import Routes from "./Routes";
 import { AppContext } from "./libs/contextLib";
 
