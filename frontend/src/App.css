@@ -2,6 +2,32 @@
   margin-top: 15px;
 }
 
+.navbar-default {
+  background-color: #cd5c5c;
+}
+
 .App .navbar-brand {
   font-weight: bold;
+  color: white;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: white;
+}
+
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: white;
+  background-color: transparent;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: white;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .active > a:hover {
+  color: white;
+  background-color: #cd5c5c;
 }
