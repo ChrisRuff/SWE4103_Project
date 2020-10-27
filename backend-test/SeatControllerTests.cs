@@ -54,6 +54,7 @@ namespace test
 			var seatController = new SeatController(_seatLogger);
 			var classController = new ClassController(_classLogger);
 
+			DatabaseConnector.Connector.RemoveClass(testClass[0].className);
 			// add class
 			var request = classController.MakeClassAPI(testClass);
 			Assert.True(request[0].response);
@@ -76,6 +77,8 @@ namespace test
 			var testClass = GetTestClass();
 			var seatController = new SeatController(_seatLogger);
 			var classController = new ClassController(_classLogger);
+
+			DatabaseConnector.Connector.RemoveClass(testClass[0].className);
 
 			// add class
 			var request = classController.MakeClassAPI(testClass);
