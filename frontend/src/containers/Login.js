@@ -5,7 +5,7 @@ import LoaderButton from "../components/LoaderButton";
 import { useAppContext } from "../libs/contextLib";
 import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
-import { sha512 } from "js-sha512";
+import * as sha512 from "js-sha512";
 import "./Login.css";
 import { Radio, RadioGroup, FormControlLabel } from "@material-ui/core";
 import { AspNetConnector } from "../AspNetConnector.js" 
@@ -42,7 +42,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      let hash = sha512(fields.password);
+      let hash = sha512.sha512(fields.password);
       if ((fields.account==="student")){
         let request = await AspNetConnector.loginStudent([{
           "email": fields.email,
