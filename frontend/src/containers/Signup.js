@@ -56,7 +56,6 @@ export default function Signup() {
     event.preventDefault();
     setIsLoading(true);
     try {
-      console.log(fields.account);
       if(fields.account==="student"){
         const newUser = await AspNetConnector.addStudents([{
           "studentName": fields.name,
@@ -71,7 +70,6 @@ export default function Signup() {
           "pass": hash,
         }]);
       }
-      setIsLoading(false);
       setNewUser(newUser);
       userHasAuthenticated(true);
       history.push("/");

@@ -8,6 +8,7 @@ import { onError } from "../libs/errorLib";
 import { sha512 } from "js-sha512";
 import "./Login.css";
 import { AspNetConnector } from "../AspNetConnector.js" 
+import { StateManager } from "../StateManager";
 
 export default function Login() {
   const history = useHistory();
@@ -25,17 +26,30 @@ export default function Login() {
   // handleSubmit is called once the 'login' button is clicked
   async function handleSubmit(event) {
     event.preventDefault();
-
     setIsLoading(true);
 
     try {
-      // TODO: Use AspNetConnector to sign in
-      userHasAuthenticated(true);
-      // Push to Instructor view for now
-      history.push("/InstructorHome");
+      let hash = sha512(fields.password);
+      let request = await AspNetConnector.loginProf([{
+        "email": fields.email,
+        "pass": hash,
+      }]);
+      request.onload = function() {
+        let obj = (JSON.parse(request.response));
+        let value = (obj[0].response);
+        if (value === true){
+          userHasAuthenticated(true);
+          history.push("/InstructorHome"); 
+        }
+        else{
+          onError("Invalid password");
+          userHasAuthenticated(false);
+          history.push("/")
+        }
+      }
     } catch (e) {
       onError(e);
-      setIsLoading(false);
+      setIsLoading(false); 
     }
   }
 
