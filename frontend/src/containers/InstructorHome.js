@@ -171,7 +171,7 @@ export default function InstructorHome() {
 	}
 
 	AspNetConnector.addProf(prof);
-	AspNetConnector.profAddClass(prof);
+	//AspNetConnector.profAddClass(prof);
 
 	let classList = JSON.parse(AspNetConnector.profGetClasses(prof).response);
 	const handleSelect = (eventKey, event) => {
