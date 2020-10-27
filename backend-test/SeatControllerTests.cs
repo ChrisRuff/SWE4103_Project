@@ -54,8 +54,12 @@ namespace test
 			var seatController = new SeatController(_seatLogger);
 			var classController = new ClassController(_classLogger);
 
+			// attempt to disable non existent seat
+			var request = seatController.DisableSeatAPI(testClass);
+			Assert.False(request[0].response);
+
 			// add class
-			var request = classController.MakeClassAPI(testClass);
+			request = classController.MakeClassAPI(testClass);
 			Assert.True(request[0].response);
 
 			// disable a seat
@@ -68,7 +72,6 @@ namespace test
 
 			// cleanup
 			request = classController.RemoveClassAPI(testClass);
-			Assert.True(request[0].response);
 		}
 
 		[Fact]
