@@ -19,6 +19,7 @@ export default function InstructorHome() {
 	}));
 
 	const createLayout = (numRows, numCols) => {
+		StateManager.wipeSeats();
 		StateManager.setRows(numRows);
 		StateManager.setCols(numCols);
 
@@ -53,8 +54,14 @@ export default function InstructorHome() {
     return layout;
 	};
 
+	const prof = [{
+		"name":"Dawn",
+		"email":"dawn@unb.ca",
+		"pass":"pass",
+		"classes": []
+	}];
 	const classes = useStyles();
-	const [layout, setLayout] = useState(createLayout(5,6));
+	const [layout, setLayout] = useState(createLayout(5,5));
 
 
 	
@@ -98,7 +105,7 @@ export default function InstructorHome() {
 			}
 		}
 		// Add seat with specified seat type
-        cols.push(
+		cols.push(
 			<div key={i} className="seat">
 				<Seat x={i} y={j} seatType={type}/>
 			</div>
@@ -106,9 +113,9 @@ export default function InstructorHome() {
 	}
 	
 	rows.push(
-        <Grid item className="row" key={j} col={j} xs={12}>
+		<Grid item className="row" key={j} col={j} xs={12}>
 			{cols}
-        </Grid>
+		</Grid>
 	);
     }
 
@@ -123,21 +130,22 @@ export default function InstructorHome() {
 	};
 
 	const makeClass = () => {
-		deleteClass()
 		var cols = layout[0].props.children.props.children[0].props.children.length;
 		var rows = layout[0].props.children.props.children.length;
-		var className = "TestClass";
-		var newClass = [{"className": className, "height": cols, "width": rows}]
+		var className = title;
+		var newClass = [{"className": className, "height": cols, "width": rows}];
 		AspNetConnector.makeClass(newClass);	
+		AspNetConnector.profAddClass([{"email": prof[0].email, "classes" : [{"className": title}]}]);
 		addSeats();
 	}
 	
 	const addSeats = () => {
 		var currentLayout = StateManager.getSeats();
+		AspNetConnector.wipeSeats([{"className": title}]);
 
 		for( var i=0; i<currentLayout.length; i++){
 			let classDTO = [{
-				"className": "TestClass",
+				"className": title,
 				"seat": null
 			}]
 
@@ -153,23 +161,15 @@ export default function InstructorHome() {
 
 				AspNetConnector.disableSeat(classDTO);
 			}
-			/*
 			else if(currentLayout[i].seatType == "accessible"){
-				var seat = [{"x": currentLayout[i].x, "y": currentLayout[i].y}]
-				classDTO.seat = seat;
+				var accessibleSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y};
+				classDTO[0].seat = accessibleSeat;
 
 				AspNetConnector.makeSeatAccessible(classDTO);
 			}	
-			*/
 		}
 	}
 
-	const prof = [{
-		"name":"Dawn",
-		"email":"dawn@unb.ca",
-		"pass":"pass",
-		"classes": [{"className": "SWE4103"}, {"className": "CS2043"}]
-	}];
 	AspNetConnector.addProf(prof);
 	AspNetConnector.profAddClass(prof);
 
@@ -184,13 +184,16 @@ export default function InstructorHome() {
 			console.log(StateManager.getClassLayout());
 			setLayout(loadLayout(classLayout[0]));
 		}
+		console.log(StateManager.getSeats());
+	}
+	const newClass = () =>
+	{
+		let name = prompt("New Class Name");
+		setLayout(createLayout(5,5));
+		StateManager.setSelectedClass(name);
+		setTitle(name);
 	}
 
-	const deleteClass = () => {
-		var className = "TestClass";
-		var newClass = [{"className": className}]
-		AspNetConnector.removeClass(newClass);
-	}
 
 return (
     <div>
@@ -205,7 +208,7 @@ return (
 					</MenuItem>
 				))}
 			</DropdownButton>);
-        <Button variant="light">Add</Button>
+        <Button onClick={newClass} variant="light">Add</Button>
         <Button onClick={makeClass} variant="light">Submit</Button>
 		</div>
 		<Fragment>{layout}</Fragment>

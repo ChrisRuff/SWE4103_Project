@@ -33,7 +33,7 @@ export var StateManager = {
 			this.seats.pop(this.numCols * this.numRows);
 	},
 	changeSeatType(x, y, seatType) {
-		var seatLoc = y * this.numCols + x; 
+		var seatLoc = y * this.numRows + x; 
 		this.seats[seatLoc].seatType = seatType;
 	},
 	getSeat(x,y) {
