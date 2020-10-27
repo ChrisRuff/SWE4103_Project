@@ -2,6 +2,19 @@
   margin-top: 15px;
 }
 
+.navbar-default {
+  background-color: #cd5c5c;
+}
+
 .App .navbar-brand {
   font-weight: bold;
+  color: white;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: white;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: white;
 }
