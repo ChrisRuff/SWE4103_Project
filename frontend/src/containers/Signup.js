@@ -12,7 +12,9 @@ import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
 import "./Signup.css";
 import { Radio, RadioGroup, FormControlLabel } from "@material-ui/core";
+import { sha512 } from "js-sha512";
 import { StateManager } from "../StateManager";
+import { AspNetConnector } from "../AspNetConnector.js" 
 
 export default function Signup() {
 
@@ -22,6 +24,7 @@ export default function Signup() {
   const { userHasAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -33,12 +36,14 @@ export default function Signup() {
     fields.account = event.target.value;  
     StateManager.setAccountState(event.target.value);
     setValue(event.target.value);
+    if (fields.password !== fields.confirmPassword){
+      onError("Passwords do not match");
+    }
   };
 
   function validateForm() {
-    //testing to check if it works
-    //console.log(fields.account); 
     return (
+      fields.name.length>0 &&
       fields.email.length > 0 &&
       fields.password.length > 0 &&
       fields.password === fields.confirmPassword &&
@@ -46,28 +51,43 @@ export default function Signup() {
     );
   } 
 
-  //function validateConfirmationForm() {
-    //return fields.confirmationCode.length > 0;
-  //}
-
   async function handleSubmit(event) {
+    let hash = sha512(fields.password);
     event.preventDefault();
-
     setIsLoading(true);
-
-    // TODO: replace this line with a database call to create a new user
-    setNewUser("test");
-
-    setIsLoading(false);
+    try {
+      console.log(fields.account);
+      if(fields.account==="student"){
+        const newUser = await AspNetConnector.addStudents([{
+          "studentName": fields.name,
+          "email": fields.email,
+          "pass": hash,
+        }]);
+      }
+      else{
+        const newUser = await AspNetConnector.addProf([{
+          "profName": fields.name,
+          "email": fields.email,
+          "pass": hash,
+        }]);
+      }
+      setIsLoading(false);
+      setNewUser(newUser);
+      userHasAuthenticated(true);
+      history.push("/");
+    } catch (e) {
+      onError(e);
+      setIsLoading(false);
+    }
   }
 
-  // This will only be utilized if we want to send new users
-  // an emailed confirmation code when signing up
-  //async function handleConfirmationSubmit(event) {
-    //event.preventDefault();
+  /* This will only be utilized if we want to send new users
+     an emailed confirmation code when signing up
+     async function handleConfirmationSubmit(event) {
+      event.preventDefault();
 
-    //setIsLoading(true);
-  //}
+      setIsLoading(true);
+    }
 
   function renderConfirmationForm() {
     return (
@@ -93,15 +113,23 @@ export default function Signup() {
         </LoaderButton>
       </form>
     );
-  }
+  }*/
 
   function renderForm() {
     return (
       <form onSubmit={handleSubmit}>
+        <FormGroup controlId="name" bsSize="large">
+          <ControlLabel>Name</ControlLabel>
+          <FormControl
+            autoFocus
+            type="name"
+            value={fields.name}
+            onChange={handleFieldChange}
+          />
+        </FormGroup>
         <FormGroup controlId="email" bsSize="large">
           <ControlLabel>Email</ControlLabel>
           <FormControl
-            autoFocus
             type="email"
             value={fields.email}
             onChange={handleFieldChange}
@@ -146,7 +174,7 @@ export default function Signup() {
 
   return (
     <div className="Signup">
-      {newUser === null ? renderForm() : renderConfirmationForm()}
+      {renderForm()}
     </div>
   );
 }

@@ -5,7 +5,9 @@ import LoaderButton from "../components/LoaderButton";
 import { useAppContext } from "../libs/contextLib";
 import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
+import { sha512 } from "js-sha512";
 import "./Login.css";
+import { AspNetConnector } from "../AspNetConnector.js" 
 
 export default function Login() {
   const history = useHistory();
