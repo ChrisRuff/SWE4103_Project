@@ -4,8 +4,9 @@ import { Button, Dropdown, DropdownButton, MenuItem} from "react-bootstrap";
 import { AspNetConnector } from "../AspNetConnector.js";
 import Grid from "@material-ui/core/Grid";
 import "./InstructorHome.css";
-import { StateManager } from "../StateManager.js"
+import { StateManager } from "../StateManager.js";
 import Seat from "../components/Seat.js";
+import { useHistory } from "react-router-dom";
 
 export default function InstructorHome() {
 
@@ -62,8 +63,6 @@ export default function InstructorHome() {
 	}];
 	const classes = useStyles();
 	const [layout, setLayout] = useState(createLayout(5,5));
-
-
 	
 	const loadLayout = (classDTO) => {
 		StateManager.wipeSeats();
@@ -194,6 +193,10 @@ export default function InstructorHome() {
 		setTitle(name);
 	}
 
+	const history = useHistory();
+  	function directToEditSeatPlanPage() {
+    	history.push("/EditSeatPlan");
+  	}
 
 return (
     <div>
@@ -213,7 +216,7 @@ return (
 		</div>
 		<Fragment>{layout}</Fragment>
 		<div className="layoutFooter">
-			<Button variant="light">Edit Seat Plan</Button>
+			<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
 			<Button variant="light">More Options...</Button>
 		</div>
     </div>
