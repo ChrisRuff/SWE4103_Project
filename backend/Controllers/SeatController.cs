@@ -95,10 +95,31 @@ namespace backend
             for (int i = 0; i < classDTOs.Count; i++)
             {
                 bool res = DatabaseConnector.Connector.ReserveSeat(classDTOs[i].className,
+									classDTOs[i].seat.x, classDTOs[i].seat.y);
+                classDTOs[i].response = res;
+            }
+            return classDTOs;
+        }
+        [HttpPost, Route("api/student/seat/accessible")]
+        public List<ClassDTO> AccessibleSeatAPI(List<ClassDTO> classDTOs)
+        {
+            for (int i = 0; i < classDTOs.Count; i++)
+            {
+                bool res = DatabaseConnector.Connector.AccessibleSeat(classDTOs[i].className,
                 classDTOs[i].seat.x, classDTOs[i].seat.y);
                 classDTOs[i].response = res;
             }
             return classDTOs;
         }
+        [HttpPost, Route("api/class/seat/wipe")]
+				public List<ClassDTO> WipeSeats(List<ClassDTO> classDTOs)
+				{
+					for(int i = 0; i < classDTOs.Count; ++i)
+					{
+						bool res = DatabaseConnector.Connector.WipeSeats(classDTOs[i].className);
+						classDTOs[i].response = res;
+					}
+					return classDTOs;
+				}
     }
 }

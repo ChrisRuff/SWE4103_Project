@@ -65,7 +65,7 @@ export default function Signup() {
       }
       else{
         const newUser = await AspNetConnector.addProf([{
-          "profName": fields.name,
+          "name": fields.name,
           "email": fields.email,
           "pass": hash,
         }]);

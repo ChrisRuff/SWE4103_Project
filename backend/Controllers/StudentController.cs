@@ -10,83 +10,83 @@ using System.Text.Json.Serialization;
 
 namespace backend
 {
-    [ApiController]
-    public class StudentController : ControllerBase
+  [ApiController]
+  public class StudentController : ControllerBase
+  {
+    private readonly ILogger<StudentController> _logger;
+
+    public StudentController(ILogger<StudentController> logger)
     {
-        private readonly ILogger<StudentController> _logger;
+      _logger = logger;
+    }
 
-        public StudentController(ILogger<StudentController> logger)
+    [HttpPost, Route("api/student/add")]
+    public List<StudentDTO> AddStudent(List<StudentDTO> students)
+    {
+      for (int i = 0; i < students.Count; i++)
+      {
+        bool res = DatabaseConnector.Connector.AddStudent(students[i].studentName, students[i].email, students[i].pass);
+        students[i].response = res;
+      }
+      return students;
+    }
+      /*
+      [HttpPost, Route("api/student/absence/get")]
+      public StudentDTO IsAbsentAPI(StudentDTO student)
+      {
+        if (!DatabaseConnector.Connector.CheckPass(student.email, student.pass))
+          student.response = false;
+        else
         {
-            _logger = logger;
+          student.response = true;
+          for (int i = 0; i < student.classes.Length; i++)
+          {
+            bool res = DatabaseConnector.Connector.IsAbsent(student.email,
+              student.classes[i].className);
+            student.response &= res;
+          }
         }
-
-        [HttpPost, Route("api/student/add")]
-        public List<StudentDTO> AddStudent(List<StudentDTO> students)
+        return student;
+      }
+      */
+      [HttpPost, Route("api/student/remove")]
+      public List<StudentDTO> RemoveStudent(List<StudentDTO> students)
+      {
+        for (int i = 0; i < students.Count; i++)
         {
-            for (int i = 0; i < students.Count; i++)
+          bool res = DatabaseConnector.Connector.RemoveStudent(students[i].email);
+          students[i].response = res;
+        }
+        return students;
+      }
+      
+      [HttpPost, Route("api/student/get")]
+      public List<StudentDTO> GetStudentAPI(List<StudentDTO> students)
+      {
+        for (int i = 0; i < students.Count; i++)
+        {
+          try
+          {
+            if (!DatabaseConnector.Connector.CheckPassStudent(students[i].email, students[i].pass))
             {
-                bool res = DatabaseConnector.Connector.AddStudent(students[i].studentName, students[i].email, students[i].pass);
-                students[i].response = res;
+              students[i].response = false;
+              continue;
             }
-            return students;
-        }
-        /*
-        [HttpPost, Route("api/student/absence/get")]
-        public StudentDTO IsAbsentAPI(StudentDTO student)
-        {
-            if (!DatabaseConnector.Connector.CheckPassStudent(student.email, student.pass))
-                student.response = false;
             else
             {
-                student.response = true;
-                for (int i = 0; i < student.classes.Length; i++)
-                {
-                    bool res = DatabaseConnector.Connector.IsAbsent(student.email,
-                        student.classes[i].className);
-                    student.response &= res;
-                }
+              students[i] = DatabaseConnector.Connector.GetStudent(students[i].email);
+              students[i].response = true;
             }
-            return student;
+          }
+          catch (Exception e)
+          {
+            students[i].response = false;
+          }
         }
-        */
-        [HttpPost, Route("api/student/remove")]
-        public List<StudentDTO> RemoveStudent(List<StudentDTO> students)
-        {
-            for (int i = 0; i < students.Count; i++)
-            {
-                bool res = DatabaseConnector.Connector.RemoveStudent(students[i].email);
-                students[i].response = res;
-            }
-            return students;
-        }
-        
-        [HttpPost, Route("api/student/get")]
-        public List<StudentDTO> GetStudentAPI(List<StudentDTO> students)
-        {
-            for (int i = 0; i < students.Count; i++)
-            {
-                try
-                {
-                    if (!DatabaseConnector.Connector.CheckPassStudent(students[i].email, students[i].pass))
-                    {
-                        students[i].response = false;
-                        continue;
-                    }
-                    else
-                    {
-                        students[i] = DatabaseConnector.Connector.GetStudent(students[i].email);
-                        students[i].response = true;
-                    }
-                }
-                catch (Exception e)
-                {
-                    students[i].response = false;
-                }
-            }
-            return students;
-        }
+        return students;
+      }
 
-        [HttpPost, Route("api/student/login")]
+      [HttpPost, Route("api/student/login")]
         public List<StudentDTO> LoginStudent(List<StudentDTO> students)
         {
             for (int i = 0; i < students.Count; i++)
@@ -96,5 +96,6 @@ namespace backend
             }
             return students;
         }
-    }
+  }
 }
+

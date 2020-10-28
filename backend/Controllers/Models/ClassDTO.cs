@@ -10,6 +10,7 @@ namespace backend.Controllers.Models
 		public int height { get; set; }
 		public SeatDTO[] DisabledSeats { get; set; }
 		public SeatDTO[] ReservedSeats { get; set; }
+		public SeatDTO[] AccessibleSeats { get; set; }
 		public bool response { get; set; }
 	}
 }

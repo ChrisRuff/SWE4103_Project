@@ -1,34 +1,34 @@
 export var AspNetConnector = {
 	// Asynchronous example
 	callExampleEndpointFetch: function() {
-			return fetch('api/apiexample/get').then(res => res.json()).then((data) => {
-						return data;
-			}).catch(function(error) {
-						console.log('Request Failed', error);
-			})
+		return fetch('api/apiexample/get').then(res => res.json()).then((data) => {
+			return data;
+		}).catch(function(error) {
+			console.log('Request Failed', error);
+		})
 	},
 
 	//Synchronous example, use only if needed and don't run on the main thread
 	callExampleEndpointXML: function() {
-			var request = new XMLHttpRequest();
-			// `false` makes the request synchronous
-			// if you leave false out feel free to use XMLHttp
-			request.open('GET', 'api/apiexample/get', false);
-			request.send();
-			if (request.status === 200) { // That's HTTP for 'ok'
-						return JSON.parse(request.response);
-			}
-	},
+		var request = new XMLHttpRequest();
+		// `false` makes the request synchronous
+		// if you leave false out feel free to use XMLHttp
+		request.open('GET', 'api/apiexample/get', false);
+		request.send();
+		if (request.status === 200) { // That's HTTP for 'ok'
+			return JSON.parse(request.response);
+		}
+},
 
 	/* Sample call
 	 *
 	 * var students = [{
-   * 	"studentName": "cruff",
-   * 	"classes":[{"className": "SWE4103", "seat":{"x":1,"y":1}}], 
-   * 	"email": "cruffy_test@unb.net",
+     * 	"studentName": "cruff",
+     * 	"classes":[{"className": "SWE4103", "seat":{"x":1,"y":1}}], 
+     * 	"email": "cruffy_test@unb.net",
 	 * 	"password": "password",
-   * 	"response": false
-   * }]
+     * 	"response": false
+	 * }]
 	 *
 	 * var request = DatabaseConnector.Connector.AddStudent(student(s));
 	 *
@@ -75,52 +75,99 @@ export var AspNetConnector = {
 		
 		return request;
 	},
+	addProf: function(profs) {
+		var request = new XMLHttpRequest();
 
-/* 
-	 var students = [{
-    	"studentName": "cruff",
-    	"classes":[{"className": "SWE4103", "seat":{"x":1,"y":1}}], 
-    	"email": "cruffy_test@unb.net",
-	  	"pass": "password",
-    	"response": false
+		request.open('POST', 'api/prof/add', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(profs));
+
+		return request;
+	},
+	removeProf: function(profs) {
+		var request = new XMLHttpRequest();
+
+		request.open('POST', 'api/prof/remove', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(profs));
+
+		return request;
+	},
+	profAddClass: function(profs)
+	{
+		var request = new XMLHttpRequest();
+
+		request.open('POST', 'api/prof/class/add', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(profs));
+
+		return request;
+	},
+	profGetClasses: function(profs)
+	{
+		var request = new XMLHttpRequest();
+
+		request.open('POST', 'api/prof/class/get', false);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(profs));
+
+		return request;
+	},
+	getClasses: function(classes)
+	{
+		var request = new XMLHttpRequest();
+
+		request.open('POST', 'api/class/get', false);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(classes));
+
+		return request;
+	},
+
+	/* 
+	var students = [{
+	"studentName": "cruff",
+	"classes":[{"className": "SWE4103", "seat":{"x":1,"y":1}}], 
+	"email": "cruffy_test@unb.net",
+	"pass": "password",
+	"response": false
     }]
-	 
-	  //AspNetConnector.addStudents(students);
-	 
-	  var request = AspNetConnector.addSeat(students);
-	  var request = AspNetConnector.getSeat(students);
-	 
-	 	request.onload = function() {
-	 		console.log(JSON.parse(request.response));
-	 	}
+	
+	//AspNetConnector.addStudents(students);
+	var request = AspNetConnector.addSeat(students);
+	var request = AspNetConnector.getSeat(students);
+	
+	request.onload = function() {
+	console.log(JSON.parse(request.response));
+	}
 	*/
 	// Gets a seat from the DB
 	getSeat: function(students) {
 			
-		var request = new XMLHttpRequest();
-        
-		request.open('POST', 'api/student/seat/get', true);
-		request.setRequestHeader('Content-type', 'application/json');
-		request.send(JSON.stringify(students));
-		
-		return request;
+	var request = new XMLHttpRequest();
+	
+	request.open('POST', 'api/student/seat/get', true);
+	request.setRequestHeader('Content-type', 'application/json');
+	request.send(JSON.stringify(students));
+	
+	return request;
 	},
 		
 	/* Sample call
-	 var student = [{
-    	"studentName": "cruff",
-    	"classes":[{"className": "SWE4103", "seat":{"x":1,"y":1}}], 
-    	"email": "cruffy_test@unb.net",
-	  	"password": "password",
-    	"response": false
+	var student = [{
+	"studentName": "cruff",
+	"classes":[{"className": "SWE4103", "seat":{"x":1,"y":1}}], 
+	"email": "cruffy_test@unb.net",
+	"password": "password",
+	"response": false
     }]
-	 
-	  var request = AspNetConnector.getStudents(student);
-	 
-	 	request.onload = function() {
-	 		console.log(JSON.parse(request.response));
-	 	}
-	 */
+	
+	var request = AspNetConnector.getStudents(student);
+	
+	request.onload = function() {
+	console.log(JSON.parse(request.response));
+	}
+	*/
 	// get student
 	getStudents: function(students) {
 			
@@ -135,20 +182,20 @@ export var AspNetConnector = {
 	},
 
 	/* 
-	 var newClass = [{"className": "CS1073", "height": 25, "width": 50}]
+	var newClass = [{"className": "CS1073", "height": 25, "width": 50}]
+
+	var request = AspNetConnector.makeClass(newClass);
 	
-	 var request = AspNetConnector.makeClass(newClass);
-	 
-	 request.onload = function() {
-	 	JSON.parse(request.response)
-	 }
+	request.onload = function() {
+	JSON.parse(request.response)
+	}
 	*/
 	// makes class
 	makeClass: function(students) {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/class/add', true);
+		request.open('POST', 'api/class/add', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
@@ -156,20 +203,20 @@ export var AspNetConnector = {
 	},
 
 	/* 
-	 var newClass = [{"className": "SWE4103", "seat":{"x":1,"y":1}}]
+	var newClass = [{"className": "SWE4103", "seat":{"x":1,"y":1}}]
+
+	var request = AspNetConnector.disableSeat(newClass);
 	
-	 var request = AspNetConnector.disableSeat(newClass);
-	 
-	 request.onload = function() {
-	 	JSON.parse(request.response)
-	 }
+	request.onload = function() {
+	JSON.parse(request.response)
+	}
 	*/
 	// Disable a seat
 	disableSeat: function(students) {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/seat/disable', true);
+		request.open('POST', 'api/student/seat/disable', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
@@ -177,20 +224,20 @@ export var AspNetConnector = {
 	},
 
 	/* 
-   var newClass = [{"className": "CS1073"}]
+   	var newClass = [{"className": "CS1073"}]
 	
-	 var request = AspNetConnector.removeClass(newClass);
-	 
-	 request.onload = function() {
-	 	JSON.parse(request.response)
-	 }
+	var request = AspNetConnector.removeClass(newClass);
+	
+	request.onload = function() {
+	JSON.parse(request.response)
+	}
 	*/
 	// remove a class
 	removeClass: function(students) {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/class/remove', true);
+		request.open('POST', 'api/student/class/remove', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
@@ -198,20 +245,20 @@ export var AspNetConnector = {
 	},
 
 	/* 
-	 var newClass = [{"className": "SWE4103", "seat":{"x":1,"y":1}}]
+	var newClass = [{"className": "SWE4103", "seat":{"x":1,"y":1}}]
+
+	var request = AspNetConnector.reserveSeat(newClass);
 	
-	 var request = AspNetConnector.reserveSeat(newClass);
-	 
-	 request.onload = function() {
-	 	JSON.parse(request.response)
-	 }
+	request.onload = function() {
+	JSON.parse(request.response)
+	}
 	*/
 	// reserve a seat
 	reserveSeat: function(students) {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/seat/reserve', true);
+		request.open('POST', 'api/student/seat/reserve', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
@@ -288,6 +335,25 @@ export var AspNetConnector = {
 		request.open('POST', 'api/student/login', true);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
+
+		return request;
+	},
+	makeSeatAccessible: function(students) {
+			
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/student/seat/accessible', false);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(students));
+		
+		return request;
+	},
+	wipeSeats: function(classDTO) {
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/class/seat/wipe', false);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(classDTO));
 		
 		return request;
 	}

@@ -87,7 +87,6 @@ namespace test
 			request = controller.RemoveStudent(testStudent);
 			Assert.True(request[0].response);
 		}
-
 		[Fact]
 		public void AddAndLoginStudent()
 		{
