@@ -56,63 +56,63 @@ export default function InstructorHome() {
 	};
 
 	const classes = useStyles();
-	const [layout, setLayout] = useState(createLayout(5,5));
+	const [layout, setLayout] = useState(StateManager.getClassLayout() == null ? createLayout(5,5) : StateManager.getClassLayout());
 	
 	const loadLayout = (classDTO) => {
-    StateManager.wipeSeats();
-    StateManager.setRows(classDTO.height);
-    StateManager.setCols(classDTO.width);
+		StateManager.wipeSeats();
+		StateManager.setRows(classDTO.height);
+		StateManager.setCols(classDTO.width);
 
-    let layout = [];
-    let rows = [];
+		let layout = [];
+		let rows = [];
 
-    for (var j = 0; j < classDTO.height; j++) {
+		for (var j = 0; j < classDTO.height; j++) {
 
-	let cols = [];
-	for (var i = 0; i < classDTO.width; i++) {
+			let cols = [];
+			for (var i = 0; i < classDTO.width; i++) {
 
-		// Find type of seat from classDTO
-		let type = ""
-		for(let k = 0; k < classDTO.disabledSeats.length; ++k)
-		{
-			if(classDTO.disabledSeats[k].x === i &&
-			classDTO.disabledSeats[k].y === j )
-			{
-				type = "disabled"
+				// Find type of seat from classDTO
+				let type = ""
+				for(let k = 0; k < classDTO.disabledSeats.length; ++k)
+				{
+					if(classDTO.disabledSeats[k].x === i &&
+					classDTO.disabledSeats[k].y === j )
+					{
+						type = "disabled"
+					}
+				}
+				for(let k = 0; k < classDTO.reservedSeats.length; ++k)
+				{
+					if(classDTO.reservedSeats[k].x === i &&
+						classDTO.reservedSeats[k].y === j )
+					{
+						type = "reserved"
+					}
+				}
+				for(let k = 0; k < classDTO.accessibleSeats.length; ++k)
+				{
+					if(classDTO.accessibleSeats[k].x === i &&
+						classDTO.accessibleSeats[k].y === j )
+					{
+						type = "accessible"
+					}
+				}
+				// Add seat with specified seat type
+				cols.push(
+					<div key={i} className="seat">
+						<Seat x={i} y={j} seatType={type}/>
+					</div>
+						);
 			}
+			
+			rows.push(
+				<Grid item className="row" key={j} col={j} xs={12}>
+					{cols}
+				</Grid>
+			);
 		}
-		for(let k = 0; k < classDTO.reservedSeats.length; ++k)
-		{
-			if(classDTO.reservedSeats[k].x === i &&
-				classDTO.reservedSeats[k].y === j )
-			{
-				type = "reserved"
-			}
-		}
-		for(let k = 0; k < classDTO.accessibleSeats.length; ++k)
-		{
-			if(classDTO.accessibleSeats[k].x === i &&
-				classDTO.accessibleSeats[k].y === j )
-			{
-				type = "accessible"
-			}
-		}
-		// Add seat with specified seat type
-		cols.push(
-			<div key={i} className="seat">
-				<Seat x={i} y={j} seatType={type}/>
-			</div>
-        );
-	}
-	
-	rows.push(
-		<Grid item className="row" key={j} col={j} xs={12}>
-			{cols}
-		</Grid>
-	);
-    }
 
-    layout.push(
+		layout.push(
 		<div key="root" className="root">
 			<Grid container spacing={3}>
 				{rows}
@@ -160,7 +160,7 @@ export default function InstructorHome() {
 				classDTO[0].seat = accessibleSeat;
 
 				AspNetConnector.makeSeatAccessible(classDTO);
-			}	
+			}
 		}
 	}
 
