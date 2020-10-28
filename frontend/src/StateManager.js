@@ -1,9 +1,10 @@
 
 export var StateManager = {
-    accountState: null,
+	accountState: null,
 	exampleData: null,
 	classLayout: null,
 	selectedClass: "--",
+	prof: null,
 	x: 0,
 	y: 0,
 	numRows: 0,
@@ -15,12 +16,18 @@ export var StateManager = {
 	getExampleData() {
 		return this.exampleData;
 	},
+	getProf() {
+		return this.prof;
+	},
+	setProf(prof) {
+		this.prof = prof;
+	},
 	setAccountState(state) {
-        this.accountState = state;
-    },
-    getAccountState() {
-        return this.accountState;
-    },
+		this.accountState = state;
+	},
+	getAccountState() {
+			return this.accountState;
+	},
 	setSelectedClass(data){
 		this.selectedClass = data;
 	},

@@ -72,6 +72,7 @@ export default function Login() {
           let value = (obj[0].response);
           if (value === true){
             userHasAuthenticated(true);
+						StateManager.setProf(obj[0]);
             history.push("/InstructorHome"); 
           }
           else{

@@ -55,19 +55,13 @@ export default function InstructorHome() {
     return layout;
 	};
 
-	const prof = [{
-		"name":"Dawn",
-		"email":"dawn@unb.ca",
-		"pass":"pass",
-		"classes": []
-	}];
 	const classes = useStyles();
 	const [layout, setLayout] = useState(createLayout(5,5));
 	
 	const loadLayout = (classDTO) => {
-		StateManager.wipeSeats();
-		StateManager.setRows(classDTO.height);
-		StateManager.setCols(classDTO.width);
+    StateManager.wipeSeats();
+    StateManager.setRows(classDTO.height);
+    StateManager.setCols(classDTO.width);
 
     let layout = [];
     let rows = [];
@@ -133,8 +127,9 @@ export default function InstructorHome() {
 		var rows = layout[0].props.children.props.children.length;
 		var className = title;
 		var newClass = [{"className": className, "height": cols, "width": rows}];
-		AspNetConnector.makeClass(newClass);	
-		AspNetConnector.profAddClass([{"email": prof[0].email, "classes" : [{"className": title}]}]);
+		AspNetConnector.makeClass(newClass);
+		console.log(StateManager.getProf());
+		AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
 		addSeats();
 	}
 	
@@ -169,10 +164,8 @@ export default function InstructorHome() {
 		}
 	}
 
-	AspNetConnector.addProf(prof);
-	//AspNetConnector.profAddClass(prof);
-
-	let classList = JSON.parse(AspNetConnector.profGetClasses(prof).response);
+	console.log(StateManager.getProf());
+	let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getProf()]).response);
 	const handleSelect = (eventKey, event) => {
 		StateManager.setSelectedClass(classList[eventKey]);
 		setTitle(classList[eventKey]);
@@ -210,7 +203,7 @@ return (
 						{opt}
 					</MenuItem>
 				))}
-			</DropdownButton>);
+			</DropdownButton>
         <Button onClick={newClass} variant="light">Add</Button>
         <Button onClick={makeClass} variant="light">Submit</Button>
 		</div>
