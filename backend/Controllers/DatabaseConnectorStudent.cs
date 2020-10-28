@@ -14,7 +14,22 @@ namespace backend
 	{
 		public bool CheckPassStudent(string email, string pass)
 		{
-			return true;
+			FilterDefinition<BsonDocument> query 
+				= Builders<BsonDocument>.Filter.Eq("email", email);
+			var qResults = students.Find(query);
+			if(qResults.CountDocuments() <= 0)
+			{
+				return false;
+			}
+			var student = qResults.First();
+			if(student["pass"] == pass)
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
 		}
 
 		public bool AddStudent(string name, string email, string pass)

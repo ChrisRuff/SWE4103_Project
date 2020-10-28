@@ -33,6 +33,25 @@ namespace test
 			var request = controller.RemoveProfAPI(testProfs);
 			Assert.True(request[0].response);
 		}
+		[Fact]
+		public void AddAndLoginProf()
+		{
+			var testProfs = GetTestProfs();
+			var profController = new ProfController(_logger);
+
+			// add prof
+			DatabaseConnector.Connector.RemoveProf(testProfs[0].email);
+			var request = profController.AddProfAPI(testProfs);
+			Assert.True(request[0].response);
+
+			// add prof again and fail
+			request = profController.AddProfAPI(testProfs);
+			Assert.False(request[0].response);
+
+			// login prof
+			request = profController.LoginProf(testProfs);
+			Assert.True(request[0].response);
+		}
 
 		[Fact]
 		public void GetProfClasses()

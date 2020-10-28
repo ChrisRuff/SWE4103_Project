@@ -204,64 +204,25 @@ namespace test
 		}
 
 		[Fact]
-		public void GetProfsClasses()
+		public void ProfLogin()
 		{
-			
-			DatabaseConnector.Connector.RemoveProf("dawn@unb.ca");
-			DatabaseConnector.Connector.AddProf("Dawn", "dawn@unb.ca", "pass");
-			DatabaseConnector.Connector.AddClassProf("dawn@unb.ca", "CS2043");
-			DatabaseConnector.Connector.AddClassProf("dawn@unb.ca", "SWE4103");
-
-			List<String> classes = DatabaseConnector.Connector.GetProfClassNames("dawn@unb.ca");
-
-			Assert.True(classes[0] == "CS2043");
-			Assert.True(classes[1] == "SWE4103");
-
-			try
-			{
-				DatabaseConnector.Connector.GetProfClassNames("NONAME");
-
-				// SHOULDN"T GET HERE
-				Assert.False(true);
-			}
-			catch(System.Exception)
-			{
-				// SHOULD GET HERE
-				Assert.True(true);
-			}
+			DatabaseConnector.Connector.AddProf("Tester", "test@gmail.com", "password");
+			DatabaseConnector.Connector.RemoveProf("wrong@gmail.com");
+			Assert.True(DatabaseConnector.Connector.CheckPassProf("test@gmail.com", "password"));
+			Assert.True(DatabaseConnector.Connector.CheckPassProf("test@gmail.com", "password"));
+			Assert.False(DatabaseConnector.Connector.CheckPassProf("test@gmail.com", "passwor"));
+			Assert.False(DatabaseConnector.Connector.CheckPassProf("wrong@gmail.com", "passwor"));
 		}
+
 		[Fact]
-		public void GetClassTest()
+		public void StudentLogin()
 		{
-			DatabaseConnector.Connector.RemoveClass("CS2043");
-			DatabaseConnector.Connector.MakeClass("CS2043", 5, 5);
-
-			DatabaseConnector.Connector.DisableSeat("CS2043", 1, 1);
-			DatabaseConnector.Connector.DisableSeat("CS2043", 1, 2);
-			DatabaseConnector.Connector.ReserveSeat("CS2043", 1, 2);
-			DatabaseConnector.Connector.ReserveSeat("CS2043", 1, 1);
-
-			ClassDTO MrClassy = DatabaseConnector.Connector.GetClass("CS2043");
-			Assert.True(MrClassy.height == 5);
-			Assert.True(MrClassy.width == 5);
-			Assert.True(MrClassy.className == "CS2043");
-
-			Assert.True(MrClassy.ReservedSeats[0].x == 1 && MrClassy.ReservedSeats[0].y == 2);
-			Assert.True(MrClassy.ReservedSeats[1].x == 1 && MrClassy.ReservedSeats[1].y == 1);
-			Assert.True(MrClassy.DisabledSeats[0].x == 1 && MrClassy.DisabledSeats[0].y == 1);
-			Assert.True(MrClassy.DisabledSeats[1].x == 1 && MrClassy.DisabledSeats[1].y == 2);
-			
-			DatabaseConnector.Connector.RemoveClass("CS2043");
-			try
-			{
-				// Should throw exception
-				DatabaseConnector.Connector.GetClass("CS2043");
-				Assert.True(false);
-			}
-			catch(System.Exception)
-			{
-
-			}
+			DatabaseConnector.Connector.AddStudent("Tester", "test@gmail.com", "password");
+			DatabaseConnector.Connector.RemoveStudent("wrong@gmail.com");
+			Assert.True(DatabaseConnector.Connector.CheckPassStudent("test@gmail.com", "password"));
+			Assert.True(DatabaseConnector.Connector.CheckPassStudent("test@gmail.com", "password"));
+			Assert.False(DatabaseConnector.Connector.CheckPassStudent("test@gmail.com", "passwor"));
+			Assert.False(DatabaseConnector.Connector.CheckPassStudent("wrong@gmail.com", "passwor"));
 		}
 	}
 }

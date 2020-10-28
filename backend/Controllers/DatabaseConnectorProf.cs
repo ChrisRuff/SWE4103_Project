@@ -13,7 +13,22 @@ namespace backend
 	{
 		public bool CheckPassProf(string email, string pass)
 		{
-			return true;
+			FilterDefinition<BsonDocument> query 
+				= Builders<BsonDocument>.Filter.Eq("email", email);
+			var qResults = profs.Find(query);
+			if(qResults.CountDocuments() <= 0)
+			{
+				return false;
+			}
+			var prof = qResults.First();
+			if(prof["pass"] == pass)
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
 		}
 		public bool AddProf(string name, string email, string pass)
 		{

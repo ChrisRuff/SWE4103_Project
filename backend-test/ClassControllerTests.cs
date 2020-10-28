@@ -19,7 +19,8 @@ namespace test
 			var classController = new ClassController(_classLogger);
 
 			// add class
-			classController.RemoveClassAPI(testClass);
+			DatabaseConnector.Connector.RemoveClass(testClass[0].className);
+
 			var request = classController.MakeClassAPI(testClass);
 			Assert.True(request[0].response);
 

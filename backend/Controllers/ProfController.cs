@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using backend.Controllers.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
@@ -63,5 +63,16 @@ namespace backend
 				return new List<String>();
 			}
 		}
+
+		[HttpPost, Route("api/prof/login")]
+        public List<ProfDTO> LoginProf(List<ProfDTO> profs)
+        {
+            for (int i = 0; i < profs.Count; i++)
+            {
+                bool res = DatabaseConnector.Connector.CheckPassProf(profs[i].email, profs[i].pass);
+                profs[i].response = res;
+            }
+            return profs;
+        }
 	}
 }

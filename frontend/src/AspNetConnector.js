@@ -264,6 +264,80 @@ export var AspNetConnector = {
 		
 		return request;
 	},
+
+	/*  Sample call
+	 var prof = [{
+    	"profName": "profman",
+    	"email": "profman@unb.net",
+	  	"pass": "password",
+    	"response": false
+    }]
+	 
+	  var request = AspNetConnector.addProf(prof);
+	 
+	 	request.onload = function() {
+	 		console.log(JSON.parse(request.response));
+	 	}
+	*/
+	// add prof
+	addProf: function(profs) {
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/prof/add', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(profs));
+		
+		return request;
+	},
+
+	/*  Sample call
+	 var prof = [{
+    	"email": "profman@unb.net",
+	  	"pass": "password",
+    	"response": false
+    }]
+	 
+	  var request = AspNetConnector.loginProf(prof);
+	 
+	 	request.onload = function() {
+	 		console.log(JSON.parse(request.response));
+	 	}
+	*/
+	// login prof
+	loginProf: function(profs) {
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/prof/login', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(profs));
+		
+		return request;
+	},
+
+	/*  var students = [{
+	 	"studentName": "zlewis",
+	 	"classes": [{"className": "CS1073", "seat": {"x": 4,"y": 7}}],
+	 	"email": "zlewis_test@unb.net",
+	 	"pass": "password1",
+	 	"response": false
+	 }]
+	
+	 var request = AspNetConnector.loginStudent(students);
+	 
+	 request.onload = function() {
+	 	JSON.parse(request.response)
+	 }
+	*/
+	// login student
+	loginStudent: function(students) {
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/student/login', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(students));
+
+		return request;
+	},
 	makeSeatAccessible: function(students) {
 			
 		var request = new XMLHttpRequest();

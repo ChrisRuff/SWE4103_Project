@@ -1,5 +1,6 @@
 
 export var StateManager = {
+    accountState: null,
 	exampleData: null,
 	classLayout: null,
 	selectedClass: "--",
@@ -14,6 +15,12 @@ export var StateManager = {
 	getExampleData() {
 		return this.exampleData;
 	},
+	setAccountState(state) {
+        this.accountState = state;
+    },
+    getAccountState() {
+        return this.accountState;
+    },
 	setSelectedClass(data){
 		this.selectedClass = data;
 	},
