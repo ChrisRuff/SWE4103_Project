@@ -191,6 +191,11 @@ export default function InstructorHome() {
     	history.push("/EditSeatPlan");
   	}
 
+	// If there is no prof object(not signed in) then return to the homepage
+	if(StateManager.getProf() == null)
+	{
+		history.push("/");
+	}
 return (
     <div>
 		<div className="layoutHeader">
