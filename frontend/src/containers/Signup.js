@@ -72,7 +72,7 @@ export default function Signup() {
       }
       setNewUser(newUser);
       userHasAuthenticated(true);
-      history.push("/");
+      history.push("/login");
     } catch (e) {
       onError(e);
       setIsLoading(false);
