@@ -53,6 +53,7 @@ export default function Login() {
           let value = (obj[0].response);
           if (value === true){
             userHasAuthenticated(true);
+						localStorage.setItem('user', obj[0]);
             history.push("/InstructorHome"); 
           }
           else{
@@ -73,6 +74,7 @@ export default function Login() {
           if (value === true){
             userHasAuthenticated(true);
 						StateManager.setProf(obj[0]);
+						localStorage.setItem('user', JSON.stringify(obj[0]));
             history.push("/InstructorHome"); 
           }
           else{

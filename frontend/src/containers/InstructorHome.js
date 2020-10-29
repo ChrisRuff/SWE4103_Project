@@ -10,6 +10,18 @@ import { useHistory } from "react-router-dom";
 
 export default function InstructorHome() {
 
+	const history = useHistory();
+
+	// If there is no prof object(not signed in) then return to the homepage
+	if(StateManager.getProf() == null)
+	{
+		StateManager.setProf(JSON.parse(localStorage.getItem('user')));
+		if(StateManager.getProf() == null)
+		{
+			history.push("/");
+		}
+	}
+
 	const [title, setTitle] = useState("--");
 	const useStyles = makeStyles((theme) => ({
 		paper: {
@@ -128,7 +140,6 @@ export default function InstructorHome() {
 		var className = title;
 		var newClass = [{"className": className, "height": cols, "width": rows}];
 		AspNetConnector.makeClass(newClass);
-		console.log(StateManager.getProf());
 		AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
 		addSeats();
 	}
@@ -164,7 +175,6 @@ export default function InstructorHome() {
 		}
 	}
 
-	console.log(StateManager.getProf());
 	let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getProf()]).response);
 	const handleSelect = (eventKey, event) => {
 		StateManager.setSelectedClass(classList[eventKey]);
@@ -186,16 +196,10 @@ export default function InstructorHome() {
 		setTitle(name);
 	}
 
-	const history = useHistory();
-  	function directToEditSeatPlanPage() {
-    	history.push("/EditSeatPlan");
-  	}
-
-	// If there is no prof object(not signed in) then return to the homepage
-	if(StateManager.getProf() == null)
-	{
-		history.push("/");
+	function directToEditSeatPlanPage() {
+		history.push("/EditSeatPlan");
 	}
+
 return (
     <div>
 		<div className="layoutHeader">
