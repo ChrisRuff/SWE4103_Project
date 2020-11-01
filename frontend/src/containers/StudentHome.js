@@ -1,12 +1,14 @@
 import React, { Fragment, useState, useEffect }  from "react";
 import "./StudentHome.css";
-import { makeStyles } from "@material-ui/core/styles";
+import { lighten, makeStyles } from "@material-ui/core/styles";
 import { Button, Dropdown, DropdownButton, MenuItem} from "react-bootstrap";
 import { StateManager } from "../StateManager.js";
 import { useHistory } from "react-router-dom";
 import { AspNetConnector } from "../AspNetConnector.js";
 import Grid from "@material-ui/core/Grid"; 
 import Seat from "../components/Seat.js";
+import * as sha512 from "js-sha512";
+import { onError } from "../libs/errorLib";
 
 export default function StudentHome() {
 
@@ -66,7 +68,7 @@ export default function StudentHome() {
     return layout;
   };
   
-  const classes = useStyles();
+  //const classes = useStyles();
 	const [layout, setLayout] = useState(StateManager.getClassLayout() == null ? createLayout(5,5) : StateManager.getClassLayout());
 	
 	const loadLayout = (classDTO) => {
@@ -133,8 +135,30 @@ export default function StudentHome() {
     return layout;
 	};
 
-  let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getStudent()]).response);
-	const handleSelect = (eventKey, event) => {
+    //let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getStudent()]).response);
+	let hash = sha512.sha512("abc");
+	var student = JSON.parse(AspNetConnector.getStudents([{"email": "tester@tester.test", "pass": hash }]).response[0]); 
+	//let student;
+	/*try {
+		students = AspNetConnector.getStudents([{
+			"email": "tester@tester.test",
+			"pass": hash,
+		}]);
+		students.onload = function() {
+			student = (JSON.parse(students.response));
+			let classes = (student[0].classes);
+		}
+	  } catch (e) {
+		onError(e);
+	  }*/
+	  let classList = [];
+	  if (student !== undefined) {
+		for(let i = 0; i < student.classes.length; i++){
+			classList.push(student.classes[i].name);
+		}
+		console.log(classList);
+	  }
+	/*const handleSelect = (eventKey, event) => {
 		StateManager.setSelectedClass(classList[eventKey]);
 		setTitle(classList[eventKey]);
     let classLayout = JSON.parse(AspNetConnector.getClasses([{"className": classList[eventKey]}]).response);
@@ -145,15 +169,14 @@ export default function StudentHome() {
 			setLayout(loadLayout(classLayout[0]));
 		}
 		console.log(StateManager.getSeats());
-  }
+  }*/
   
   return (
     <div className="StudentHome">
       <div className="layoutHeader">
         <DropdownButton 
           title={StateManager.getSelectedClass()}
-          id="classDropdown"
-          onSelect={handleSelect.bind(this)}>
+          id="classDropdown">
           {classList.map((opt, i) => (
             <MenuItem key={i} eventKey={i}>
               {opt}

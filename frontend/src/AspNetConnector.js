@@ -173,7 +173,7 @@ export var AspNetConnector = {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/get', true);
+		request.open('POST', 'api/student/get', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
