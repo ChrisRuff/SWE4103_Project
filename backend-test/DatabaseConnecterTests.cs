@@ -123,36 +123,9 @@ namespace test
 				caught = true;
 			}
 			Assert.True(caught);
-		}
-    
-		public void GetStudent()
-		{
-			// Ensure there aren't any test coles out there 
-			while(DatabaseConnector.Connector.RemoveStudent("scole_test@unb.ca"));
-
-			// Add test student
-			DatabaseConnector.Connector.AddStudent(
-					"Stephen Cole - Test", "scole_test@unb.ca", "pass"); 
-			DatabaseConnector.Connector.AddClass("scole_test@unb.ca", "CS2043");
-			DatabaseConnector.Connector.AddClass("scole_test@unb.ca", "SWE4103");
-			DatabaseConnector.Connector.AddSeat("scole_test@unb.ca", "CS2043", 1, 1);
-			DatabaseConnector.Connector.AddSeat("scole_test@unb.ca", "SWE4103", 2, 5);
-
-			var stephen = DatabaseConnector.Connector.GetStudent("scole_test@unb.ca");
-
-			Assert.True(stephen.studentName == "Stephen Cole - Test");
-			Assert.True(stephen.email == "scole_test@unb.ca");
-			Assert.True(stephen.pass == "pass");
-
-			Assert.True(stephen.classes[0].className == "CS2043");
-			Assert.True(stephen.classes[0].seat.x == 1);
-			Assert.True(stephen.classes[0].seat.y == 1);
-			Assert.True(stephen.classes[1].className == "SWE4103");
-			Assert.True(stephen.classes[1].seat.x == 2);
-			Assert.True(stephen.classes[1].seat.y == 5);
-			
 			DatabaseConnector.Connector.RemoveStudent("scole_test@unb.ca");
 		}
+    
 
 		[Fact]
 		public void MakeClassAndReserve()
@@ -223,6 +196,37 @@ namespace test
 			Assert.True(DatabaseConnector.Connector.CheckPassStudent("test@gmail.com", "password"));
 			Assert.False(DatabaseConnector.Connector.CheckPassStudent("test@gmail.com", "passwor"));
 			Assert.False(DatabaseConnector.Connector.CheckPassStudent("wrong@gmail.com", "passwor"));
+			DatabaseConnector.Connector.RemoveStudent("test@gmail.com");
+		}
+
+		[Fact]
+		public void GetStudent()
+		{
+			// Ensure there aren't any test coles out there 
+			while(DatabaseConnector.Connector.RemoveStudent("scole_test@unb.ca"));
+
+			// Add test student
+			DatabaseConnector.Connector.AddStudent(
+					"Stephen Cole - Test", "scole_test@unb.ca", "pass"); 
+			DatabaseConnector.Connector.AddClass("scole_test@unb.ca", "CS2043");
+			DatabaseConnector.Connector.AddClass("scole_test@unb.ca", "SWE4103");
+			DatabaseConnector.Connector.AddSeat("scole_test@unb.ca", "CS2043", 1, 1);
+			DatabaseConnector.Connector.AddSeat("scole_test@unb.ca", "SWE4103", 2, 5);
+
+			var stephen = DatabaseConnector.Connector.GetStudent("scole_test@unb.ca");
+
+			Assert.True(stephen.studentName == "Stephen Cole - Test");
+			Assert.True(stephen.email == "scole_test@unb.ca");
+			Assert.True(stephen.pass == "pass");
+
+			Assert.True(stephen.classes[0].className == "CS2043");
+			Assert.True(stephen.classes[0].seat.x == 1);
+			Assert.True(stephen.classes[0].seat.y == 1);
+			Assert.True(stephen.classes[1].className == "SWE4103");
+			Assert.True(stephen.classes[1].seat.x == 2);
+			Assert.True(stephen.classes[1].seat.y == 5);
+			
+			DatabaseConnector.Connector.RemoveStudent("scole_test@unb.ca");
 		}
 	}
 }
