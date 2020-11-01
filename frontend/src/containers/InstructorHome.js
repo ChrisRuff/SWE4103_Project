@@ -166,7 +166,7 @@ export default function InstructorHome() {
 
 				AspNetConnector.disableSeat(classDTO);
 			}
-			else if(currentLayout[i].seatType == "accessible"){
+			else if(currentLayout[i].seatType === "accessible"){
 				var accessibleSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y};
 				classDTO[0].seat = accessibleSeat;
 

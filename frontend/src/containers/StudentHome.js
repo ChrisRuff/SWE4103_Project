@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect }  from "react";
 import "./StudentHome.css";
-import { lighten, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { Button, Dropdown, DropdownButton, MenuItem} from "react-bootstrap";
 import { StateManager } from "../StateManager.js";
 import { useHistory } from "react-router-dom";
@@ -68,7 +68,6 @@ export default function StudentHome() {
     return layout;
   };
   
-  //const classes = useStyles();
 	const [layout, setLayout] = useState(StateManager.getClassLayout() == null ? createLayout(5,5) : StateManager.getClassLayout());
 	
 	const loadLayout = (classDTO) => {
@@ -135,44 +134,40 @@ export default function StudentHome() {
     return layout;
 	};
 
-    //let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getStudent()]).response);
-	let hash = sha512.sha512("abc");
+	let hash = sha512.sha512("abc");   //this needs to be changed later, works now only for a dummy student
 	let student = [];
 	try {
 		student = JSON.parse(AspNetConnector.getStudents([{
-			"email": "tester@tester.test",
+			"email": "tester@tester.test",   //needs to be changed later
 			"pass": hash,
 		}]).response)[0];
 	} catch (e) {
 		onError(e);
 	}
 	let classList = [];
-	if (student != undefined) {
-		console.log(student)
+	if (student !== undefined) {
 		for(let i = 0; i < student.classes.length; i++){
 			classList.push(student.classes[i].className);
 		}
-		console.log(classList);
 	}
-	/*const handleSelect = (eventKey, event) => {
+	const handleSelect = (eventKey, event) => {
 		StateManager.setSelectedClass(classList[eventKey]);
 		setTitle(classList[eventKey]);
-    let classLayout = JSON.parse(AspNetConnector.getClasses([{"className": classList[eventKey]}]).response);
+        let classLayout = JSON.parse(AspNetConnector.getClasses([{"className": classList[eventKey]}]).response);
 		if(classLayout[0].response)
 		{
 			StateManager.setClassLayout(classLayout[0]);
-			console.log(StateManager.getClassLayout());
 			setLayout(loadLayout(classLayout[0]));
 		}
-		console.log(StateManager.getSeats());
-  }*/
+	}
   
   return (
     <div className="StudentHome">
       <div className="layoutHeader">
         <DropdownButton 
           title={StateManager.getSelectedClass()}
-          id="classDropdown">
+		  id="classDropdown"
+		  onSelect={handleSelect.bind(this)}>
           {classList.map((opt, i) => (
             <MenuItem key={i} eventKey={i}>
               {opt}
@@ -181,7 +176,7 @@ export default function StudentHome() {
         </DropdownButton>
           <Button variant="light">Submit</Button>
       </div>
-      <Fragment>{layout}</Fragment>
+	   <Fragment>{layout }</Fragment>
     </div>
   );
 }

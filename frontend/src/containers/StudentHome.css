@@ -21,7 +21,7 @@
 }
 
 .layoutHeader > div {
-  margin-right: 65%;
+  margin-right: 80%;
   padding: 15px;
 }
 
@@ -33,11 +33,12 @@
   overflow: scroll;
   width: 800px;
   margin: auto;
+  pointer-events: none;
   height: min-content;
   max-height: 600px;
   padding: 5px;
   border: 3px solid grey;
-}
+} 
 
 .seat {
   margin: auto;
