@@ -137,27 +137,23 @@ export default function StudentHome() {
 
     //let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getStudent()]).response);
 	let hash = sha512.sha512("abc");
-	var student = JSON.parse(AspNetConnector.getStudents([{"email": "tester@tester.test", "pass": hash }]).response[0]); 
-	//let student;
-	/*try {
-		students = AspNetConnector.getStudents([{
+	let student = [];
+	try {
+		student = JSON.parse(AspNetConnector.getStudents([{
 			"email": "tester@tester.test",
 			"pass": hash,
-		}]);
-		students.onload = function() {
-			student = (JSON.parse(students.response));
-			let classes = (student[0].classes);
-		}
-	  } catch (e) {
+		}]).response)[0];
+	} catch (e) {
 		onError(e);
-	  }*/
-	  let classList = [];
-	  if (student !== undefined) {
+	}
+	let classList = [];
+	if (student != undefined) {
+		console.log(student)
 		for(let i = 0; i < student.classes.length; i++){
-			classList.push(student.classes[i].name);
+			classList.push(student.classes[i].className);
 		}
 		console.log(classList);
-	  }
+	}
 	/*const handleSelect = (eventKey, event) => {
 		StateManager.setSelectedClass(classList[eventKey]);
 		setTitle(classList[eventKey]);
