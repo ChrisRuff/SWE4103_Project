@@ -53,8 +53,8 @@ export default function Login() {
           let value = (obj[0].response);
           if (value === true){
             userHasAuthenticated(true);
-						localStorage.setItem('user', obj[0]);
-            history.push("/InstructorHome"); 
+						localStorage.setItem('user', JSON.stringify(obj[0]));
+            history.push("/StudentHome"); 
           }
           else{
             onError("Invalid password or account selected");
