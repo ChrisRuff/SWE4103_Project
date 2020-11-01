@@ -57,7 +57,10 @@ export default class Seat extends Component {
 	render() {
 		StateManager.addSeat(this.x, this.y, this.state.seatType, this)
 		return (
-			<Button className={this.state.seatType} onClick = {this.handleClick}>Seat</Button>
+			<Button className={this.state.seatType} onClick = {this.handleClick}>
+				Seat<br/>
+				X:{this.x}&nbsp;&nbsp;&nbsp;Y:{this.y}
+			</Button>
 		);
 	}
 }
