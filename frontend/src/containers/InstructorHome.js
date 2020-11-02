@@ -135,6 +135,10 @@ export default function InstructorHome() {
 	};
 
 	const makeClass = () => {
+		if(title == "--")
+		{
+			return;
+		}
 		var cols = layout[0].props.children.props.children[0].props.children.length;
 		var rows = layout[0].props.children.props.children.length;
 		var className = title;
