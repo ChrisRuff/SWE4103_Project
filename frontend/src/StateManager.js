@@ -5,6 +5,7 @@ export var StateManager = {
 	classLayout: null,
 	selectedClass: "--",
 	prof: null,
+	student: null,
 	x: 0,
 	y: 0,
 	numRows: 0,
@@ -22,11 +23,17 @@ export var StateManager = {
 	setProf(prof) {
 		this.prof = prof;
 	},
+	getStudent() {
+		return this.student;
+	},
+	setStudent(student) {
+		this.student = student;
+	},
 	setAccountState(state) {
 		this.accountState = state;
 	},
 	getAccountState() {
-			return this.accountState;
+		return this.accountState;
 	},
 	setSelectedClass(data){
 		this.selectedClass = data;

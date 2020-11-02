@@ -188,16 +188,20 @@ namespace backend
 			data.email = student["email"].ToString();
 			data.pass = student["pass"].ToString();
 			ClassDTO[] classes = new ClassDTO[student["classes"].AsBsonArray.Count];
+
 			int idx = 0;
 			foreach(var i in student["classes"].AsBsonArray)
 			{
+				var c = new ClassDTO();
 				var seat = new SeatDTO();
-				seat.x = i[1]["x"].ToInt32();
-				seat.y = i[1]["y"].ToInt32();
-				classes[idx].className = i[0].ToString();
-				classes[idx].seat = seat;
+				seat.x = i["seat"]["x"].ToInt32();
+				seat.y = i["seat"]["y"].ToInt32();
+				c.className = i["name"].ToString();
+				c.seat = seat;
+				classes[idx] = c;
 				idx++;
 			}
+			data.classes = classes;
 			return data;
 		}
 	}
