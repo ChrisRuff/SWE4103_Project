@@ -31,20 +31,24 @@ export default function StudentHome() {
 			color: theme.palette.text.secondary,
 		},
   }));
-  
-  const sendMessage = (event)  => {
-		StateManager.wipeSeats();
 
-		let layout = [];
+  let hash = sha512.sha512("abc");   //this needs to be changed later, works now only for a dummy student
+	let student = [];
+	try {
+		student = JSON.parse(AspNetConnector.getStudents([{
+			"email": "tester@tester.test",   //needs to be changed later
+			"pass": hash,
+		}]).response)[0];
+	} catch (e) {
+		onError(e);
+	}
+	let classList = [];
+	if (student !== undefined) {
+		for(let i = 0; i < student.classes.length; i++){
+			classList.push(student.classes[i].className);
+		}
+	}
 
-		layout.push(
-		<div key="root" className="root">
-			<h1 style= {{textAlign: 'center', padding: '50px' }} >There are no classes to display </h1>
-		</div>
-		);
-		return layout;
-	};
-	
 	const loadLayout = (classDTO) => {
 		StateManager.wipeSeats();
 		StateManager.setRows(classDTO.height);
@@ -109,7 +113,27 @@ export default function StudentHome() {
     return layout;
 	};
 
-	const [layout, setLayout] = useState(StateManager.getClassLayout() === null ?  sendMessage : StateManager.getClassLayout());
+	let emptyLayout = [];
+	if (StateManager.getClassLayout() === null){
+		if (classList[0] !== null){
+			StateManager.setSelectedClass(classList[0]);
+			let classLayout = JSON.parse(AspNetConnector.getClasses([{"className": classList[0]}]).response);
+			//StateManager.setClassLayout(classLayout[0]);
+			if(classLayout[0].response){
+				StateManager.setClassLayout(loadLayout(classLayout[0]));
+				//setLayout(loadLayout(classLayout[0]));
+			}
+		}
+		else {
+			emptyLayout.push( //gives this statement if student has no classes
+				<div key="root" className="root">
+					<h1 style= {{textAlign: 'center', padding: '50px' }}> There are no classes to display </h1>
+				</div>
+				);
+		}
+	}
+
+	const [layout, setLayout] = useState(StateManager.getClassLayout() == null ? emptyLayout : StateManager.getClassLayout());
 
 	const handleSelect = (eventKey, event) => {
 		StateManager.setSelectedClass(classList[eventKey]);
@@ -122,33 +146,6 @@ export default function StudentHome() {
 		}
 	}
 
-	let hash = sha512.sha512("abc");   //this needs to be changed later, works now only for a dummy student
-	let student = [];
-	try {
-		student = JSON.parse(AspNetConnector.getStudents([{
-			"email": "tester@tester.test",   //needs to be changed later
-			"pass": hash,
-		}]).response)[0];
-	} catch (e) {
-		onError(e);
-	}
-	let classList = [];
-	if (student !== undefined) {
-		for(let i = 0; i < student.classes.length; i++){
-			classList.push(student.classes[i].className);
-		}
-	}
-
-	window.onload = (event) => {
-		StateManager.setSelectedClass(classList[0]);
-	    let classLayout = JSON.parse(AspNetConnector.getClasses([{"className": classList[0]}]).response);
-		StateManager.setClassLayout(classLayout[0]);
-		if(classLayout[0].response){
-		StateManager.setClassLayout(classLayout[0]);
-		setLayout(loadLayout(classLayout[0]));
-	    }
-	};
-  
   return (
     <div className="StudentHome">
       <div className="layoutHeader">
