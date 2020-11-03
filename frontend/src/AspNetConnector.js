@@ -356,5 +356,14 @@ export var AspNetConnector = {
 		request.send(JSON.stringify(classDTO));
 		
 		return request;
+	},
+	getAllClasses: function() {
+		var request = new XMLHttpRequest();
+
+		request.open('GET', 'api/class/get/all', false);
+		request.send();
+		if (request.status === 200) { // That's HTTP for 'ok'
+			return JSON.parse(request.response);
+		}
 	}
 }
