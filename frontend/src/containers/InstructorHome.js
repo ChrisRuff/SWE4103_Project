@@ -22,6 +22,7 @@ export default function InstructorHome() {
 		}
 	}
 
+	const cs = AspNetConnector.getAllClasses();
 	const [title, setTitle] = useState("--");
 	const useStyles = makeStyles((theme) => ({
 		paper: {
@@ -195,6 +196,15 @@ export default function InstructorHome() {
 	const newClass = () =>
 	{
 		let name = prompt("New Class Name");
+		
+		for(let i = 0; i < cs.length; ++i)
+		{
+			if(cs[i] === name)
+			{
+				alert("Class already exists");
+				return;
+			}
+		}
 		setLayout(createLayout(5,5));
 		StateManager.setSelectedClass(name);
 		setTitle(name);
