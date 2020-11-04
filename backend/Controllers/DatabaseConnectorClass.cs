@@ -98,6 +98,16 @@ namespace backend
 
 			return true;
 		}
+		public List<String> GetAllClasses()
+		{
+			List<String> cls = new List<String>();
+			var allClasses = classes.AsQueryable();
+			foreach(var x in allClasses)
+			{
+				cls.Add(x["name"].ToString());
+			}
+			return cls;
+		}
 		public bool AccessibleSeat(string className, int x, int y)
 		{
 			// Create a filter that will find the student with the given email

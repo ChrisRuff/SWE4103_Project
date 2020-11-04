@@ -39,6 +39,12 @@ namespace backend
 					return classes;
 				}
         
+				[HttpGet, Route("api/class/get/all")]
+        public List<String> GetAllClassesAPI()
+				{
+					return DatabaseConnector.Connector.GetAllClasses();
+				}
+
         [HttpPost, Route("api/class/add")]
         public List<ClassDTO> MakeClassAPI(List<ClassDTO> classDTOs)
         {

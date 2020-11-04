@@ -11,3 +11,35 @@
 .StudentHome .lander p {
   color: #999;
 }
+
+.row {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.layoutHeader > div {
+  margin-right: 80%;
+  padding: 15px;
+}
+
+.layoutHeader > button {
+  margin: 0px 15px;
+}
+
+.root {
+  overflow: scroll;
+  width: 800px;
+  margin: auto;
+  height: min-content;
+  max-height: 600px;
+  padding: 5px;
+  border: 3px solid grey;
+} 
+
+.studentSeat {
+  pointer-events: none;
+  margin: auto;
+}

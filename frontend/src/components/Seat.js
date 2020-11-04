@@ -4,7 +4,6 @@ import "./Seat.css";
 import {StateManager} from "../StateManager.js"
 
 export default class Seat extends Component {
-
 	constructor(props) {
 		super(props);
 		this.y = StateManager.getY();
@@ -20,6 +19,24 @@ export default class Seat extends Component {
 			this.state = {
 				seatType: props.seatType,
 			};
+		}
+		StateManager.incX();
+	}
+	componentWillReceiveProps(props)
+	{
+		this.y = StateManager.getY();
+		this.x = StateManager.getX();
+		if(props.seatType == null || props.seatType === "")
+		{
+			this.setState({
+				seatType: "available",
+			});
+		}
+		else
+		{
+			this.setState({
+				seatType: props.seatType,
+			});
 		}
 		StateManager.incX();
 	}
@@ -57,7 +74,10 @@ export default class Seat extends Component {
 	render() {
 		StateManager.addSeat(this.x, this.y, this.state.seatType, this)
 		return (
-			<Button className={this.state.seatType} onClick = {this.handleClick}>Seat</Button>
+			<Button className={this.state.seatType} onClick = {this.handleClick}>
+				Seat<br/>
+				X:{this.x}&nbsp;&nbsp;&nbsp;Y:{this.y}
+			</Button>
 		);
 	}
 }

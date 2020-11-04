@@ -23,6 +23,7 @@ export default function InstructorHome() {
 		}
 	}
 
+	const cs = AspNetConnector.getAllClasses();
 	const [title, setTitle] = useState("--");
 	const useStyles = makeStyles((theme) => ({
 		paper: {
@@ -136,6 +137,10 @@ export default function InstructorHome() {
 	};
 
 	const makeClass = () => {
+		if(title == "--")
+		{
+			return;
+		}
 		var cols = layout[0].props.children.props.children[0].props.children.length;
 		var rows = layout[0].props.children.props.children.length;
 		var className = title;
@@ -167,7 +172,7 @@ export default function InstructorHome() {
 
 				AspNetConnector.disableSeat(classDTO);
 			}
-			else if(currentLayout[i].seatType == "accessible"){
+			else if(currentLayout[i].seatType === "accessible"){
 				var accessibleSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y};
 				classDTO[0].seat = accessibleSeat;
 
@@ -192,6 +197,15 @@ export default function InstructorHome() {
 	const newClass = () =>
 	{
 		let name = prompt("New Class Name");
+		
+		for(let i = 0; i < cs.length; ++i)
+		{
+			if(cs[i] === name)
+			{
+				alert("Class already exists");
+				return;
+			}
+		}
 		setLayout(createLayout(5,5));
 		StateManager.setSelectedClass(name);
 		setTitle(name);
@@ -209,18 +223,21 @@ export default function InstructorHome() {
 return (
     <div>
 		<div className="layoutHeader">
-			<DropdownButton 
-				title={StateManager.getSelectedClass()}
-				id="classDropdown"
-				onSelect={handleSelect.bind(this)}>
-				{classList.map((opt, i) => (
-					<MenuItem key={i} eventKey={i}>
-						{opt}
-					</MenuItem>
-				))}
-			</DropdownButton>
-        <Button onClick={newClass} variant="light">Add</Button>
-        <Button onClick={makeClass} variant="light">Submit</Button>
+			<div style={{width: "100%"}}>
+				<DropdownButton 
+					title={StateManager.getSelectedClass()}
+					id="classDropdown"
+					onSelect={handleSelect.bind(this)}>
+					{classList.map((opt, i) => (
+						<MenuItem key={i} eventKey={i}>
+							{opt}
+						</MenuItem>
+					))}
+				</DropdownButton>
+				<div style={{width: "15px", height: "auto", display: "inline-block"}}/>
+				<Button onClick={newClass} variant="light">Add</Button>
+				<Button onClick={makeClass} variant="light" className="pull-right">Submit</Button>
+			</div>
 		</div>
 		<Fragment>{layout}</Fragment>
 		<div className="layoutFooter">
