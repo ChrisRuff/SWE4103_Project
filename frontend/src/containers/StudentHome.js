@@ -12,17 +12,44 @@ import { onError } from "../libs/errorLib";
 
 export default function StudentHome() {
 
-  const history = useHistory();
+    const history = useHistory();
 
-	// If there is no student object(not signed in) then return to the homepage
-	if(StateManager.getStudent() == null)
-	{
-		StateManager.setStudent(JSON.parse(localStorage.getItem('user')));
-		if(StateManager.getStudent() == null)
-		{
-			history.push("/");
-		}
-  }
+    // useEffect's run every render, since there are no
+    // dependants declared in this one, it will run only
+    // on page load
+    useEffect(() => {
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        let code = url.searchParams.get("code");
+        // If there is no student object(not signed in) then return to the homepage
+        if(StateManager.getStudent() == null) {
+            StateManager.setStudent(JSON.parse(localStorage.getItem('user')));
+            if(StateManager.getStudent() == null) {
+                if (code == null) {
+                    history.push("/login");
+                }
+                else {
+                    history.push(`/login?code=${code}`);
+                }
+            }
+        }
+        if (code != null && StateManager.getStudent() != null) {
+            //let classFromCode = AspNetConnector.getClassFromCode(code);
+            let classFromCode = "SWE4103"; //temp
+            let answer = window.confirm(`Would you like to register for ${classFromCode}?`);
+            if (answer) {
+                // var student = [{
+                //     "studentName": StateManager.getStudent().studentName,
+                //     "email": StateManager.getStudent().email,
+                //     "response": false
+                // }];
+                // AspNetConnector.studentAddClass(student, class);
+                console.log("Class would be added"); //temp
+            }
+            history.push("/StudentHome");
+        }
+    });
+
   const [title, setTitle] = useState("--");
 	const useStyles = makeStyles((theme) => ({
 		paper: {

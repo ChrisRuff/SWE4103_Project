@@ -53,8 +53,16 @@ export default function Login() {
           let value = (obj[0].response);
           if (value === true){
             userHasAuthenticated(true);
-						localStorage.setItem('user', JSON.stringify(obj[0]));
-            history.push("/StudentHome"); 
+            localStorage.setItem('user', JSON.stringify(obj[0]));
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            let code = url.searchParams.get("code");
+            if (code == null) {
+              history.push("/StudentHome"); 
+            }
+            else {
+              history.push(`/StudentHome?code=${code}`);
+            }
           }
           else{
             onError("Invalid password or account selected");
