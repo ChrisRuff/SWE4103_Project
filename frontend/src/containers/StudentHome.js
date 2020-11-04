@@ -90,7 +90,7 @@ export default function StudentHome() {
 				}
 				// Add seat with specified seat type
 				cols.push(
-					<div key={i} className="seat">
+					<div key={i} className="studentSeat">
 						<Seat x={i} y={j} seatType={type}/>
 					</div>
 						);
