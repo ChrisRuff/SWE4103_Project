@@ -7,6 +7,7 @@ import "./InstructorHome.css";
 import { StateManager } from "../StateManager.js";
 import Seat from "../components/Seat.js";
 import { useHistory } from "react-router-dom";
+import { TextField } from "@material-ui/core";
 
 export default function InstructorHome() {
 
@@ -200,6 +201,11 @@ export default function InstructorHome() {
 		history.push("/EditSeatPlan");
 	}
 
+	const generateLink = () => {
+		//let link = AspNetConnector.generateLink(StateManager.getSelectedClass);
+		document.getElementById("link-field").value="Hello";
+	}
+
 return (
     <div>
 		<div className="layoutHeader">
@@ -220,6 +226,18 @@ return (
 		<div className="layoutFooter">
 			<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
 			<Button variant="light">More Options...</Button>
+		</div>
+		<div className="link">
+			<TextField
+			className="link"
+			id="link-field"
+			defaultValue=""
+			InputProps={{
+				readOnly: true,
+			}}
+			variant="outlined"
+			/>
+			<Button className="link" onClick={generateLink} variant="light">Geneate Link</Button>
 		</div>
     </div>
 );
