@@ -217,7 +217,8 @@ export default function InstructorHome() {
 
 	const generateLink = () => {
 		//let link = AspNetConnector.generateLink(StateManager.getSelectedClass);
-		document.getElementById("link-field").value="Hello";
+		//document.getElementById("link-field").value=link;
+		document.getElementById("link-field").value="https://blahblahblah.com/register?p=123456789";
 	}
 
 return (
@@ -243,18 +244,16 @@ return (
 		<div className="layoutFooter">
 			<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
 			<Button variant="light">More Options...</Button>
-		</div>
-		<div className="link">
+			<Button className="pull-right" onClick={generateLink} variant="light">Generate Registration Link</Button>
 			<TextField
-			className="link"
+			className="pull-right"
 			id="link-field"
+			style={{width: '400px', height: 'auto'}}
 			defaultValue=""
 			InputProps={{
 				readOnly: true,
 			}}
-			variant="outlined"
 			/>
-			<Button className="link" onClick={generateLink} variant="light">Geneate Link</Button>
 		</div>
     </div>
 );
