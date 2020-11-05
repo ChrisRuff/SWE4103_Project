@@ -216,9 +216,15 @@ export default function InstructorHome() {
 	}
 
 	const generateLink = () => {
-		//let link = AspNetConnector.generateLink(StateManager.getSelectedClass);
-		//document.getElementById("link-field").value=link;
-		document.getElementById("link-field").value="https://blahblahblah.com/register?p=123456789";
+		var selectedClass = [{
+			"className": StateManager.getSelectedClass()
+		}];
+		var request = AspNetConnector.generateClassCode(selectedClass);
+		request.onload = async function() {
+			var response = await JSON.parse(request.response);
+			var url = window.location.href.split("/");
+			document.getElementById("link-field").value=`https://${url[2]}/StudentHome?code=${response[0].classCode}`;
+		}
 	}
 
 return (
@@ -248,7 +254,7 @@ return (
 			<TextField
 			className="pull-right"
 			id="link-field"
-			style={{width: '400px', height: 'auto'}}
+			style={{width: '250px', height: 'auto'}}
 			defaultValue=""
 			InputProps={{
 				readOnly: true,
