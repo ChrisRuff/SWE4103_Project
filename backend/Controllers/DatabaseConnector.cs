@@ -24,6 +24,7 @@ namespace backend
 		private IMongoCollection<BsonDocument> students;
 		private IMongoCollection<BsonDocument> classes;
 		private IMongoCollection<BsonDocument> profs;
+		private IMongoCollection<BsonDocument> classCodes;
 
 		private DatabaseConnector()
 		{
@@ -35,6 +36,7 @@ namespace backend
 			students = database.GetCollection<BsonDocument>("students");
 			profs = database.GetCollection<BsonDocument>("profs");
 			classes = database.GetCollection<BsonDocument>("classes");
+			classCodes = database.GetCollection<BsonDocument>("classCodes");
 		}
 
 		public void Wipe()
@@ -43,6 +45,7 @@ namespace backend
 			students = database.GetCollection<BsonDocument>("students");
 			classes = database.GetCollection<BsonDocument>("classes");
 			profs = database.GetCollection<BsonDocument>("profs");
+			classCodes = database.GetCollection<BsonDocument>("classCodes");
 		}
 
 		public static DatabaseConnector Connector

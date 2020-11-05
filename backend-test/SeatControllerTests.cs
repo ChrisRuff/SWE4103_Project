@@ -67,10 +67,6 @@ namespace test
 			request = seatController.DisableSeatAPI(testClass);
 			Assert.True(request[0].response);
 
-			// attempt to disable same seat
-			request = seatController.DisableSeatAPI(testClass);
-			Assert.False(request[0].response);
-
 			// cleanup
 			request = classController.RemoveClassAPI(testClass);
 		}
