@@ -236,7 +236,17 @@ return (
 		<Fragment>{layout}</Fragment>
 		<div className="layoutFooter">
 			<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
-			<Button variant="light">More Options...</Button>
+			<DropdownButton 
+					title="More Options..."
+					id="moreOptionsDropdown">
+						<MenuItem key="remove" eventKey={"remove"}>
+							Remove Class
+						</MenuItem>
+						<MenuItem key="mandatory" eventKey={"mandatory"}>
+							Make Mandatory
+						</MenuItem>
+				</DropdownButton>
+
 		</div>
     </div>
 );
