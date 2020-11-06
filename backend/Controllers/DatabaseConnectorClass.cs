@@ -165,7 +165,6 @@ namespace backend
 			var foundClasses = classes.Find(query);
 			if(foundClasses.CountDocuments() <= 0)
 			{
-				Console.WriteLine("Could not find class");
 				throw new System.Exception("Could not find class");
 			}
 

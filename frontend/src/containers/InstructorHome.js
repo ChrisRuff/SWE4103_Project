@@ -68,9 +68,6 @@ export default function InstructorHome() {
     return layout;
 	};
 
-	const classes = useStyles();
-	const [layout, setLayout] = useState(StateManager.getClassLayout() == null ? createLayout(5,5) : StateManager.getClassLayout());
-	
 	const loadLayout = (classDTO) => {
 		StateManager.wipeSeats();
 		StateManager.setRows(classDTO.height);
@@ -135,8 +132,14 @@ export default function InstructorHome() {
     return layout;
 	};
 
+	let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getProf()]).response);
+	let emptyLayout = [];
+
+	const classes = useStyles();
+	const [layout, setLayout] = useState(StateManager.getClassLayout() === null ? emptyLayout : StateManager.getClassLayout());
+
 	const makeClass = () => {
-		if(title == "--")
+		if(title === "--")
 		{
 			return;
 		}
@@ -180,7 +183,6 @@ export default function InstructorHome() {
 		}
 	}
 
-	let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getProf()]).response);
 	const handleSelect = (eventKey, event) => {
 		StateManager.setSelectedClass(classList[eventKey]);
 		setTitle(classList[eventKey]);
@@ -188,10 +190,8 @@ export default function InstructorHome() {
 		if(classLayout[0].response)
 		{
 			StateManager.setClassLayout(classLayout[0]);
-			console.log(StateManager.getClassLayout());
 			setLayout(loadLayout(classLayout[0]));
 		}
-		console.log(StateManager.getSeats());
 	}
 	const newClass = () =>
 	{
@@ -205,13 +205,36 @@ export default function InstructorHome() {
 				return;
 			}
 		}
-		setLayout(createLayout(5,5));
-		StateManager.setSelectedClass(name);
-		setTitle(name);
+		if (name !== null){
+			setLayout(createLayout(5,5));
+			StateManager.setSelectedClass(name);
+			setTitle(name);
+		}
 	}
 
 	function directToEditSeatPlanPage() {
 		history.push("/EditSeatPlan");
+	}
+
+	if (StateManager.getClassLayout() === null){
+		if (classList[0] !== null && classList[0] !== undefined){
+			setTitle(classList[0]);
+			StateManager.setSelectedClass(classList[0]);
+			let classLayout = JSON.parse(AspNetConnector.getClasses([{"className": classList[0]}]).response);
+			if(classLayout[0].response){
+				console.log(classLayout[0]);
+				StateManager.setClassLayout(classLayout[0]);
+				setLayout(loadLayout(classLayout[0]));
+			}
+		}
+		else {
+			emptyLayout.push( //gives this statement if prof has no classes
+				<div key="root" className="root">
+					<h1 style= {{textAlign: 'center', padding: '50px' }}> There are no classes to display </h1>
+				</div> 
+			);
+			return emptyLayout;
+		}
 	}
 
 return (
