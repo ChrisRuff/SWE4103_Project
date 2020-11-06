@@ -9,6 +9,7 @@ import { StateManager } from "../StateManager.js";
 import "./EditSeatPlan.css";
 
 export default function EditSeatPlan() {
+  // function taken from InstructorHome.js to create seating plan layout
   const createLayout = (numRows, numCols) => {
 		StateManager.wipeSeats();
 		StateManager.setRows(numRows);
@@ -54,6 +55,10 @@ export default function EditSeatPlan() {
   
   const [myLayouts, setLayouts] = useState(createLayout(rowNum, colNum));
 
+  /*
+   anything entered in width and height textfields get saved into rowNum and colNum
+   that are going to be used later when the user hits the confirm button
+   */
   const handleRowTextFieldChange = x => {
     rowNum = x.target.value;
   }
@@ -61,6 +66,7 @@ export default function EditSeatPlan() {
     colNum = x.target.value;
   }
 
+  // clones existing class layout with new width and height
   function handleConfirmButtonClick() {
     var classToDelete = [{"className": classSelected}]
     var newClass = [{"className": classSelected, "width": parseInt(colNum,10), "height": parseInt(rowNum,10)}]
