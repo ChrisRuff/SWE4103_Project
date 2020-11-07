@@ -6,7 +6,10 @@ export default function UnauthenticatedHome() {
 	const history = useHistory();
 	if(localStorage.getItem("user") != null)
 	{
-		history.push("/InstructorHome"); 
+		if(localStorage.getItem("type") == "student")
+			history.push("/StudentHome"); 
+		else
+			history.push("/InstructorHome"); 
 	}
   return (
     <div className="UnauthenticatedHome">
