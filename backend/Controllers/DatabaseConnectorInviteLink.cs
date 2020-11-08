@@ -12,7 +12,7 @@ namespace backend
 	// https://mongodb.github.io/mongo-csharp-driver/2.10/getting_started/quick_tour/
 	public partial class DatabaseConnector
 	{
-		public String GenerateInviteKey(string className)
+		public string GenerateInviteKey(string className)
 		{
 			// Create a filter that will find the student with the given email
 			FilterDefinition<BsonDocument> query 
@@ -45,6 +45,22 @@ namespace backend
 			classCodes.InsertOne(newLink);
 
 			return keyString;
+		}
+
+		public string GetInviteKey(string classCode)
+		{
+			// Create a filter that will find the student with the given email
+			FilterDefinition<BsonDocument> query
+				= Builders<BsonDocument>.Filter.Eq("inviteLinkKey", classCode);
+
+			var foundClasses = classCodes.Find(query);
+			if (foundClasses.CountDocuments() <= 0)
+			{
+				throw new System.Exception("Invalid key.");
+			}
+
+			var foundClass = foundClasses.First();
+			return foundClass["inviteLinkKey"].ToString();
 		}
 	}
 }

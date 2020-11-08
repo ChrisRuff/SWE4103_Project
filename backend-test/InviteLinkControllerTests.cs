@@ -19,6 +19,8 @@ namespace test
 			var controller = new InviteLinkController(_logger);
 			var classController = new ClassController(_classLogger);
 
+			classController.RemoveClassAPI(testClass);
+
 			// generate key for nonexistant class
 			var request = controller.GenerateClassCodeAPI(testClass);
 			Assert.False(request[0].response);
@@ -30,11 +32,49 @@ namespace test
 			// generate key for class
 			request = controller.GenerateClassCodeAPI(testClass);
 			Assert.True(request[0].response);
-			Console.WriteLine("\n\n" + request[0].classCode);
 
 			// delete class
 			request = classController.RemoveClassAPI(testClass);
-		}	
+		}
+
+		[Fact]
+		public void GetClassCode()
+		{
+			var testClass = GetTestClasses();
+			var controller = new InviteLinkController(_logger);
+			var classController = new ClassController(_classLogger);
+
+			// get invalid class from key
+			testClass[0].className = "INVALID_CLASS";
+			var request = controller.GetClassCodeAPI(testClass);
+			Assert.False(request[0].response);
+			testClass[0].className = "TEST1003";
+
+			// get class from invalid key
+			testClass[0].classCode = "INVALID_CODE";
+			request = controller.GetClassCodeAPI(testClass);
+			Assert.False(request[0].response);
+
+			// make class
+			classController.RemoveClassAPI(testClass);
+			request = classController.MakeClassAPI(testClass);
+			Assert.True(request[0].response);
+
+			// generate key for class
+			request = controller.GenerateClassCodeAPI(testClass);
+			Assert.True(request[0].response);
+			var classCode1 = request[0].classCode;
+
+			// get key
+			testClass[0].classCode = classCode1;
+			request = controller.GetClassCodeAPI(testClass);
+			Assert.True(request[0].response);
+			Assert.True(classCode1 == request[0].classCode);
+			Assert.True(testClass[0].className == request[0].className);
+
+			// delete class
+			request = classController.RemoveClassAPI(testClass);
+		}
 
 		private List<StudentDTO> GetTestStudents()
 		{
@@ -71,8 +111,9 @@ namespace test
 			testClass.Add(
 					new ClassDTO
 					{
-						className = "TEST1001",
+						className = "TEST1003",
 						width = 100,
+						classCode = "",
 						height = 32,
 						seat = new SeatDTO
 						{

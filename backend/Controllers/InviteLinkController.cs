@@ -38,5 +38,24 @@ namespace backend
             }
             return classDTOs;
         }
+
+        [HttpPost, Route("api/invite_link/get")]
+        public List<ClassDTO> GetClassCodeAPI(List<ClassDTO> classDTOs)
+        {
+            for (int i = 0; i < classDTOs.Count; i++)
+            {
+                try
+                {
+                    string res = DatabaseConnector.Connector.GetInviteKey(classDTOs[i].classCode);
+                    classDTOs[i].classCode = res;
+                    classDTOs[i].response = true;
+                }
+                catch (Exception)
+                {
+                    classDTOs[i].response = false;
+                }
+            }
+            return classDTOs;
+        }
     }
 }
