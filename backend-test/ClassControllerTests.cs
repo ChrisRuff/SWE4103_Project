@@ -38,23 +38,24 @@ namespace test
 		}
 
 		[Fact]
-		public void AddClass()
+		public void ChangeNotificationFrequency()
 		{
-			var testStudents = GetTestStudents();
-			var studentController = new StudentController(_studentLogger);
+			var testClass = GetTestClass();
 			var classController = new ClassController(_classLogger);
+			classController.MakeClassAPI(testClass);
+			var classObject = DatabaseConnector.Connector.GetClass(testClass[0].className);
 
-			DatabaseConnector.Connector.RemoveStudent(testStudents[0].email);
-			var request = studentController.AddStudent(testStudents);
-			if (request[0].response)
-			{
-				var request2 = classController.AddClass(testStudents);
-				Assert.True(request2[0].response);
-			}
+			Assert.True(classObject.notificationFreq == 3);
+			testClass[0].notificationFreq = 5;
+			classController.ChangeFreqAPI(testClass);
 
-			// cleanup
-			studentController.RemoveStudent(testStudents);
+			classObject = DatabaseConnector.Connector.GetClass(testClass[0].className);
+			Assert.True(classObject.notificationFreq == 5);
+
+			classController.RemoveClassAPI(testClass);
+
 		}
+
 
 		private List<StudentDTO> GetTestStudents()
 		{
@@ -67,7 +68,7 @@ namespace test
 						{
 							new ClassDTO
 							{
-								className = "TEST1001",
+								className = "TEST101",
 								width = 100,
 								height = 32,
 								seat = new SeatDTO
@@ -91,7 +92,7 @@ namespace test
 			testClass.Add(
 					new ClassDTO
 					{
-						className = "TEST1001",
+						className = "TEST101",
 						width = 100,
 						height = 32,
 						seat = new SeatDTO

@@ -70,7 +70,6 @@ export default function InstructorHome() {
 
 	const classes = useStyles();
 	const [layout, setLayout] = useState(StateManager.getClassLayout() == null ? createLayout(5,5) : StateManager.getClassLayout());
-	
 	const loadLayout = (classDTO) => {
 		StateManager.wipeSeats();
 		StateManager.setRows(classDTO.height);
@@ -188,7 +187,6 @@ export default function InstructorHome() {
 		if(classLayout[0].response)
 		{
 			StateManager.setClassLayout(classLayout[0]);
-			console.log(StateManager.getClassLayout());
 			setLayout(loadLayout(classLayout[0]));
 		}
 		console.log(StateManager.getSeats());
@@ -214,6 +212,21 @@ export default function InstructorHome() {
 		history.push("/EditSeatPlan");
 	}
 
+	const moreOptions = (eventKey, event) =>
+	{
+		switch(eventKey)
+		{
+			case "notFreq":
+				let input = 0;
+				do
+				{
+					input = parseInt(prompt("New notification frequency"));
+				}while(isNaN(input));
+				AspNetConnector.changeNotificationFreq([{"className": StateManager.getSelectedClass(), "notificationFreq": input }]);
+
+		}
+	}
+
 return (
     <div>
 		<div className="layoutHeader">
@@ -236,7 +249,21 @@ return (
 		<Fragment>{layout}</Fragment>
 		<div className="layoutFooter">
 			<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
-			<Button variant="light">More Options...</Button>
+			<DropdownButton 
+					onSelect={moreOptions.bind(this)}
+					title="More Options..."
+					id="moreOptionsDropdown">
+						<MenuItem key="remove" eventKey={"remove"}>
+							Remove Class
+						</MenuItem>
+						<MenuItem key="mandatory" eventKey={"mandatory"}>
+							Make Mandatory
+						</MenuItem>
+						<MenuItem key="notificationFreq" eventKey={"notFreq"}>
+							Change Notification Frequency: { StateManager.getClassLayout() != null ? StateManager.getClassLayout().notificationFreq : "" }
+						</MenuItem>
+				</DropdownButton>
+
 		</div>
     </div>
 );
