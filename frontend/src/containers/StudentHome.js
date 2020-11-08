@@ -34,20 +34,35 @@ export default function StudentHome() {
             }
         }
         if (code != null && StateManager.getStudent() != null) {
-            //let classFromCode = AspNetConnector.getClassFromCode(code);
-            let classFromCode = "SWE4103"; //temp
-            let answer = window.confirm(`Would you like to register for ${classFromCode}?`);
-            if (answer) {
-                // var student = [{
-                //     "studentName": StateManager.getStudent().studentName,
-                //     "email": StateManager.getStudent().email,
-                //     "response": false
-                // }];
-                // AspNetConnector.studentAddClass(student, class);
-                console.log("Class would be added"); //temp
-            }
-            history.push("/StudentHome");
-        }
+			//get class from class code
+			var newClass = [{
+				"classCode": code
+			}]
+			var request = AspNetConnector.getClassCode(newClass);
+			request.onload = async function() {
+				var response = await JSON.parse(request.response);
+				var classFromCode = response[0].className;
+				// if valid class code, ask user if they would like to register
+				if (classFromCode!=null) {
+					let answer = window.confirm(`Would you like to register for ${classFromCode}?`);
+					// if they would like to register, call addClassToStudent
+					if (answer) {
+						var student = [{
+							"classes":[{"className": classFromCode}], 
+							"email": StateManager.getStudent().email
+						}];
+						request = AspNetConnector.addClassToStudent(student);
+						request.onload = async function() {
+							response = await JSON.parse(request.response);
+						}
+					}
+				}
+				else {
+					alert("Invalid registration link.");
+				}
+			}
+			history.push("/StudentHome");
+		}
     });
 
   const [title, setTitle] = useState("--");
