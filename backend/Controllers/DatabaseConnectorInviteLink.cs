@@ -60,7 +60,7 @@ namespace backend
 			}
 
 			var foundClass = foundClasses.First();
-			return foundClass["inviteLinkKey"].ToString();
+			return foundClass["className"].ToString();
 		}
 	}
 }

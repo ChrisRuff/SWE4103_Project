@@ -47,7 +47,7 @@ namespace backend
                 try
                 {
                     string res = DatabaseConnector.Connector.GetInviteKey(classDTOs[i].classCode);
-                    classDTOs[i].classCode = res;
+                    classDTOs[i].className = res;
                     classDTOs[i].response = true;
                 }
                 catch (Exception)
