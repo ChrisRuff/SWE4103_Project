@@ -48,6 +48,18 @@ export var AspNetConnector = {
 		return request;
 			
 	},
+	
+	addClassToStudent: function(students) {
+			
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/student/class/add', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(students));
+		
+		return request;
+			
+	},
 
 	/* 
 	* var newSeat = [{
