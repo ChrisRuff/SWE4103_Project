@@ -1,7 +1,7 @@
-import React, { Fragment, useState, useEffect }  from "react";
+import React, { Fragment, useState}  from "react";
 import "./StudentHome.css";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Dropdown, DropdownButton, MenuItem} from "react-bootstrap";
+import { Button, DropdownButton, MenuItem} from "react-bootstrap";
 import { StateManager } from "../StateManager.js";
 import { useHistory } from "react-router-dom";
 import { AspNetConnector } from "../AspNetConnector.js";
