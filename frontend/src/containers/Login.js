@@ -54,6 +54,7 @@ export default function Login() {
           if (value === true){
             userHasAuthenticated(true);
 						localStorage.setItem('user', JSON.stringify(obj[0]));
+						localStorage.setItem('type', "student");
             history.push("/StudentHome"); 
           }
           else{
@@ -75,6 +76,7 @@ export default function Login() {
             userHasAuthenticated(true);
 						StateManager.setProf(obj[0]);
 						localStorage.setItem('user', JSON.stringify(obj[0]));
+						localStorage.setItem('type', "prof");
             history.push("/InstructorHome"); 
           }
           else{

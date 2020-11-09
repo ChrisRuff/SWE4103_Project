@@ -229,6 +229,20 @@ export default function InstructorHome() {
 			}
 		}
 	}
+	const moreOptions = (eventKey, event) =>
+	{
+		switch(eventKey)
+		{
+			case "notFreq":
+				let input = 0;
+				do
+				{
+					input = parseInt(prompt("New notification frequency"));
+				}while(isNaN(input));
+				AspNetConnector.changeNotificationFreq([{"className": StateManager.getSelectedClass(), "notificationFreq": input }]);
+
+		}
+	}
 
 return (
     <div>
@@ -254,7 +268,21 @@ return (
 			<Fragment>{layout}</Fragment>
 			<div className="layoutFooter">
 				<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
-				<Button variant="light">More Options...</Button>
+				<DropdownButton 
+						onSelect={moreOptions.bind(this)}
+						title="More Options..."
+						id="moreOptionsDropdown">
+							<MenuItem key="remove" eventKey={"remove"}>
+								Remove Class
+							</MenuItem>
+							<MenuItem key="mandatory" eventKey={"mandatory"}>
+								Make Mandatory
+							</MenuItem>
+							<MenuItem key="notificationFreq" eventKey={"notFreq"}>
+								Change Notification Frequency: { StateManager.getClassLayout() != null ? StateManager.getClassLayout().notificationFreq : "" }
+							</MenuItem>
+					</DropdownButton>
+
 			</div>
 		</div>
 		}

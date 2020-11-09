@@ -138,5 +138,23 @@ namespace test
 
 			return testStudents;
 		}
+
+		[Fact]
+		public void AddClass()
+		{
+			var testStudents = GetTestStudents();
+			var studentController = new StudentController(_logger);
+
+			DatabaseConnector.Connector.RemoveStudent(testStudents[0].email);
+			var request = studentController.AddStudent(testStudents);
+			if (request[0].response)
+			{
+				var request2 = studentController.AddClass(testStudents);
+				Assert.True(request2[0].response);
+			}
+
+			// cleanup
+			studentController.RemoveStudent(testStudents);
+		}
 	}
 }

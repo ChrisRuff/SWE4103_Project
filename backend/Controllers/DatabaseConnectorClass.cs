@@ -28,6 +28,7 @@ namespace backend
 				{ "name", name },
 				{ "width", width },
 				{ "height", height },
+				{ "notificationFreq", 3 },
 				{ "dSeats", new BsonArray{}},
 				{ "rSeats", new BsonArray{}},
 				{ "aSeats", new BsonArray{}}
@@ -175,6 +176,7 @@ namespace backend
 			MrClassy.className = className;
 			MrClassy.height = foundClass["height"].ToInt32();
 			MrClassy.width = foundClass["width"].ToInt32();
+			MrClassy.notificationFreq = foundClass["notificationFreq"].ToInt32();
 
 			// Get disabled seats
 			var dseats = foundClass["dSeats"].AsBsonArray;
@@ -238,6 +240,28 @@ namespace backend
 			update = 
 				Builders<BsonDocument>.Update.Set("dSeats", new BsonArray{});
 			classes.UpdateOne(query, update);
+			return true;
+		}
+		public bool ChangeFreq(string className, int newF)
+		{
+			// Create a filter that will find the class with the given name
+			FilterDefinition<BsonDocument> query 
+				= Builders<BsonDocument>.Filter.Eq("name", className);
+
+
+			var foundClasses = classes.Find(query);
+			if(foundClasses.CountDocuments() <= 0)
+			{
+				return false;
+			}
+			var foundClass = foundClasses.First();
+
+			// Create a update routine that will update a class 
+			UpdateDefinition<BsonDocument> update = 
+				Builders<BsonDocument>.Update.Set("notificationFreq", newF);
+
+			classes.UpdateOne(foundClass, update);
+
 			return true;
 		}
 	}
