@@ -68,8 +68,6 @@ export default function InstructorHome() {
     return layout;
 	};
 
-	const classes = useStyles();
-	const [layout, setLayout] = useState(StateManager.getClassLayout() == null ? createLayout(5,5) : StateManager.getClassLayout());
 	const loadLayout = (classDTO) => {
 		StateManager.wipeSeats();
 		StateManager.setRows(classDTO.height);
@@ -134,8 +132,15 @@ export default function InstructorHome() {
     return layout;
 	};
 
+	let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getProf()]).response);
+	let emptyLayout = [];
+
+	const classes = useStyles();
+	const [layout, setLayout] = useState(StateManager.getClassLayout() === null ? emptyLayout : StateManager.getClassLayout());
+	const [noClasses, setNoClasses] = useState(classList.length === 0);
+
 	const makeClass = () => {
-		if(title == "--")
+		if(title === "--")
 		{
 			return;
 		}
@@ -179,7 +184,6 @@ export default function InstructorHome() {
 		}
 	}
 
-	let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getProf()]).response);
 	const handleSelect = (eventKey, event) => {
 		StateManager.setSelectedClass(classList[eventKey]);
 		setTitle(classList[eventKey]);
@@ -189,7 +193,6 @@ export default function InstructorHome() {
 			StateManager.setClassLayout(classLayout[0]);
 			setLayout(loadLayout(classLayout[0]));
 		}
-		console.log(StateManager.getSeats());
 	}
 	const newClass = () =>
 	{
@@ -203,15 +206,29 @@ export default function InstructorHome() {
 				return;
 			}
 		}
-		setLayout(createLayout(5,5));
-		StateManager.setSelectedClass(name);
-		setTitle(name);
+		if (name !== null){
+			setLayout(createLayout(5,5));
+			StateManager.setSelectedClass(name);
+			setTitle(name);
+			setNoClasses(false);
+		}
 	}
 
 	function directToEditSeatPlanPage() {
 		history.push("/EditSeatPlan");
 	}
 
+	if (StateManager.getClassLayout() === null){
+		if (classList[0] !== null && classList[0] !== undefined){
+			setTitle(classList[0]);
+			StateManager.setSelectedClass(classList[0]);
+			let classLayout = JSON.parse(AspNetConnector.getClasses([{"className": classList[0]}]).response);
+			if(classLayout[0].response){
+				StateManager.setClassLayout(classLayout[0]);
+				setLayout(loadLayout(classLayout[0]));
+			}
+		}
+	}
 	const moreOptions = (eventKey, event) =>
 	{
 		switch(eventKey)
@@ -246,25 +263,35 @@ return (
 				<Button onClick={makeClass} variant="light" className="pull-right">Submit</Button>
 			</div>
 		</div>
-		<Fragment>{layout}</Fragment>
-		<div className="layoutFooter">
-			<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
-			<DropdownButton 
-					onSelect={moreOptions.bind(this)}
-					title="More Options..."
-					id="moreOptionsDropdown">
-						<MenuItem key="remove" eventKey={"remove"}>
-							Remove Class
-						</MenuItem>
-						<MenuItem key="mandatory" eventKey={"mandatory"}>
-							Make Mandatory
-						</MenuItem>
-						<MenuItem key="notificationFreq" eventKey={"notFreq"}>
-							Change Notification Frequency: { StateManager.getClassLayout() != null ? StateManager.getClassLayout().notificationFreq : "" }
-						</MenuItem>
-				</DropdownButton>
+		{ (noClasses === false) &&
+		<div>
+			<Fragment>{layout}</Fragment>
+			<div className="layoutFooter">
+				<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
+				<DropdownButton 
+						onSelect={moreOptions.bind(this)}
+						title="More Options..."
+						id="moreOptionsDropdown">
+							<MenuItem key="remove" eventKey={"remove"}>
+								Remove Class
+							</MenuItem>
+							<MenuItem key="mandatory" eventKey={"mandatory"}>
+								Make Mandatory
+							</MenuItem>
+							<MenuItem key="notificationFreq" eventKey={"notFreq"}>
+								Change Notification Frequency: { StateManager.getClassLayout() != null ? StateManager.getClassLayout().notificationFreq : "" }
+							</MenuItem>
+					</DropdownButton>
 
+			</div>
 		</div>
+		}
+		{
+			(noClasses === true ) &&
+			<div key="root" className="root">
+				<h1 style= {{textAlign: 'center', padding: '50px' }}> There are no classes to display </h1>
+			</div> 
+		}
     </div>
 );
 }
