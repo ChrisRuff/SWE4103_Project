@@ -137,6 +137,7 @@ export default function InstructorHome() {
 
 	const classes = useStyles();
 	const [layout, setLayout] = useState(StateManager.getClassLayout() === null ? emptyLayout : StateManager.getClassLayout());
+	const [noClasses, setNoClasses] = useState(classList.length === 0);
 
 	const makeClass = () => {
 		if(title === "--")
@@ -209,6 +210,7 @@ export default function InstructorHome() {
 			setLayout(createLayout(5,5));
 			StateManager.setSelectedClass(name);
 			setTitle(name);
+			setNoClasses(false);
 		}
 	}
 
@@ -222,18 +224,9 @@ export default function InstructorHome() {
 			StateManager.setSelectedClass(classList[0]);
 			let classLayout = JSON.parse(AspNetConnector.getClasses([{"className": classList[0]}]).response);
 			if(classLayout[0].response){
-				console.log(classLayout[0]);
 				StateManager.setClassLayout(classLayout[0]);
 				setLayout(loadLayout(classLayout[0]));
 			}
-		}
-		else {
-			emptyLayout.push( //gives this statement if prof has no classes
-				<div key="root" className="root">
-					<h1 style= {{textAlign: 'center', padding: '50px' }}> There are no classes to display </h1>
-				</div> 
-			);
-			return emptyLayout;
 		}
 	}
 
@@ -256,11 +249,21 @@ return (
 				<Button onClick={makeClass} variant="light" className="pull-right">Submit</Button>
 			</div>
 		</div>
-		<Fragment>{layout}</Fragment>
-		<div className="layoutFooter">
-			<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
-			<Button variant="light">More Options...</Button>
+		{ (noClasses === false) &&
+		<div>
+			<Fragment>{layout}</Fragment>
+			<div className="layoutFooter">
+				<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
+				<Button variant="light">More Options...</Button>
+			</div>
 		</div>
+		}
+		{
+			(noClasses === true ) &&
+			<div key="root" className="root">
+				<h1 style= {{textAlign: 'center', padding: '50px' }}> There are no classes to display </h1>
+			</div> 
+		}
     </div>
 );
 }
