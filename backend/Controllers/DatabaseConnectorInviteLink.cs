@@ -14,7 +14,7 @@ namespace backend
 	{
 		public string GenerateInviteKey(string className)
 		{
-			// Create a filter that will find the student with the given email
+			// Create a filter that will find the class and verify classname
 			FilterDefinition<BsonDocument> query 
 				= Builders<BsonDocument>.Filter.Eq("name", className);
 
@@ -31,7 +31,8 @@ namespace backend
 
 			for(int i = 0; i < 8; i++)
             {
-				keyString += symbols[rand.Next(symbols.Length)];
+				string randomIndex = rand.Next(symbols.Length);
+				keyString += symbols[randomIndex];
             }
 
 			// Create the student document
@@ -49,7 +50,7 @@ namespace backend
 
 		public string GetInviteKey(string classCode)
 		{
-			// Create a filter that will find the student with the given email
+			// Create a filter that will find class with a given code
 			FilterDefinition<BsonDocument> query
 				= Builders<BsonDocument>.Filter.Eq("inviteLinkKey", classCode);
 
