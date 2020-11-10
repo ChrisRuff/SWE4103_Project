@@ -177,6 +177,19 @@ namespace test
 		}
 
 		[Fact]
+		public void RemoveClass()
+		{
+			DatabaseConnector.Connector.MakeClass("CS2042", 5, 5);
+			DatabaseConnector.Connector.AddProf("TESTPROF123", "TESTPROF123@123.TEST", "PASS");
+			DatabaseConnector.Connector.AddClassProf("TESTPROF123@123.TEST", "CS2042");
+
+			Assert.True(DatabaseConnector.Connector.GetProfClassNames("TESTPROF123@123.TEST")[0] == "CS2042");
+			Assert.True(DatabaseConnector.Connector.RemoveClass("CS2042"));
+			DatabaseConnector.Connector.GetProfClassNames("TESTPROF123@123.TEST").ForEach(Console.WriteLine);
+			Assert.True(DatabaseConnector.Connector.GetProfClassNames("TESTPROF123@123.TEST").Count == 0);
+		}
+
+		[Fact]
 		public void ProfLogin()
 		{
 			DatabaseConnector.Connector.AddProf("Tester", "test@gmail.com", "password");
