@@ -31,7 +31,7 @@ namespace backend
 
 			for(int i = 0; i < 8; i++)
             {
-				string randomIndex = rand.Next(symbols.Length);
+				int randomIndex = rand.Next(symbols.Length);
 				keyString += symbols[randomIndex];
             }
 
