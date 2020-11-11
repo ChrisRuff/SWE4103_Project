@@ -171,7 +171,6 @@ export default function InstructorHome() {
 	}
 
 	let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getProf()]).response);
-	console.log(classList)
 	const handleSelect = (eventKey, event) => {
 		StateManager.setSelectedClass(classList[eventKey]);
 		setTitle(classList[eventKey]);
@@ -231,10 +230,11 @@ export default function InstructorHome() {
 	{
 		if(StateManager.getSelectedClass() != null && StateManager.getSelectedClass() != "--") {
 			var currentClass = [{"className": StateManager.getSelectedClass()}]
-			var request = AspNetConnector.removeClass(currentClass);
-			request.onload = function() {
-				console.log(JSON.parse(request.response))
-			}
+			AspNetConnector.removeClass(currentClass);
+
+			setLayout(createLayout(5,5));
+			StateManager.setSelectedClass("--");
+			setTitle("--");
 		}
 		else 
 			alert("Please select a class!")
