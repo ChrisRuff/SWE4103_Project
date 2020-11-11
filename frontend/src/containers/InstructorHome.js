@@ -250,7 +250,7 @@ export default function InstructorHome() {
 			var currentClass = [{"className": StateManager.getSelectedClass()}]
 			AspNetConnector.removeClass(currentClass);
 
-			setLayout(createLayout(5,5));
+			setNoClasses(true)
 			StateManager.setSelectedClass("--");
 			setTitle("--");
 		}
@@ -277,6 +277,7 @@ return (
 				<Button onClick={makeClass} variant="light" className="pull-right">Submit</Button>
 			</div>
 		</div>
+		{ (noClasses === false) &&
 		<div>
 			<Fragment>{layout}</Fragment>
 			<div className="layoutFooter">
@@ -285,7 +286,7 @@ return (
 						onSelect={moreOptions.bind(this)}
 						title="More Options..."
 						id="moreOptionsDropdown">
-							<MenuItem key="remove" onClick={removeClass} eventKey={"remove"}>
+							<MenuItem key="remove" eventKey={"remove"} onClick={removeClass}>
 								Remove Class
 							</MenuItem>
 							<MenuItem key="mandatory" eventKey={"mandatory"}>
@@ -295,8 +296,10 @@ return (
 								Change Notification Frequency: { StateManager.getClassLayout() != null ? StateManager.getClassLayout().notificationFreq : "" }
 							</MenuItem>
 					</DropdownButton>
+
 			</div>
 		</div>
+		}
 		{
 			(noClasses === true ) &&
 			<div key="root" className="root">
