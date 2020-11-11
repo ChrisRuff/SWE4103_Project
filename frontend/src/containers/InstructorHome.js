@@ -128,8 +128,6 @@ export default function InstructorHome() {
 	let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getProf()]).response);
 	let emptyLayout = [];
 
-	const classes = useStyles();
-	const [layout, setLayout] = useState(StateManager.getClassLayout() === null ? emptyLayout : StateManager.getClassLayout());
 	const [noClasses, setNoClasses] = useState(classList.length === 0 && StateManager.getClassLayout() === null);
 
 	const makeClass = () => {
@@ -287,7 +285,7 @@ return (
 						onSelect={moreOptions.bind(this)}
 						title="More Options..."
 						id="moreOptionsDropdown">
-							<MenuItem key="remove" eventKey={"remove"}>
+							<MenuItem key="remove" onClick={removeClass} eventKey={"remove"}>
 								Remove Class
 							</MenuItem>
 							<MenuItem key="mandatory" eventKey={"mandatory"}>
@@ -299,7 +297,6 @@ return (
 					</DropdownButton>
 			</div>
 		</div>
-		}
 		{
 			(noClasses === true ) &&
 			<div key="root" className="root">
