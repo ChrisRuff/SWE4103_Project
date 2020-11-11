@@ -121,7 +121,6 @@ export default function StudentHome() {
 			//StateManager.setClassLayout(classLayout[0]);
 			if(classLayout[0].response){
 				StateManager.setClassLayout(loadLayout(classLayout[0]));
-				//setLayout(loadLayout(classLayout[0]));
 			}
 		}
 		else {

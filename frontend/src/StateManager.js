@@ -11,6 +11,16 @@ export var StateManager = {
 	numRows: 0,
 	numCols: 0,
 	seats: [],
+	wipe() {
+		this.classLayout = null;
+		this.accountState = null;
+		this.selectedClass = "--";
+		this.prof = null;
+		this.student = null;
+		this.numRows = 0;
+		this.numCols = 0;
+		this.wipeSeats();
+	},
 	setExampleData(data) {
 		this.exampleData = data;
 	},

@@ -5,6 +5,7 @@ import { Nav, Navbar, NavItem } from "react-bootstrap";
 import "./App.css";
 import Routes from "./Routes";
 import { AppContext } from "./libs/contextLib";
+import {StateManager} from "./StateManager.js";
 
 function App() {
   const [isAuthenticated, userHasAuthenticated] = useState(localStorage.getItem('user') != null);
@@ -14,7 +15,9 @@ function App() {
     // TODO: logout user using AspNetConnector
     userHasAuthenticated(false);
 		localStorage.removeItem('user');
+		localStorage.removeItem('type');
     history.push("/login");
+		StateManager.wipe();
   }
 
   return (

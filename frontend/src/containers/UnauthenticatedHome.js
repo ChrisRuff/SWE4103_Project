@@ -4,9 +4,9 @@ import { useHistory } from "react-router-dom";
 
 export default function UnauthenticatedHome() {
 	const history = useHistory();
-	if(localStorage.getItem("user") != null)
+	if(localStorage.getItem("user") !== null)
 	{
-		if(localStorage.getItem("type") == "student")
+		if(localStorage.getItem("type") === "student")
 			history.push("/StudentHome"); 
 		else
 			history.push("/InstructorHome"); 
