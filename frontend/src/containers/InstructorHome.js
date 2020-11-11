@@ -196,7 +196,7 @@ export default function InstructorHome() {
 	}
 	const newClass = () =>
 	{
-		let name = prompt("New Class Name");
+		let name = prompt("New Class Name (Enter section as well e.g. SWE4103_FR01A)");
 		
 		for(let i = 0; i < cs.length; ++i)
 		{
