@@ -20,14 +20,14 @@ button.reserved {
     width: 100px;
     height: 50px;
     align-items: "center";
-    background-color: #cd5c5c;
+    background-color: #f9dede;
 }
 button.reserved:hover {
-    background-color: #cd5c5c;
+    background-color: #f9dede;
     cursor: pointer;
 }
 button.reserved:focus {
-    background-color: #cd5c5c;
+    background-color: #f9dede;
     cursor: pointer;
     outline: none;
 }
