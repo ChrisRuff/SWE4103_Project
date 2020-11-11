@@ -137,7 +137,7 @@ export default function InstructorHome() {
 
 	const classes = useStyles();
 	const [layout, setLayout] = useState(StateManager.getClassLayout() === null ? emptyLayout : StateManager.getClassLayout());
-	const [noClasses, setNoClasses] = useState(classList.length === 0);
+	const [noClasses, setNoClasses] = useState(classList.length === 0 && StateManager.getClassLayout() === null);
 
 	const makeClass = () => {
 		if(title === "--")
@@ -196,7 +196,7 @@ export default function InstructorHome() {
 	}
 	const newClass = () =>
 	{
-		let name = prompt("New Class Name");
+		let name = prompt("New Class Name (Enter section as well e.g. SWE4103_FR01A)");
 		
 		for(let i = 0; i < cs.length; ++i)
 		{
