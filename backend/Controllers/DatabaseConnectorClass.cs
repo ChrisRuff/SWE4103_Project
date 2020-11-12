@@ -145,11 +145,21 @@ namespace backend
 			// Create a filter that will find the class with the given email
 			FilterDefinition<BsonDocument> query 
 				= Builders<BsonDocument>.Filter.Eq("name", className);
+
+			FilterDefinition<BsonDocument> profQuery 
+				= Builders<BsonDocument>.Filter.Eq("classes.name", className);
 			
 			// Actually delete the student if query finds result
 			if(classes.Find(query).CountDocuments() > 0)
 			{
 				classes.DeleteOne(query);
+				if(profs.Find(profQuery).CountDocuments() > 0)
+				{
+					UpdateDefinition<BsonDocument> update = 
+						Builders<BsonDocument>.Update.Pull("classes", new BsonDocument{{"name", className}});
+
+					profs.UpdateOne(profQuery, update);
+				}
 				return true;
 			}
 			else

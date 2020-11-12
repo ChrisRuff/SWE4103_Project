@@ -1,6 +1,5 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Button, Dropdown, DropdownButton, MenuItem} from "react-bootstrap";
+import React, { Fragment, useState} from "react";
+import { Button, DropdownButton, MenuItem} from "react-bootstrap";
 import { AspNetConnector } from "../AspNetConnector.js";
 import Grid from "@material-ui/core/Grid";
 import "./InstructorHome.css";
@@ -24,13 +23,6 @@ export default function InstructorHome() {
 
 	const cs = AspNetConnector.getAllClasses();
 	const [title, setTitle] = useState("--");
-	const useStyles = makeStyles((theme) => ({
-		paper: {
-			padding: theme.spacing(1),
-			textAlign: "center",
-			color: theme.palette.text.secondary,
-		},
-	}));
 
 	const createLayout = (numRows, numCols) => {
 		StateManager.wipeSeats();
@@ -68,6 +60,7 @@ export default function InstructorHome() {
     return layout;
 	};
 
+	const [layout, setLayout] = useState(StateManager.getClassLayout() == null ? createLayout(5,5) : StateManager.getClassLayout());
 	const loadLayout = (classDTO) => {
 		StateManager.wipeSeats();
 		StateManager.setRows(classDTO.height);
@@ -135,8 +128,6 @@ export default function InstructorHome() {
 	let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getProf()]).response);
 	let emptyLayout = [];
 
-	const classes = useStyles();
-	const [layout, setLayout] = useState(StateManager.getClassLayout() === null ? emptyLayout : StateManager.getClassLayout());
 	const [noClasses, setNoClasses] = useState(classList.length === 0 && StateManager.getClassLayout() === null);
 
 	const makeClass = () => {
@@ -244,6 +235,29 @@ export default function InstructorHome() {
 		}
 	}
 
+	/* 
+	var newClass = [{"className": "CS1073"}]
+	
+	var request = AspNetConnector.removeClass(newClass);
+	
+	request.onload = function() {
+	JSON.parse(request.response)
+	}
+	*/
+	const removeClass = () =>
+	{
+		if(StateManager.getSelectedClass() != null && StateManager.getSelectedClass() != "--") {
+			var currentClass = [{"className": StateManager.getSelectedClass()}]
+			AspNetConnector.removeClass(currentClass);
+
+			setNoClasses(true)
+			StateManager.setSelectedClass("--");
+			setTitle("--");
+		}
+		else 
+			alert("Please select a class!")
+	}
+
 return (
     <div>
 		<div className="layoutHeader">
@@ -272,7 +286,7 @@ return (
 						onSelect={moreOptions.bind(this)}
 						title="More Options..."
 						id="moreOptionsDropdown">
-							<MenuItem key="remove" eventKey={"remove"}>
+							<MenuItem key="remove" eventKey={"remove"} onClick={removeClass}>
 								Remove Class
 							</MenuItem>
 							<MenuItem key="mandatory" eventKey={"mandatory"}>
