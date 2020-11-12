@@ -228,7 +228,8 @@ export default function InstructorHome() {
 			var response = await JSON.parse(request.response);
 			var url = window.location.href.split("/");
 			document.getElementById("link-field").value=`https://${url[2]}/StudentHome?code=${response[0].classCode}`;
-      
+		}
+	}
 	if (StateManager.getClassLayout() === null){
 		if (classList[0] !== null && classList[0] !== undefined){
 			setTitle(classList[0]);
@@ -313,3 +314,4 @@ return (
 		}
     </div>
 );
+}
