@@ -51,18 +51,17 @@ button.accessible:focus {
 button.disabled {
     padding: 3px;
     width: 100px;
-    border: 0px;
     height: 50px;
     align-items: "center";
-    background: repeating-linear-gradient( 45deg, lightgray, lightgray 10px, white 10px, white 20px);
+    background-color: #f9c642;
     color: black;
 }
 button.disabled:hover {
-    background: repeating-linear-gradient( 45deg, lightgray, lightgray 10px, white 10px, white 20px);
+    background-color: #f9c642;
     cursor: pointer;
 }
 button.disabled:focus {
-    background: repeating-linear-gradient( 45deg, lightgray, lightgray 10px, white 10px, white 20px);
+    background-color: #F9C642;
     cursor: pointer;
     outline: none;
 }
