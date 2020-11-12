@@ -7,6 +7,7 @@ import "./InstructorHome.css";
 import { StateManager } from "../StateManager.js";
 import Seat from "../components/Seat.js";
 import { useHistory } from "react-router-dom";
+import { TextField } from "@material-ui/core";
 
 export default function InstructorHome() {
 
@@ -218,6 +219,17 @@ export default function InstructorHome() {
 		history.push("/EditSeatPlan");
 	}
 
+	const generateLink = () => {
+		var selectedClass = [{
+			"className": StateManager.getSelectedClass()
+		}];
+		var request = AspNetConnector.generateClassCode(selectedClass);
+		request.onload = async function() {
+			var response = await JSON.parse(request.response);
+			var url = window.location.href.split("/");
+			document.getElementById("link-field").value=`https://${url[2]}/StudentHome?code=${response[0].classCode}`;
+		}
+	}
 	if (StateManager.getClassLayout() === null){
 		if (classList[0] !== null && classList[0] !== undefined){
 			setTitle(classList[0]);
@@ -240,7 +252,6 @@ export default function InstructorHome() {
 					input = parseInt(prompt("New notification frequency"));
 				}while(isNaN(input));
 				AspNetConnector.changeNotificationFreq([{"className": StateManager.getSelectedClass(), "notificationFreq": input }]);
-
 		}
 	}
 
@@ -282,7 +293,16 @@ return (
 								Change Notification Frequency: { StateManager.getClassLayout() != null ? StateManager.getClassLayout().notificationFreq : "" }
 							</MenuItem>
 					</DropdownButton>
-
+        <Button className="pull-right" onClick={generateLink} variant="light">Generate Registration Link</Button>
+        <TextField
+        className="pull-right"
+        id="link-field"
+        style={{width: '250px', height: 'auto'}}
+        defaultValue=""
+        InputProps={{
+          readOnly: true,
+        }}
+        />
 			</div>
 		</div>
 		}

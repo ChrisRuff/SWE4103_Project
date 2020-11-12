@@ -48,6 +48,18 @@ export var AspNetConnector = {
 		return request;
 			
 	},
+	
+	addClassToStudent: function(students) {
+			
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/student/class/add', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(students));
+		
+		return request;
+			
+	},
 
 	/* 
 	* var newSeat = [{
@@ -366,6 +378,53 @@ export var AspNetConnector = {
 			return JSON.parse(request.response);
 		}
 	},
+  
+	/* 
+	* var newClass = [{
+	* 	"className": "CS1073"
+	* }]
+	*
+	* var request = AspNetConnector.generateClassCode(newClass);
+	* 
+	* request.onload = function() {
+	* 	JSON.parse(request.response)
+	* }
+	*/
+	// generates class code
+	generateClassCode: function(classes) {
+			
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/invite_link/add', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(classes));
+		
+		return request;
+	},
+	
+	/* 
+	* var newClass = [{
+	* 	"className": "CS1073"
+	* }]
+	*
+	* var request = AspNetConnector.getClassCode(newClass);
+	* 
+	* request.onload = function() {
+	* 	JSON.parse(request.response)
+	* }
+	*/
+	// generates class code
+	getClassCode: function(classes) {
+			
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/invite_link/get', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(classes));
+		
+		return request;
+  },
+
 	changeNotificationFreq: function(classes) {
 		var request = new XMLHttpRequest();
 
