@@ -54,16 +54,6 @@ export default function Login() {
           if (value === true){
             userHasAuthenticated(true);
             localStorage.setItem('user', JSON.stringify(obj[0]));
-            var url_string = window.location.href;
-            var url = new URL(url_string);
-            let code = url.searchParams.get("code");
-            if (code == null) {
-              history.push("/StudentHome"); 
-            }
-            else {
-              history.push(`/StudentHome?code=${code}`);
-            }
-						localStorage.setItem('user', JSON.stringify(obj[0]));
 						localStorage.setItem('type', "student");
             var url_string = window.location.href;
             var url = new URL(url_string);
