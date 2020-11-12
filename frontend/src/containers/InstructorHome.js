@@ -258,6 +258,30 @@ export default function InstructorHome() {
 			alert("Please select a class!")
 	}
 
+	const setMandatory = () =>
+	{
+		var currentClass = [{"className": StateManager.getSelectedClass()}]
+		let fullClass = JSON.parse(AspNetConnector.getClasses(currentClass).response);
+		
+		if(fullClass[0].response === true)
+		{
+			if(fullClass[0].mandatory === false)
+			{
+				currentClass = [{"className": StateManager.getSelectedClass(), "mandatory": true}]
+				let response = AspNetConnector.setMandatoryStatus(currentClass);
+				alert("Mandatory class attendance set to: " + response[0].mandatory)
+			}
+			else
+			{
+				currentClass = [{"className": StateManager.getSelectedClass(), "mandatory": false}]
+				let response = AspNetConnector.setMandatoryStatus(currentClass);
+				alert("Mandatory class attendance set to: " + response[0].mandatory)
+			}
+		}
+		else
+			alert("Please save your class!")
+	}
+
 return (
     <div>
 		<div className="layoutHeader">
@@ -289,8 +313,8 @@ return (
 							<MenuItem key="remove" eventKey={"remove"} onClick={removeClass}>
 								Remove Class
 							</MenuItem>
-							<MenuItem key="mandatory" eventKey={"mandatory"}>
-								Make Mandatory
+							<MenuItem key="mandatory" eventKey={"mandatory"} onClick={setMandatory}>
+								Set Mandatory
 							</MenuItem>
 							<MenuItem key="notificationFreq" eventKey={"notFreq"}>
 								Change Notification Frequency: { StateManager.getClassLayout() != null ? StateManager.getClassLayout().notificationFreq : "" }

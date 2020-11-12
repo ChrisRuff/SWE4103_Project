@@ -11,6 +11,7 @@ export var StateManager = {
 	numRows: 0,
 	numCols: 0,
 	seats: [],
+	mandatoryStatus: null,
 	wipe() {
 		this.classLayout = null;
 		this.accountState = null;
@@ -103,5 +104,11 @@ export var StateManager = {
 	},
 	getSeats() {
 		return this.seats;
+	},
+	setMandatoryStatus(mandatoryStatus) {
+		this.mandatoryStatus = mandatoryStatus
+	},
+	getMandatoryStatus() {
+		return this.mandatoryStatus
 	}
 }
