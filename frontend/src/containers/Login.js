@@ -63,6 +63,17 @@ export default function Login() {
             else {
               history.push(`/StudentHome?code=${code}`);
             }
+						localStorage.setItem('user', JSON.stringify(obj[0]));
+						localStorage.setItem('type', "student");
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            let code = url.searchParams.get("code");
+            if (code == null) {
+              history.push("/StudentHome"); 
+            }
+            else {
+              history.push(`/StudentHome?code=${code}`);
+            }
           }
           else{
             onError("Invalid password or account selected");
@@ -83,6 +94,7 @@ export default function Login() {
             userHasAuthenticated(true);
 						StateManager.setProf(obj[0]);
 						localStorage.setItem('user', JSON.stringify(obj[0]));
+						localStorage.setItem('type', "prof");
             history.push("/InstructorHome"); 
           }
           else{

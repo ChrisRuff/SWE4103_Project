@@ -31,7 +31,7 @@ namespace test
 			Assert.True(request[0].response);
 
 			// add class for student
-			request = classController.AddClass(testStudent);
+			request = studentController.AddClass(testStudent);
 			Assert.True(request[0].response);
 
 			// add seat
