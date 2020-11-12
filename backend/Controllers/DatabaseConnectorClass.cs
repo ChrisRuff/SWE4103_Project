@@ -29,6 +29,7 @@ namespace backend
 				{ "width", width },
 				{ "height", height },
 				{ "notificationFreq", 3 },
+				{ "mandatory", false },
 				{ "dSeats", new BsonArray{}},
 				{ "rSeats", new BsonArray{}},
 				{ "aSeats", new BsonArray{}}
@@ -156,6 +157,25 @@ namespace backend
 				return false;
 			}
 		}
+		public bool setMandatory(string className, bool mandatory)
+		{
+			// Create a filter that will find the class with the given email
+			FilterDefinition<BsonDocument> query 
+				= Builders<BsonDocument>.Filter.Eq("name", className);
+			
+			UpdateDefinition<BsonDocument> update = 
+				Builders<BsonDocument>.Update.Set("mandatory", mandatory);
+
+			if(classes.Find(query).CountDocuments() <= 0)
+			{
+				return false;
+			}
+			else
+			{
+				classes.UpdateOne(query, update);
+				return true;
+			}
+		}
 		public ClassDTO GetClass(string className)
 		{
 			// Create a filter that will find the class with the given email
@@ -177,6 +197,7 @@ namespace backend
 			MrClassy.height = foundClass["height"].ToInt32();
 			MrClassy.width = foundClass["width"].ToInt32();
 			MrClassy.notificationFreq = foundClass["notificationFreq"].ToInt32();
+			MrClassy.mandatory = foundClass["mandatory"].ToBoolean();
 
 			// Get disabled seats
 			var dseats = foundClass["dSeats"].AsBsonArray;
