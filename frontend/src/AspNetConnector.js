@@ -376,5 +376,16 @@ export var AspNetConnector = {
 		if (request.status === 200) { // That's HTTP for 'ok'
 			return JSON.parse(request.response);
 		}
+	},
+	setMandatoryStatus: function(classes) {
+		var request = new XMLHttpRequest();
+
+		request.open('POST', 'api/class/set/mandatory', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(classes));
+
+		if (request.status === 200) { // That's HTTP for 'ok'
+			return JSON.parse(request.response);
+		}
 	}
 }
