@@ -12,7 +12,9 @@ import { onError } from "../libs/errorLib";
 
 export default function StudentHome() {
 
-    const history = useHistory();
+  var noClasses = false;
+
+  const history = useHistory();
 
     // useEffect's run every render, since there are no
     // dependants declared in this one, it will run only
@@ -85,7 +87,10 @@ export default function StudentHome() {
 		onError(e);
 	}
 	let classList = [];
-	if (student !== undefined) {
+	if (student !== undefined && student.classes == null) {
+		noClasses = true;
+	}
+	else if (student !== undefined && student.classes !== null) {
 		for(let i = 0; i < student.classes.length; i++){
 			classList.push(student.classes[i].className);
 		}
@@ -200,9 +205,16 @@ export default function StudentHome() {
             </MenuItem>
           ))}
         </DropdownButton>
-          <Button variant="light">Submit</Button>
+          <Button className="pull-right" variant="light">Submit</Button>
       </div>
-	   <Fragment>{layout }</Fragment>
+	  	{!noClasses && (
+            <Fragment>{layout }</Fragment>
+          )}
+        {noClasses && (
+            <div key="root" className="root">
+            <h1 style= {{textAlign: 'center', padding: '50px' }}> There are no classes to display </h1>
+        </div> 
+        )}
     </div>
   );
 }
