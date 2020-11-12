@@ -68,19 +68,19 @@ export default function EditSeatPlan() {
 
   // clones existing class layout with new width and height
   function handleConfirmButtonClick() {
-    var classToDelete = [{"className": classSelected}]
-    var newClass = [{"className": classSelected, "width": parseInt(colNum,10), "height": parseInt(rowNum,10)}]
 
-    var request = AspNetConnector.removeClass(classToDelete);
-    request.onload = function() {
-      JSON.parse(request.response)
-    }
+		var classToDelete = [{"className": classSelected}]
+		var newClass = [{"className": classSelected, "width": parseInt(colNum,10), "height": parseInt(rowNum,10)}]
+		var request = AspNetConnector.removeClass(classToDelete);
+		request.onload = function() {
+			JSON.parse(request.response)
+		}
 
-    var request2 = AspNetConnector.makeClass(newClass);
-    request2.onload = function() {
-      JSON.parse(request2.response)
-    }
-
+		var request2 = AspNetConnector.makeClass(newClass);
+		request2.onload = function() {
+			JSON.parse(request2.response)
+		}
+		StateManager.setSelectedClass(classSelected);
     StateManager.setClassLayout(createLayout(rowNum, colNum));
     history.push("/InstructorHome");
   }

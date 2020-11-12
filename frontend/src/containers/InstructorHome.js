@@ -23,7 +23,7 @@ export default function InstructorHome() {
 	}
 
 	const cs = AspNetConnector.getAllClasses();
-	const [title, setTitle] = useState("--");
+	const [title, setTitle] = useState(StateManager.getSelectedClass());
 	const useStyles = makeStyles((theme) => ({
 		paper: {
 			padding: theme.spacing(1),
@@ -207,7 +207,9 @@ export default function InstructorHome() {
 			}
 		}
 		if (name !== null){
-			setLayout(createLayout(5,5));
+			let newLayout = createLayout(5,5);
+			StateManager.setClassLayout(newLayout);
+			setLayout(StateManager.getClassLayout());
 			StateManager.setSelectedClass(name);
 			setTitle(name);
 			setNoClasses(false);
@@ -220,12 +222,16 @@ export default function InstructorHome() {
 
 	if (StateManager.getClassLayout() === null){
 		if (classList[0] !== null && classList[0] !== undefined){
-			setTitle(classList[0]);
-			StateManager.setSelectedClass(classList[0]);
 			let classLayout = JSON.parse(AspNetConnector.getClasses([{"className": classList[0]}]).response);
 			if(classLayout[0].response){
+				StateManager.setSelectedClass(classList[0]);
 				StateManager.setClassLayout(classLayout[0]);
+				setTitle(StateManager.getSelectedClass());
 				setLayout(loadLayout(classLayout[0]));
+			}
+			else
+			{
+				alert("Could not load class");
 			}
 		}
 	}
