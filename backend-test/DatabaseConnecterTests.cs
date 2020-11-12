@@ -189,6 +189,20 @@ namespace test
 			Assert.True(DatabaseConnector.Connector.GetProfClassNames("TESTPROF123@123.TEST").Count == 0);
 		}
 
+		public void SetMandatory()
+		{
+			DatabaseConnector.Connector.RemoveClass("CS2043");
+			Assert.False(DatabaseConnector.Connector.setMandatory("CS2043", true));
+
+			DatabaseConnector.Connector.MakeClass("CS2043", 5, 5);
+			Assert.True(DatabaseConnector.Connector.GetClass("CS2043").mandatory == false);
+			Assert.True(DatabaseConnector.Connector.setMandatory("CS2043", true));
+			Assert.True(DatabaseConnector.Connector.GetClass("CS2043").mandatory == true);
+			Assert.True(DatabaseConnector.Connector.setMandatory("CS2043", false));
+			Assert.True(DatabaseConnector.Connector.GetClass("CS2043").mandatory == false);
+			DatabaseConnector.Connector.RemoveClass("CS2043");
+		}
+
 		[Fact]
 		public void ProfLogin()
 		{
