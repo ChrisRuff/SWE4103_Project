@@ -197,7 +197,8 @@ namespace backend
 			MrClassy.height = foundClass["height"].ToInt32();
 			MrClassy.width = foundClass["width"].ToInt32();
 			MrClassy.notificationFreq = foundClass["notificationFreq"].ToInt32();
-			MrClassy.mandatory = foundClass["mandatory"].ToBoolean();
+			
+			try { MrClassy.mandatory = foundClass["mandatory"].ToBoolean(); } catch(Exception e) {}
 
 			// Get disabled seats
 			var dseats = foundClass["dSeats"].AsBsonArray;
