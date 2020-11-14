@@ -7,6 +7,7 @@ import { StateManager } from "../StateManager.js";
 import Seat from "../components/Seat.js";
 import { useHistory } from "react-router-dom";
 import { TextField } from "@material-ui/core";
+import Legend from "../components/Legend";
 
 export default function InstructorHome() {
 
@@ -290,7 +291,10 @@ return (
 		</div>
 		{ (noClasses === false) &&
 		<div>
-			<Fragment>{layout}</Fragment>
+			<div className="main">
+				<Fragment>{layout}</Fragment>
+				<Legend/>
+			</div>
 			<div className="layoutFooter">
 				<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
 				<DropdownButton 
