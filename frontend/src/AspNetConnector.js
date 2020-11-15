@@ -156,13 +156,13 @@ export var AspNetConnector = {
 	// Gets a seat from the DB
 	getSeat: function(students) {
 			
-	var request = new XMLHttpRequest();
+		var request = new XMLHttpRequest();
 	
-	request.open('POST', 'api/student/seat/get', true);
-	request.setRequestHeader('Content-type', 'application/json');
-	request.send(JSON.stringify(students));
+		request.open('POST', 'api/student/seat/get', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(students));
 	
-	return request;
+		return request;
 	},
 		
 	/* Sample call
@@ -439,7 +439,7 @@ export var AspNetConnector = {
 	setMandatoryStatus: function(classes) {
 		var request = new XMLHttpRequest();
 
-		request.open('POST', 'api/class/set/mandatory', true);
+		request.open('POST', 'api/class/set/mandatory', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(classes));
 

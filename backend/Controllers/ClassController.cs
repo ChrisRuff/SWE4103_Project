@@ -89,7 +89,7 @@ namespace backend
 		[HttpPost, Route("api/class/set/mandatory")]
 		public List<ClassDTO> SetMandatoryStatus(List<ClassDTO> classes)
 		{
-			for(int i = 0; i < classes.Count; ++i)
+			for(int i = 0; i < classes.Count; i++)
 			{
 				classes[i].response = 
 					DatabaseConnector.Connector.setMandatory(classes[i].className, classes[i].mandatory);
