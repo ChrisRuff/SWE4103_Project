@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import Seat from "../components/Seat.js";
 import * as sha512 from "js-sha512";
 import { onError } from "../libs/errorLib";
+import Legend from "../components/Legend";
 
 export default function StudentHome() {
 
@@ -208,7 +209,10 @@ export default function StudentHome() {
           <Button className="pull-right" variant="light">Submit</Button>
       </div>
 	  	{!noClasses && (
-            <Fragment>{layout }</Fragment>
+            <div className="main">
+			<Fragment>{layout}</Fragment>
+			<Legend/>
+		    </div>
           )}
         {noClasses && (
             <div key="root" className="root">
