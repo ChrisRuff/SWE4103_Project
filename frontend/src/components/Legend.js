@@ -25,7 +25,7 @@ export default function Legend(){
             </div>
             </Tooltip>
             <Tooltip title={<h6 style={{ color: "white" }}> No one is allowed to sit here. </h6>}>
-            <div className="grey">
+            <div className="yellow">
                 Locked
             </div>
             </Tooltip>
