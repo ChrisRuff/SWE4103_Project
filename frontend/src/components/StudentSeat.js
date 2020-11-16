@@ -54,9 +54,9 @@ export default class Seat extends Component {
         if(currentState == "available") {
             // Display a pop-up message for user's confirmation
             let response = window.confirm("Do you really want to reserve this seat?");
-            
+
             if(response) {
-                this.reserve();
+                this.disable();
                 // TODO: back-end submits save
             }
         }
