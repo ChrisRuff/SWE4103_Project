@@ -51,7 +51,7 @@ export default class Seat extends Component {
 
 	handleClick = () => {
         const currentState = this.state.seatType;
-        if(currentState == "available") {
+        if(currentState == "available" || currentState == "accessible") {
             // Display a pop-up message for user's confirmation
             let response = window.confirm("Do you really want to reserve this seat?");
 
