@@ -1,68 +1,67 @@
 button.available {
-    padding: 3px;
-    width: 100px;
-    height: 50px;
-    align-items: "center";
-    background-color: white;
-    color: black;
+  padding: 3px;
+  width: 100px;
+  height: 50px;
+  align-items: "center";
+  background-color: white;
+  color: black;
 }
 button.available:hover {
-    background-color: white;
-    cursor: pointer;
+  background-color: white;
+  cursor: pointer;
 }
 button.available:focus {
-    background-color: white;
-    cursor: pointer;
-    outline: none;
+  background-color: white;
+  cursor: pointer;
+  outline: none;
 }
 button.reserved {
-    padding: 3px;
-    width: 100px;
-    height: 50px;
-    align-items: "center";
-    background-color: #cd5c5c;
+  padding: 3px;
+  width: 100px;
+  height: 50px;
+  align-items: "center";
+  background-color: #f9dede;
 }
 button.reserved:hover {
-    background-color: #cd5c5c;
-    cursor: pointer;
+  background-color: #f9dede;
+  cursor: pointer;
 }
 button.reserved:focus {
-    background-color: #cd5c5c;
-    cursor: pointer;
-    outline: none;
+  background-color: #f9dede;
+  cursor: pointer;
+  outline: none;
 }
 button.accessible {
-    padding: 3px;
-    width: 100px;
-    height: 50px;
-    align-items: "center";
-    background-color: lightblue;
-    color: black;
+  padding: 3px;
+  width: 100px;
+  height: 50px;
+  align-items: "center";
+  background-color: lightblue;
+  color: black;
 }
 button.accessible:hover {
-    background-color: lightblue;
-    cursor: pointer;
+  background-color: lightblue;
+  cursor: pointer;
 }
 button.accessible:focus {
-    background-color: lightblue;
-    cursor: pointer;
-    outline: none;
+  background-color: lightblue;
+  cursor: pointer;
+  outline: none;
 }
-button.disabled {
-    padding: 3px;
-    width: 100px;
-    border: 0px;
-    height: 50px;
-    align-items: "center";
-    background: repeating-linear-gradient( 45deg, lightgray, lightgray 10px, white 10px, white 20px);
-    color: black;
+button.disabledSeat {
+  padding: 3px;
+  width: 100px;
+  height: 50px;
+  align-items: "center";
+  background-color: #f9c642;
+  color: black;
 }
-button.disabled:hover {
-    background: repeating-linear-gradient( 45deg, lightgray, lightgray 10px, white 10px, white 20px);
-    cursor: pointer;
+button.disabledSeat:hover {
+  background-color: #f9c642;
+  cursor: pointer;
 }
-button.disabled:focus {
-    background: repeating-linear-gradient( 45deg, lightgray, lightgray 10px, white 10px, white 20px);
-    cursor: pointer;
-    outline: none;
+button.disabledSeat:focus {
+  background-color: #f9c642;
+  cursor: pointer;
+  outline: none;
 }
