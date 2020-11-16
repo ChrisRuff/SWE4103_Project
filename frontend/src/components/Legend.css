@@ -1,0 +1,42 @@
+.legend > button{
+    margin: 15px;
+}
+
+div.white{
+    margin: 15px;
+    padding: 15px 5px;
+    align-items: "center";
+    background-color: white;
+    color: black;
+    border: 1px grey solid;
+    cursor: pointer;
+}
+
+div.blue{
+    padding: 15px 5px;
+    align-items: "center";
+    background-color: lightblue;
+    color: black;
+    margin: 15px;
+    border: 1px grey solid;
+    cursor: pointer;
+}
+
+div.red{
+    padding: 15px 5px;
+    align-items: "center";
+    background-color: #cd5c5c;
+    color: black;
+    margin: 15px;
+    border: 1px grey solid;
+    cursor: pointer;
+}
+div.yellow{
+    padding: 15px 5px;
+    align-items: "center";
+    background-color: #f9c642;
+    color: black;
+    margin: 15px;
+    border: 1px grey solid;
+    cursor: pointer;
+}

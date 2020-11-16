@@ -82,5 +82,20 @@ namespace backend
 			}
 			return classes;
 		}
+
+		/*
+		 * Takes a object like [{"className": "CS2043", "mandatory": true}]
+		 */
+		[HttpPost, Route("api/class/set/mandatory")]
+		public List<ClassDTO> SetMandatoryStatus(List<ClassDTO> classes)
+		{
+			for(int i = 0; i < classes.Count; i++)
+			{
+				classes[i].response = 
+					DatabaseConnector.Connector.setMandatory(classes[i].className, classes[i].mandatory);
+
+			}
+			return classes;
+		}
 	}
 }

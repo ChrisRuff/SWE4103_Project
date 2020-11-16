@@ -30,15 +30,25 @@
 }
 
 .layoutFooter {
-  display: flex;
-  flex-direction: column;
-  width: 200px;
   padding: 15px;
 }
 
 .layoutFooter > button {
-  margin: 5px 0px;
+  margin: 0px 15px;
 }
+
+.main {
+  display: flex;
+}
+
+.main .legend {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border: 2px solid grey;
+  text-align: center;
+}
+
 
 .root {
   overflow: scroll;

@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect }  from "react";
 import "./StudentHome.css";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Dropdown, DropdownButton, MenuItem} from "react-bootstrap";
+import { Button, DropdownButton, MenuItem} from "react-bootstrap";
 import { StateManager } from "../StateManager.js";
 import { useHistory } from "react-router-dom";
 import { AspNetConnector } from "../AspNetConnector.js";
@@ -9,20 +9,65 @@ import Grid from "@material-ui/core/Grid";
 import Seat from "../components/Seat.js";
 import * as sha512 from "js-sha512";
 import { onError } from "../libs/errorLib";
+import Legend from "../components/Legend";
 
 export default function StudentHome() {
 
+  var noClasses = false;
+
   const history = useHistory();
 
-	// If there is no student object(not signed in) then return to the homepage
-	if(StateManager.getStudent() == null)
-	{
-		StateManager.setStudent(JSON.parse(localStorage.getItem('user')));
-		if(StateManager.getStudent() == null)
-		{
-			history.push("/");
+    // useEffect's run every render, since there are no
+    // dependants declared in this one, it will run only
+    // on page load
+    useEffect(() => {
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        let code = url.searchParams.get("code");
+        // If there is no student object(not signed in) then return to the homepage
+        if(StateManager.getStudent() == null) {
+            StateManager.setStudent(JSON.parse(localStorage.getItem('user')));
+            if(StateManager.getStudent() == null) {
+                if (code == null) {
+                    history.push("/login");
+                }
+                else {
+                    history.push(`/login?code=${code}`);
+                }
+            }
+        }
+        if (code != null && StateManager.getStudent() != null) {
+			//get class from class code
+			var newClass = [{
+				"classCode": code
+			}]
+			var request = AspNetConnector.getClassCode(newClass);
+			request.onload = async function() {
+				var response = await JSON.parse(request.response);
+				var classFromCode = response[0].className;
+				// if valid class code, ask user if they would like to register
+				if (classFromCode!=null) {
+					let answer = window.confirm(`Would you like to register for ${classFromCode}?`);
+					// if they would like to register, call addClassToStudent
+					if (answer) {
+						var student = [{
+							"classes":[{"className": classFromCode}], 
+							"email": StateManager.getStudent().email
+						}];
+						request = AspNetConnector.addClassToStudent(student);
+						request.onload = async function() {
+							response = await JSON.parse(request.response);
+						}
+					}
+				}
+				else {
+					alert("Invalid registration link.");
+				}
+			}
+			history.push("/StudentHome");
 		}
-  }
+    });
+
   const [title, setTitle] = useState("--");
 	const useStyles = makeStyles((theme) => ({
 		paper: {
@@ -43,7 +88,10 @@ export default function StudentHome() {
 		onError(e);
 	}
 	let classList = [];
-	if (student !== undefined) {
+	if (student !== undefined && student.classes == null) {
+		noClasses = true;
+	}
+	else if (student !== undefined && student.classes !== null) {
 		for(let i = 0; i < student.classes.length; i++){
 			classList.push(student.classes[i].className);
 		}
@@ -158,9 +206,19 @@ export default function StudentHome() {
             </MenuItem>
           ))}
         </DropdownButton>
-          <Button variant="light">Submit</Button>
+          <Button className="pull-right" variant="light">Submit</Button>
       </div>
-	   <Fragment>{layout }</Fragment>
+	  	{!noClasses && (
+            <div className="main">
+			<Fragment>{layout}</Fragment>
+			<Legend/>
+		    </div>
+          )}
+        {noClasses && (
+            <div key="root" className="root">
+            <h1 style= {{textAlign: 'center', padding: '50px' }}> There are no classes to display </h1>
+        </div> 
+        )}
     </div>
   );
 }

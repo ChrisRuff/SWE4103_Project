@@ -1,12 +1,13 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Button, Dropdown, DropdownButton, MenuItem} from "react-bootstrap";
+import React, { Fragment, useState} from "react";
+import { Button, DropdownButton, MenuItem} from "react-bootstrap";
 import { AspNetConnector } from "../AspNetConnector.js";
 import Grid from "@material-ui/core/Grid";
 import "./InstructorHome.css";
 import { StateManager } from "../StateManager.js";
 import Seat from "../components/Seat.js";
 import { useHistory } from "react-router-dom";
+import { TextField } from "@material-ui/core";
+import Legend from "../components/Legend";
 
 export default function InstructorHome() {
 
@@ -24,13 +25,6 @@ export default function InstructorHome() {
 
 	const cs = AspNetConnector.getAllClasses();
 	const [title, setTitle] = useState(StateManager.getSelectedClass());
-	const useStyles = makeStyles((theme) => ({
-		paper: {
-			padding: theme.spacing(1),
-			textAlign: "center",
-			color: theme.palette.text.secondary,
-		},
-	}));
 
 	const createLayout = (numRows, numCols) => {
 		StateManager.wipeSeats();
@@ -68,6 +62,7 @@ export default function InstructorHome() {
     return layout;
 	};
 
+	const [layout, setLayout] = useState(StateManager.getClassLayout() == null ? createLayout(5,5) : StateManager.getClassLayout());
 	const loadLayout = (classDTO) => {
 		StateManager.wipeSeats();
 		StateManager.setRows(classDTO.height);
@@ -135,8 +130,6 @@ export default function InstructorHome() {
 	let classList = JSON.parse(AspNetConnector.profGetClasses([StateManager.getProf()]).response);
 	let emptyLayout = [];
 
-	const classes = useStyles();
-	const [layout, setLayout] = useState(StateManager.getClassLayout() === null ? emptyLayout : StateManager.getClassLayout());
 	const [noClasses, setNoClasses] = useState(classList.length === 0 && StateManager.getClassLayout() === null);
 
 	const makeClass = () => {
@@ -220,6 +213,17 @@ export default function InstructorHome() {
 		history.push("/EditSeatPlan");
 	}
 
+	const generateLink = () => {
+		var selectedClass = [{
+			"className": StateManager.getSelectedClass()
+		}];
+		var request = AspNetConnector.generateClassCode(selectedClass);
+		request.onload = async function() {
+			var response = await JSON.parse(request.response);
+			var url = window.location.href.split("/");
+			document.getElementById("link-field").value=`https://${url[2]}/StudentHome?code=${response[0].classCode}`;
+		}
+	}
 	if (StateManager.getClassLayout() === null){
 		if (classList[0] !== null && classList[0] !== undefined){
 			let classLayout = JSON.parse(AspNetConnector.getClasses([{"className": classList[0]}]).response);
@@ -246,8 +250,54 @@ export default function InstructorHome() {
 					input = parseInt(prompt("New notification frequency"));
 				}while(isNaN(input));
 				AspNetConnector.changeNotificationFreq([{"className": StateManager.getSelectedClass(), "notificationFreq": input }]);
-
 		}
+	}
+
+	/* 
+	var newClass = [{"className": "CS1073"}]
+	
+	var request = AspNetConnector.removeClass(newClass);
+	
+	request.onload = function() {
+	JSON.parse(request.response)
+	}
+	*/
+	const removeClass = () =>
+	{
+		if(StateManager.getSelectedClass() != null && StateManager.getSelectedClass() != "--") {
+			var currentClass = [{"className": StateManager.getSelectedClass()}]
+			AspNetConnector.removeClass(currentClass);
+
+			setNoClasses(true)
+			StateManager.setSelectedClass("--");
+			setTitle("--");
+		}
+		else 
+			alert("Please select a class!")
+	}
+
+	const setMandatory = () =>
+	{
+		var currentClass = [{"className": StateManager.getSelectedClass()}]
+		let fullClass = JSON.parse(AspNetConnector.getClasses(currentClass).response);
+		
+		if(fullClass[0].response === true)
+		{
+			if(fullClass[0].mandatory === false)
+			{
+				currentClass = [{"className": StateManager.getSelectedClass(), "mandatory": true}]
+				let response = AspNetConnector.setMandatoryStatus(currentClass);
+				alert("Mandatory class attendance set to: " + response[0].mandatory)
+			}
+			else
+			{
+				currentClass = [{"className": StateManager.getSelectedClass(), "mandatory": false}]
+				let response = AspNetConnector.setMandatoryStatus(currentClass);
+				alert("Mandatory class attendance set to: " + response[0].mandatory)
+			}
+		}
+		else
+			alert("Please save your class!")
 	}
 
 return (
@@ -271,24 +321,36 @@ return (
 		</div>
 		{ (noClasses === false) &&
 		<div>
-			<Fragment>{layout}</Fragment>
+			<div className="main">
+				<Fragment>{layout}</Fragment>
+				<Legend/>
+			</div>
 			<div className="layoutFooter">
 				<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
 				<DropdownButton 
 						onSelect={moreOptions.bind(this)}
 						title="More Options..."
 						id="moreOptionsDropdown">
-							<MenuItem key="remove" eventKey={"remove"}>
+							<MenuItem key="remove" eventKey={"remove"} onClick={removeClass}>
 								Remove Class
 							</MenuItem>
-							<MenuItem key="mandatory" eventKey={"mandatory"}>
-								Make Mandatory
+							<MenuItem key="mandatory" eventKey={"mandatory"} onClick={setMandatory}>
+								Set Mandatory
 							</MenuItem>
 							<MenuItem key="notificationFreq" eventKey={"notFreq"}>
 								Change Notification Frequency: { StateManager.getClassLayout() != null ? StateManager.getClassLayout().notificationFreq : "" }
 							</MenuItem>
 					</DropdownButton>
-
+        <Button className="pull-right" onClick={generateLink} variant="light">Generate Registration Link</Button>
+        <TextField
+        className="pull-right"
+        id="link-field"
+        style={{width: '250px', height: 'auto'}}
+        defaultValue=""
+        InputProps={{
+          readOnly: true,
+        }}
+        />
 			</div>
 		</div>
 		}

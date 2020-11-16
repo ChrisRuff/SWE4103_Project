@@ -48,6 +48,18 @@ export var AspNetConnector = {
 		return request;
 			
 	},
+	
+	addClassToStudent: function(students) {
+			
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/student/class/add', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(students));
+		
+		return request;
+			
+	},
 
 	/* 
 	* var newSeat = [{
@@ -144,13 +156,13 @@ export var AspNetConnector = {
 	// Gets a seat from the DB
 	getSeat: function(students) {
 			
-	var request = new XMLHttpRequest();
+		var request = new XMLHttpRequest();
 	
-	request.open('POST', 'api/student/seat/get', true);
-	request.setRequestHeader('Content-type', 'application/json');
-	request.send(JSON.stringify(students));
+		request.open('POST', 'api/student/seat/get', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(students));
 	
-	return request;
+		return request;
 	},
 		
 	/* Sample call
@@ -237,7 +249,7 @@ export var AspNetConnector = {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/class/remove', false);
+		request.open('POST', 'api/student/class/remove');
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
@@ -366,10 +378,68 @@ export var AspNetConnector = {
 			return JSON.parse(request.response);
 		}
 	},
+  
+	/* 
+	* var newClass = [{
+	* 	"className": "CS1073"
+	* }]
+	*
+	* var request = AspNetConnector.generateClassCode(newClass);
+	* 
+	* request.onload = function() {
+	* 	JSON.parse(request.response)
+	* }
+	*/
+	// generates class code
+	generateClassCode: function(classes) {
+			
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/invite_link/add', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(classes));
+		
+		return request;
+	},
+	
+	/* 
+	* var newClass = [{
+	* 	"className": "CS1073"
+	* }]
+	*
+	* var request = AspNetConnector.getClassCode(newClass);
+	* 
+	* request.onload = function() {
+	* 	JSON.parse(request.response)
+	* }
+	*/
+	// generates class code
+	getClassCode: function(classes) {
+			
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/invite_link/get', true);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(classes));
+		
+		return request;
+  },
+
 	changeNotificationFreq: function(classes) {
 		var request = new XMLHttpRequest();
 
 		request.open('POST', 'api/class/notification/set', false);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(classes));
+
+		if (request.status === 200) { // That's HTTP for 'ok'
+			return JSON.parse(request.response);
+		}
+	},
+	setMandatoryStatus: function(classes) {
+		var request = new XMLHttpRequest();
+
+		request.open('POST', 'api/class/set/mandatory', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(classes));
 
