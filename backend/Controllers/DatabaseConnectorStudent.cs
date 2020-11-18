@@ -184,7 +184,7 @@ namespace backend
 			}
 			var student = studentsFound.First();
 			StudentDTO data = new StudentDTO();
-			data.studentName = student["name"].ToString();
+			data.name = student["name"].ToString();
 			data.email = student["email"].ToString();
 			data.pass = student["pass"].ToString();
 			ClassDTO[] classes = new ClassDTO[student["classes"].AsBsonArray.Count];

@@ -242,7 +242,7 @@ namespace test
 
 			var stephen = DatabaseConnector.Connector.GetStudent("scole_test@unb.ca");
 
-			Assert.True(stephen.studentName == "Stephen Cole - Test");
+			Assert.True(stephen.name == "Stephen Cole - Test");
 			Assert.True(stephen.email == "scole_test@unb.ca");
 			Assert.True(stephen.pass == "pass");
 

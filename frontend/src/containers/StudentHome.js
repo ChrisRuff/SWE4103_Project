@@ -17,58 +17,53 @@ export default function StudentHome() {
 
   const history = useHistory();
 
-    // useEffect's run every render, since there are no
-    // dependants declared in this one, it will run only
-    // on page load
-    useEffect(() => {
-        var url_string = window.location.href;
-        var url = new URL(url_string);
-        let code = url.searchParams.get("code");
-        // If there is no student object(not signed in) then return to the homepage
-        if(StateManager.getStudent() == null) {
-            StateManager.setStudent(JSON.parse(localStorage.getItem('user')));
-            if(StateManager.getStudent() == null) {
-                if (code == null) {
-                    history.push("/login");
-                }
-                else {
-                    history.push(`/login?code=${code}`);
-                }
-            }
-        }
-        if (code != null && StateManager.getStudent() != null) {
-			//get class from class code
-			var newClass = [{
-				"classCode": code
-			}]
-			var request = AspNetConnector.getClassCode(newClass);
-			request.onload = async function() {
-				var response = await JSON.parse(request.response);
-				var classFromCode = response[0].className;
-				// if valid class code, ask user if they would like to register
-				if (classFromCode!=null) {
-					let answer = window.confirm(`Would you like to register for ${classFromCode}?`);
-					// if they would like to register, call addClassToStudent
-					if (answer) {
-						var student = [{
-							"classes":[{"className": classFromCode}], 
-							"email": StateManager.getStudent().email
-						}];
-						request = AspNetConnector.addClassToStudent(student);
-						request.onload = async function() {
-							response = await JSON.parse(request.response);
-						}
+	var url_string = window.location.href;
+	var url = new URL(url_string);
+	let code = url.searchParams.get("code");
+	// If there is no student object(not signed in) then return to the homepage
+	if(StateManager.getStudent() == null) {
+		StateManager.setStudent(JSON.parse(localStorage.getItem('user')));
+		if(StateManager.getStudent() == null) {
+			if (code == null) {
+				history.push("/login");
+			}
+			else {
+				history.push(`/login?code=${code}`);
+			}
+		}
+	}
+	if (code != null && StateManager.getStudent() != null) {
+		//get class from class code
+		var newClass = [{
+			"classCode": code
+		}]
+		var request = AspNetConnector.getClassCode(newClass);
+		request.onload = async function() {
+			var response = await JSON.parse(request.response);
+			var classFromCode = response[0].className;
+			// if valid class code, ask user if they would like to register
+			if (classFromCode!=null) {
+				let answer = window.confirm(`Would you like to register for ${classFromCode}?`);
+				// if they would like to register, call addClassToStudent
+				if (answer) {
+					var student = [{
+						"classes":[{"className": classFromCode}], 
+						"email": StateManager.getStudent().email
+					}];
+					request = AspNetConnector.addClassToStudent(student);
+					request.onload = async function() {
+						response = await JSON.parse(request.response);
 					}
 				}
-				else {
-					alert("Invalid registration link.");
-				}
 			}
-			history.push("/StudentHome");
+			else {
+				alert("Invalid registration link.");
+			}
 		}
-    });
+		history.push("/StudentHome");
+	}
 
-  const [title, setTitle] = useState("--");
+  const [title, setTitle] = useState(StateManager.getSelectedClass());
 	const useStyles = makeStyles((theme) => ({
 		paper: {
 			padding: theme.spacing(1),
@@ -77,23 +72,20 @@ export default function StudentHome() {
 		},
   }));
 
-  let hash = sha512.sha512("admin1");   //this needs to be changed later, works now only for a dummy student
-	let student = [];
-	try {
-		student = JSON.parse(AspNetConnector.getStudents([{
-			"email": "bestbuytest1@hotmail.com",   //needs to be changed later
-			"pass": hash,
-		}]).response)[0];
-	} catch (e) {
-		onError(e);
-	}
+
+	let student = StateManager.getStudent();
 	let classList = [];
-	if (student !== undefined && student.classes == null) {
-		noClasses = true;
-	}
-	else if (student !== undefined && student.classes !== null) {
-		for(let i = 0; i < student.classes.length; i++){
-			classList.push(student.classes[i].className);
+	if(student !== null)
+	{
+		student = JSON.parse(AspNetConnector.getStudents([StateManager.getStudent()]).response)[0];
+		console.log(student);
+		if (student.classes == null) {
+			noClasses = true;
+		}
+		else if (student.classes !== null) {
+			for(let i = 0; i < student.classes.length; i++){
+				classList.push(student.classes[i].className);
+			}
 		}
 	}
 
@@ -117,7 +109,15 @@ export default function StudentHome() {
 					if(classDTO.disabledSeats[k].x === i &&
 					classDTO.disabledSeats[k].y === j )
 					{
-						type = "disabled"
+						type = "disabledSeat"
+					}
+				}
+				for(let k = 0; k < classDTO.openSeats.length; ++k)
+				{
+					if(classDTO.openSeats[k].x === i &&
+					classDTO.openSeats[k].y === j )
+					{
+						type = "open"
 					}
 				}
 				for(let k = 0; k < classDTO.reservedSeats.length; ++k)
