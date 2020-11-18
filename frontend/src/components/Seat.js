@@ -40,6 +40,10 @@ export default class Seat extends Component {
 		}
 		StateManager.incX();
 	}
+	open = () => {
+		this.setState({seatType: "open"});
+		StateManager.changeSeatType(this.x, this.y, "open")
+	} 
 	disable = () => {
 		this.setState({seatType: "disabledSeat"});
 		StateManager.changeSeatType(this.x, this.y, "disabledSeat")
@@ -60,6 +64,9 @@ export default class Seat extends Component {
 				StateManager.changeSeatType(this.x, this.y, "accessible")
 				break;
 			case "accessible":
+				this.open();
+				break;
+			case "open":
 				this.disable();
 				break;
 			case "disabledSeat":
