@@ -256,7 +256,7 @@ export var AspNetConnector = {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/class/class/remove');
+		request.open('POST', 'api/class/remove');
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		

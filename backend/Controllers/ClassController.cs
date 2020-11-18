@@ -57,7 +57,7 @@ namespace backend
 			return classDTOs;
 		}
 
-		[HttpPost, Route("api/student/class/remove")]
+		[HttpPost, Route("api/class/remove")]
 		public List<ClassDTO> RemoveClassAPI(List<ClassDTO> classDTOs)
 		{
 			for (int i = 0; i < classDTOs.Count; i++)
