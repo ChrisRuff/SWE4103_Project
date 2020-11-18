@@ -57,9 +57,6 @@ export default class Seat extends Component {
 		const currentState = this.state.seatType;
 		switch(currentState) {
 			case "available":
-				this.reserve();
-				break;
-			case "reserved":
 				this.setState({seatType: "accessible"}); 
 				StateManager.changeSeatType(this.x, this.y, "accessible")
 				break;
