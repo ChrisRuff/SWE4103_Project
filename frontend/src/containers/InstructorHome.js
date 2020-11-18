@@ -83,7 +83,15 @@ export default function InstructorHome() {
 					if(classDTO.disabledSeats[k].x === i &&
 					classDTO.disabledSeats[k].y === j )
 					{
-						type = "disabled"
+						type = "disabledSeat"
+					}
+				}
+				for(let k = 0; k < classDTO.openSeats.length; ++k)
+				{
+					if(classDTO.openSeats[k].x === i &&
+					classDTO.openSeats[k].y === j )
+					{
+						type = "open"
 					}
 				}
 				for(let k = 0; k < classDTO.reservedSeats.length; ++k)
@@ -156,13 +164,13 @@ export default function InstructorHome() {
 				"seat": null
 			}]
 
-			if(currentLayout[i].seatType === "reserved"){
-				var reservedSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y}
-				classDTO[0].seat = reservedSeat;
+			if(currentLayout[i].seatType === "open"){
+				var openSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y}
+				classDTO[0].seat = openSeat;
 
-				AspNetConnector.reserveSeat(classDTO);
+				AspNetConnector.makeSeatOpen(classDTO);
 			}
-			else if(currentLayout[i].seatType === "disabled"){
+			else if(currentLayout[i].seatType === "disabledSeat"){
 				var disabledSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y}
 				classDTO[0].seat = disabledSeat;
 

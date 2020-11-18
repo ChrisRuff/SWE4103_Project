@@ -224,17 +224,24 @@ export var AspNetConnector = {
 	}
 	*/
 	// Disable a seat
-	disableSeat: function(students) {
-			
+	disableSeat: function(classes) {
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/seat/disable', false);
+		request.open('POST', 'api/class/seat/disable', false);
 		request.setRequestHeader('Content-type', 'application/json');
-		request.send(JSON.stringify(students));
+		request.send(JSON.stringify(classes));
 		
 		return request;
 	},
-
+	makeSeatOpen: function(classes) {
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/class/seat/open', false);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(classes));
+		
+		return request;
+	},
 	/* 
    	var newClass = [{"className": "CS1073"}]
 	
@@ -249,7 +256,7 @@ export var AspNetConnector = {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/class/remove');
+		request.open('POST', 'api/class/class/remove');
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
@@ -270,7 +277,7 @@ export var AspNetConnector = {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/seat/reserve', false);
+		request.open('POST', 'api/class/seat/reserve', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
@@ -354,7 +361,7 @@ export var AspNetConnector = {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/seat/accessible', false);
+		request.open('POST', 'api/class/seat/accessible', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
