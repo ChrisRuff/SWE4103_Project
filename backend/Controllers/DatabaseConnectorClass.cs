@@ -315,6 +315,10 @@ namespace backend
 			update = 
 				Builders<BsonDocument>.Update.Set("dSeats", new BsonArray{});
 			classes.UpdateOne(query, update);
+
+			update = 
+				Builders<BsonDocument>.Update.Set("oSeats", new BsonArray{});
+			classes.UpdateOne(query, update);
 			return true;
 		}
 		public bool ChangeFreq(string className, int newF)
