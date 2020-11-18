@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 import "./StudentSeat.css";
 import {StateManager} from "../StateManager.js"
+import { AspNetConnector } from "../AspNetConnector.js" 
 
 export default class Seat extends Component {
 	constructor(props) {
@@ -50,17 +51,50 @@ export default class Seat extends Component {
 	}
 
 	handleClick = () => {
-        const currentState = this.state.seatType;
-        if(currentState == "available" || currentState == "accessible") {
-            // Display a pop-up message for user's confirmation
-            let response = window.confirm("Do you really want to reserve this seat?");
+		
+        
+		const currentState = this.state.seatType;
+		
+		if(StateManager.getSelectedSeat() === null){
+		
+			if(this.state.seatType === "available"){
+				this.setState({seatType: "reserved"}); 
+				StateManager.changeSeatType(this.x, this.y, "reserved");
+			}
+			else{
+				return;
+			}
+		}
 
-            if(response) {
-                this.disable();
-                // TODO: back-end submits save
-            }
-        }
+		else {
+			
+			if(this.x === StateManager.getSelectedSeat().x && this.y === StateManager.getSelectedSeat().y){
+				StateManager.setSelectedSeat(null);
+			
+				this.setState({seatType: "available"});
+				StateManager.changeSeatType(this.x, this.y, "available");
+				return;
+			}
+			else if(this.state.seatType === "available"){
+
+			
+				this.setState({seatType: "reserved"}); 
+				StateManager.changeSeatType(this.x, this.y, "reserved");
+				StateManager.getSelectedSeat().setState({seatType: "available"});
+				StateManager.changeSeatType(StateManager.getSelectedSeat().x, StateManager.getSelectedSeat().y, "available");
+			}
+			else{
+				return;
+			}
+			
+		}
+		
+		
+		
+		StateManager.setSelectedSeat(this);
 	}
+
+
 	
 	render() {
 		StateManager.addSeat(this.x, this.y, this.state.seatType, this)

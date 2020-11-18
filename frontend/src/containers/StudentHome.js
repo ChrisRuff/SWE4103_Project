@@ -193,6 +193,29 @@ export default function StudentHome() {
 		}
 	}
 
+	const handleSubmit = () => {
+       
+		let response = window.confirm("Do you really want to reserve this seat?");
+
+		if(response) {
+
+			try{
+				AspNetConnector.reserveSeat([{
+					"className": StateManager.getSelectedClass(),
+					"seat": {
+						"x": StateManager.getSelectedSeat().x,
+						"y": StateManager.getSelectedSeat().y,
+					}
+				}]);
+			} catch (e){
+					
+			}
+		}
+	   
+		
+        
+	}
+
   return (
     <div className="StudentHome">
       <div className="layoutHeader">
@@ -206,7 +229,7 @@ export default function StudentHome() {
             </MenuItem>
           ))}
         </DropdownButton>
-          <Button className="pull-right" variant="light">Submit</Button>
+          <Button onClick={handleSubmit} className="pull-right" variant="light">Submit</Button>
       </div>
 	  	{!noClasses && (
             <div className="main">
