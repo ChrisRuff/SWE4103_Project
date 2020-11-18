@@ -32,7 +32,8 @@ namespace backend
 				{ "mandatory", false },
 				{ "dSeats", new BsonArray{}},
 				{ "rSeats", new BsonArray{}},
-				{ "aSeats", new BsonArray{}}
+				{ "aSeats", new BsonArray{}},
+				{ "oSeats", new BsonArray{}}
 			};
 
 			// Insert it into the database
@@ -66,6 +67,36 @@ namespace backend
 			// (with absents field to the student document)
 			UpdateDefinition<BsonDocument> update = 
 				Builders<BsonDocument>.Update.AddToSet("dSeats", new BsonDocument{{"x", x}, {"y", y}});
+			classes.UpdateOne(foundClass, update);
+
+			return true;
+		}
+		public bool OpenSeat(string className, int x, int y)
+		{
+			// Create a filter that will find the student with the given email
+			FilterDefinition<BsonDocument> query 
+				= Builders<BsonDocument>.Filter.Eq("name", className);
+
+
+			var foundClasses = classes.Find(query);
+			if(foundClasses.CountDocuments() <= 0)
+			{
+				return false;
+			}
+			var foundClass = foundClasses.First();
+			if(foundClass["width"] < x || foundClass["height"] < y)
+			{
+				return false;
+			}
+			foreach(var i in foundClass["oSeats"].AsBsonArray)
+			{
+				if(i["x"] == x && i["y"] == y)
+					return false;
+			}
+			// Create a update routine that will add a class 
+			// (with absents field to the student document)
+			UpdateDefinition<BsonDocument> update = 
+				Builders<BsonDocument>.Update.AddToSet("oSeats", new BsonDocument{{"x", x}, {"y", y}});
 			classes.UpdateOne(foundClass, update);
 
 			return true;
@@ -244,6 +275,18 @@ namespace backend
 				seat.x = s["x"].ToInt32();
 				seat.y = s["y"].ToInt32();
 				MrClassy.AccessibleSeats[i] = seat;
+			}
+
+			// Get open seats
+			var oseats = foundClass["oSeats"].AsBsonArray;
+			MrClassy.OpenSeats = new SeatDTO[oseats.Count];
+			for(int i = 0; i < oseats.Count; ++i)
+			{
+				var s = oseats[i];
+				SeatDTO seat = new SeatDTO();
+				seat.x = s["x"].ToInt32();
+				seat.y = s["y"].ToInt32();
+				MrClassy.OpenSeats[i] = seat;
 			}
 			return MrClassy;
 		}

@@ -20,13 +20,18 @@ export default function Legend(){
             </div>
             </Tooltip>
             <Tooltip title={<h6 style={{ color: "white" }}> Anyone can sit here. These seats are not reservable. </h6>}>
-            <div className="red">
+            <div className="grey">
                 Open Access
             </div>
             </Tooltip>
             <Tooltip title={<h6 style={{ color: "white" }}> No one is allowed to sit here. </h6>}>
             <div className="yellow">
                 Locked
+            </div>
+            </Tooltip>
+            <Tooltip title={<h6 style={{ color: "white" }}> These seats are reserved. </h6>}>
+            <div className="red">
+                Reserved seat
             </div>
             </Tooltip>
         </div>

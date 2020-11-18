@@ -4,6 +4,7 @@ export var StateManager = {
 	exampleData: null,
 	classLayout: null,
 	selectedClass: "--",
+	selectedSeat: null,
 	prof: null,
 	student: null,
 	x: 0,
@@ -110,5 +111,12 @@ export var StateManager = {
 	},
 	getMandatoryStatus() {
 		return this.mandatoryStatus
+	},
+	setSelectedSeat(seat) {
+		this.selectedSeat = seat;
+	},
+	getSelectedSeat() {
+		return this.selectedSeat;
 	}
+
 }

@@ -12,6 +12,16 @@ div.white{
     cursor: pointer;
 }
 
+div.grey{
+    padding: 15px 5px;
+    align-items: "center";
+    background-color: lightgrey;
+    color: black;
+    margin: 15px;
+    border: 1px grey solid;
+    cursor: pointer;
+}
+
 div.blue{
     padding: 15px 5px;
     align-items: "center";

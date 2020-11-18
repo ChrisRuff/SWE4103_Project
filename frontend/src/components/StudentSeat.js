@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Button } from "react-bootstrap";
-import "./Seat.css";
+import "./StudentSeat.css";
 import {StateManager} from "../StateManager.js"
+import { AspNetConnector } from "../AspNetConnector.js" 
 
 export default class Seat extends Component {
 	constructor(props) {
@@ -40,13 +41,9 @@ export default class Seat extends Component {
 		}
 		StateManager.incX();
 	}
-	open = () => {
-		this.setState({seatType: "open"});
-		StateManager.changeSeatType(this.x, this.y, "open")
-	} 
 	disable = () => {
-		this.setState({seatType: "disabledSeat"});
-		StateManager.changeSeatType(this.x, this.y, "disabledSeat")
+		this.setState({seatType: "disabled"});
+		StateManager.changeSeatType(this.x, this.y, "disabled")
 	}
 	reserve = () => {
 		this.setState({seatType: "reserved"}); 
@@ -54,26 +51,50 @@ export default class Seat extends Component {
 	}
 
 	handleClick = () => {
+		
+        
 		const currentState = this.state.seatType;
-		switch(currentState) {
-			case "available":
-				this.setState({seatType: "accessible"}); 
-				StateManager.changeSeatType(this.x, this.y, "accessible")
-				break;
-			case "accessible":
-				this.open();
-				break;
-			case "open":
-				this.disable();
-				break;
-			case "disabledSeat":
+		
+		if(StateManager.getSelectedSeat() === null){
+		
+			if(this.state.seatType === "available"){
+				this.setState({seatType: "reserved"}); 
+				StateManager.changeSeatType(this.x, this.y, "reserved");
+			}
+			else{
+				return;
+			}
+		}
+
+		else {
+			
+			if(this.x === StateManager.getSelectedSeat().x && this.y === StateManager.getSelectedSeat().y){
+				StateManager.setSelectedSeat(null);
+			
 				this.setState({seatType: "available"});
-				StateManager.changeSeatType(this.x, this.y, "available")
-				break;
-			default:
-				this.disable();
-		} 
+				StateManager.changeSeatType(this.x, this.y, "available");
+				return;
+			}
+			else if(this.state.seatType === "available"){
+
+			
+				this.setState({seatType: "reserved"}); 
+				StateManager.changeSeatType(this.x, this.y, "reserved");
+				StateManager.getSelectedSeat().setState({seatType: "available"});
+				StateManager.changeSeatType(StateManager.getSelectedSeat().x, StateManager.getSelectedSeat().y, "available");
+			}
+			else{
+				return;
+			}
+			
+		}
+		
+		
+		
+		StateManager.setSelectedSeat(this);
 	}
+
+
 	
 	render() {
 		StateManager.addSeat(this.x, this.y, this.state.seatType, this)

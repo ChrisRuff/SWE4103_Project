@@ -5,8 +5,8 @@ import { Button, DropdownButton, MenuItem} from "react-bootstrap";
 import { StateManager } from "../StateManager.js";
 import { useHistory } from "react-router-dom";
 import { AspNetConnector } from "../AspNetConnector.js";
-import Grid from "@material-ui/core/Grid"; 
-import Seat from "../components/Seat.js";
+import Grid from "@material-ui/core/Grid";
+import StudentSeat from "../components/StudentSeat.js";
 import * as sha512 from "js-sha512";
 import { onError } from "../libs/errorLib";
 import Legend from "../components/Legend";
@@ -77,11 +77,11 @@ export default function StudentHome() {
 		},
   }));
 
-  let hash = sha512.sha512("abc");   //this needs to be changed later, works now only for a dummy student
+  let hash = sha512.sha512("admin1");   //this needs to be changed later, works now only for a dummy student
 	let student = [];
 	try {
 		student = JSON.parse(AspNetConnector.getStudents([{
-			"email": "tester@tester.test",   //needs to be changed later
+			"email": "bestbuytest1@hotmail.com",   //needs to be changed later
 			"pass": hash,
 		}]).response)[0];
 	} catch (e) {
@@ -138,8 +138,8 @@ export default function StudentHome() {
 				}
 				// Add seat with specified seat type
 				cols.push(
-					<div key={i} className="studentSeat">
-						<Seat x={i} y={j} seatType={type}/>
+					<div key={i} className="StudentSeat">
+						<StudentSeat x={i} y={j} seatType={type}/>
 					</div>
 						);
 			}
@@ -193,6 +193,29 @@ export default function StudentHome() {
 		}
 	}
 
+	const handleSubmit = () => {
+       
+		let response = window.confirm("Do you really want to reserve this seat?");
+
+		if(response) {
+
+			try{
+				AspNetConnector.reserveSeat([{
+					"className": StateManager.getSelectedClass(),
+					"seat": {
+						"x": StateManager.getSelectedSeat().x,
+						"y": StateManager.getSelectedSeat().y,
+					}
+				}]);
+			} catch (e){
+					
+			}
+		}
+	   
+		
+        
+	}
+
   return (
     <div className="StudentHome">
       <div className="layoutHeader">
@@ -206,7 +229,7 @@ export default function StudentHome() {
             </MenuItem>
           ))}
         </DropdownButton>
-          <Button className="pull-right" variant="light">Submit</Button>
+          <Button onClick={handleSubmit} className="pull-right" variant="light">Submit</Button>
       </div>
 	  	{!noClasses && (
             <div className="main">
