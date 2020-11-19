@@ -5,35 +5,98 @@ import LoaderButton from "../components/LoaderButton";
 import { useAppContext } from "../libs/contextLib";
 import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
+import * as sha512 from "js-sha512";
 import "./Login.css";
+import { Radio, RadioGroup, FormControlLabel } from "@material-ui/core";
+import { AspNetConnector } from "../AspNetConnector.js" 
+import { StateManager } from "../StateManager";
 
 export default function Login() {
   const history = useHistory();
   const { userHasAuthenticated } = useAppContext();
+  const [accountState, setValue] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
     email: "",
     password: "",
+    account: "",
   });
 
+  const handleChange = (event) => {
+    fields.account = event.target.value;  
+    StateManager.setAccountState(event.target.value);
+    setValue(event.target.value);
+  };
+
   function validateForm() {
-    return fields.email.length > 0 && fields.password.length > 0;
+    return (
+    fields.email.length > 0 && 
+    fields.password.length > 0 &&
+    fields.account !== ""
+    );
   }
 
   // handleSubmit is called once the 'login' button is clicked
   async function handleSubmit(event) {
     event.preventDefault();
-
     setIsLoading(true);
 
     try {
-      // TODO: Use AspNetConnector to sign in
-      userHasAuthenticated(true);
-      // Push to Instructor view for now
-      history.push("/InstructorHome");
+      let hash = sha512.sha512(fields.password);
+      if ((fields.account==="student")){
+        let request = await AspNetConnector.loginStudent([{
+          "email": fields.email,
+          "pass": hash,
+        }]);
+        request.onload = function() {
+          let obj = (JSON.parse(request.response));
+          let value = (obj[0].response);
+          if (value === true){
+            userHasAuthenticated(true);
+            localStorage.setItem('user', JSON.stringify(obj[0]));
+						localStorage.setItem('type', "student");
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            let code = url.searchParams.get("code");
+            if (code == null) {
+              history.push("/StudentHome"); 
+            }
+            else {
+              history.push(`/StudentHome?code=${code}`);
+            }
+          }
+          else{
+            onError("Invalid password or account selected");
+            userHasAuthenticated(false);
+            history.push("/")
+          }
+        }
+      }
+      else {
+        let request = await AspNetConnector.loginProf([{
+          "email": fields.email,
+          "pass": hash,
+        }]);
+        request.onload = function() {
+          let obj = (JSON.parse(request.response));
+          let value = (obj[0].response);
+          if (value === true){
+            userHasAuthenticated(true);
+						StateManager.setProf(obj[0]);
+						localStorage.setItem('user', JSON.stringify(obj[0]));
+						localStorage.setItem('type', "prof");
+            history.push("/InstructorHome"); 
+          }
+          else{
+            onError("Invalid password");
+            userHasAuthenticated(false);
+            history.push("/")
+          }
+        }
+      }
     } catch (e) {
       onError(e);
-      setIsLoading(false);
+      setIsLoading(false); 
     }
   }
 
@@ -57,6 +120,14 @@ export default function Login() {
             onChange={handleFieldChange}
           />
         </FormGroup>
+        <RadioGroup aria-label="Account"  value={accountState} onChange={handleChange}>
+          <FormControlLabel value = "student"
+            control={<Radio />}
+            label={<span style={{ fontSize: '14px' }}>Student</span>}/>
+          <FormControlLabel value = "professor"
+            control={<Radio />}
+            label={<span style={{ fontSize: '14px' }}>Professor</span>}/>
+        </RadioGroup>
         <LoaderButton
           block
           type="submit"

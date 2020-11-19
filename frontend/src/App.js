@@ -6,15 +6,19 @@ import "./App.css";
 import { AspNetConnector } from "./AspNetConnector.js";
 import Routes from "./Routes";
 import { AppContext } from "./libs/contextLib";
+import {StateManager} from "./StateManager.js";
 
 function App() {
-  const [isAuthenticated, userHasAuthenticated] = useState(false);
+  const [isAuthenticated, userHasAuthenticated] = useState(localStorage.getItem('user') != null);
   const history = useHistory();
 
   function handleLogout() {
     // TODO: logout user using AspNetConnector
     userHasAuthenticated(false);
+		localStorage.removeItem('user');
+		localStorage.removeItem('type');
     history.push("/login");
+		StateManager.wipe();
   }
 
   return (

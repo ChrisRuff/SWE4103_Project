@@ -10,3 +10,5 @@ clean:
 	dotnet clean && rm -r frontend/node_modules/
 restore:
 	dotnet restore
+connect:
+	mongo "mongodb+srv://cluster0.hzsao.mongodb.net/SWE4103_Project" --username admin

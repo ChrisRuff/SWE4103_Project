@@ -12,29 +12,54 @@
   color: #999;
 }
 
-.seats {
+.row {
   height: 100%;
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
-.layoutHeader >div {
+.layoutHeader > div {
   margin-right: 65%;
   padding: 15px;
-} 
-
-.layoutHeader > button{
-  margin: 0px 15px
 }
 
-.layoutFooter{
-  display: flex;
-  flex-direction: column;
-  width: 20%;
+.layoutHeader > button {
+  margin: 0px 15px;
+}
+
+.layoutFooter {
   padding: 15px;
 }
-.layoutFooter > button{
-  margin: 5px;
-} 
+
+.layoutFooter > button {
+  margin: 0px 15px;
+}
+
+.main {
+  display: flex;
+}
+
+.main .legend {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border: 2px solid grey;
+  text-align: center;
+}
+
+
+.root {
+  overflow: scroll;
+  width: 800px;
+  margin: auto;
+  height: min-content;
+  max-height: 600px;
+  padding: 5px;
+  border: 3px solid grey;
+}
+
+.seat {
+  margin: auto;
+}
