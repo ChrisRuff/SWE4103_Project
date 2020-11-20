@@ -63,11 +63,12 @@ export var StateManager = {
 	addSeat(x, y, seatType, seat) {
 		this.seats.push({"seatType": seatType, "x": x, "y": y, "seat": seat});
 
+
 		if(this.seats.length > this.numCols * this.numRows)
 			this.seats.pop(this.numCols * this.numRows);
 	},
 	changeSeatType(x, y, seatType) {
-		var seatLoc = y * this.numRows + x; 
+		var seatLoc = y * this.numRows/this.numCols + x; 
 		this.seats[seatLoc].seatType = seatType;
 	},
 	getSeat(x,y) {
