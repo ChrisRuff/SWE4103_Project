@@ -194,26 +194,28 @@ export default function StudentHome() {
 	}
 
 	const handleSubmit = () => {
-       
-		let response = window.confirm("Do you really want to reserve this seat?");
+		let response = null;
+		
+		// check whether the user selected a seat to reserve
+		if(StateManager.getSelectedSeat() === null){
+			window.alert("Please select a seat to reserve.");
+		} else {
+			response = window.confirm("Do you really want to reserve this seat?");
 
-		if(response) {
-
-			try{
-				AspNetConnector.reserveSeat([{
-					"className": StateManager.getSelectedClass(),
-					"seat": {
-						"x": StateManager.getSelectedSeat().x,
-						"y": StateManager.getSelectedSeat().y,
-					}
-				}]);
-			} catch (e){
-					
+			if(response) {
+				try{
+					AspNetConnector.reserveSeat([{
+						"className": StateManager.getSelectedClass(),
+						"seat": {
+							"x": StateManager.getSelectedSeat().x,
+							"y": StateManager.getSelectedSeat().y,
+						}
+					}]);
+				} catch (e){
+						
+				}
 			}
 		}
-	   
-		
-        
 	}
 
   return (
