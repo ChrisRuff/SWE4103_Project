@@ -40,7 +40,7 @@ export default function InstructorHome() {
 		for (var i = 0; i < numCols; i++) {
 			cols.push(
 			<div key={i} className="seat">
-				<Seat key={i} x={i} y={j} />
+				<Seat key={i} x={i} y={j} name={""}/>
 			</div>
 			);
 		}
@@ -96,6 +96,14 @@ export default function InstructorHome() {
 						type = "open"
 					}
 				}
+				for(let k = 0; k < classDTO.accessibleSeats.length; ++k)
+				{
+					if(classDTO.accessibleSeats[k].x === i &&
+						classDTO.accessibleSeats[k].y === j )
+					{
+						type = "accessible"
+					}
+				}
 				for(let k = 0; k < classDTO.reservedSeats.length; ++k)
 				{
 					if(classDTO.reservedSeats[k].x === i &&
@@ -105,14 +113,6 @@ export default function InstructorHome() {
 						name = classDTO.reservedSeats[k].name;
 						email = classDTO.reservedSeats[k].email;
 						type = "reserved"
-					}
-				}
-				for(let k = 0; k < classDTO.accessibleSeats.length; ++k)
-				{
-					if(classDTO.accessibleSeats[k].x === i &&
-						classDTO.accessibleSeats[k].y === j )
-					{
-						type = "accessible"
 					}
 				}
 				// Add seat with specified seat type

@@ -8,10 +8,11 @@ export default class Seat extends Component {
 		super(props);
 		this.y = StateManager.getY();
 		this.x = StateManager.getX();
-		if(props.seatType === null || props.seatType === "")
+		if(props.seatType === undefined || props.seatType === "")
 		{
 			this.state = {
 				seatType: "available",
+				email: "",
 				name: ""
 			};
 		}
@@ -20,7 +21,7 @@ export default class Seat extends Component {
 			this.state = {
 				seatType: props.seatType,
 				email: props.email,
-				name: props.name
+				name: props.name 
 			};
 		}
 		StateManager.incX();
@@ -33,12 +34,16 @@ export default class Seat extends Component {
 		{
 			this.setState({
 				seatType: "available",
+				email: "",
+				name: ""
 			});
 		}
 		else
 		{
 			this.setState({
 				seatType: props.seatType,
+				email: props.email,
+				name: props.name === undefined ? "" : props.name
 			});
 		}
 		StateManager.incX();
