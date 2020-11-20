@@ -140,7 +140,7 @@ export default function InstructorHome() {
 
 	const [noClasses, setNoClasses] = useState(classList.length === 0 && StateManager.getClassLayout() === null);
 
-	const makeClass = async () => {
+	const makeClass = () => {
 		if(title === "--")
 		{
 			return;
@@ -168,10 +168,14 @@ export default function InstructorHome() {
 			AspNetConnector.removeClass(current);
 			setTimeout(() => {
 				AspNetConnector.makeClass(newClass);
+				AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
+				addSeats();
 			}, 500);
 		}
-		AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
-		addSeats();
+		else{
+			AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
+			addSeats();
+		}
 	}
 
 	const addSeats = () => {
