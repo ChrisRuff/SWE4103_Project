@@ -161,7 +161,7 @@ export default function InstructorHome() {
 		}
 
 		var className = title;
-		var newClass = [{"className": className, "height": cols, "width": rows}];
+		var newClass = [{"className": className, "height": rows, "width": cols}];
 		var current = [{"className": className}];
 		let response = AspNetConnector.makeClass(newClass);
 		if(response[0].response === false) {
