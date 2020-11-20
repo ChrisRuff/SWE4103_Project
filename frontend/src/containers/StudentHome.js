@@ -205,6 +205,7 @@ export default function StudentHome() {
 					"seat": {
 						"x": StateManager.getSelectedSeat().x,
 						"y": StateManager.getSelectedSeat().y,
+						"email": StateManager.getStudent().email
 					}
 				}]);
 			} catch (e){

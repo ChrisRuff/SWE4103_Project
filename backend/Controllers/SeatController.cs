@@ -95,7 +95,7 @@ namespace backend
 			for (int i = 0; i < classDTOs.Count; i++)
 			{
 				bool res = DatabaseConnector.Connector.ReserveSeat(classDTOs[i].className,
-									classDTOs[i].seat.x, classDTOs[i].seat.y);
+									classDTOs[i].seat.x, classDTOs[i].seat.y, classDTOs[i].seat.email);
 				classDTOs[i].response = res;
 			}
 			return classDTOs;

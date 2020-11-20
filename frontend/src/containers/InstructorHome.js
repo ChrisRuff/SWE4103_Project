@@ -77,7 +77,9 @@ export default function InstructorHome() {
 			for (var i = 0; i < classDTO.width; i++) {
 
 				// Find type of seat from classDTO
-				let type = ""
+				let type = "";
+				let name = "";
+				let email = "";
 				for(let k = 0; k < classDTO.disabledSeats.length; ++k)
 				{
 					if(classDTO.disabledSeats[k].x === i &&
@@ -99,6 +101,9 @@ export default function InstructorHome() {
 					if(classDTO.reservedSeats[k].x === i &&
 						classDTO.reservedSeats[k].y === j )
 					{
+						console.log(classDTO.reservedSeats[k]);
+						name = classDTO.reservedSeats[k].name;
+						email = classDTO.reservedSeats[k].email;
 						type = "reserved"
 					}
 				}
@@ -113,7 +118,7 @@ export default function InstructorHome() {
 				// Add seat with specified seat type
 				cols.push(
 					<div key={i} className="seat">
-						<Seat x={i} y={j} seatType={type}/>
+						<Seat x={i} y={j} seatType={type} email={email} name={name}/>
 					</div>
 						);
 			}
@@ -183,7 +188,9 @@ export default function InstructorHome() {
 				AspNetConnector.makeSeatAccessible(classDTO);
 			}
 			else if(currentLayout[i].seatType === "reserved"){
-				var reservedSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y};
+				console.log(currentLayout[i])
+				var reservedSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y, "email": currentLayout[i].seat.state.email};
+				console.log(reservedSeat);
 				classDTO[0].seat = reservedSeat;
 
 				AspNetConnector.reserveSeat(classDTO);
