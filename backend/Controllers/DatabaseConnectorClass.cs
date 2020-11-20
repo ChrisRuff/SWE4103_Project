@@ -177,19 +177,26 @@ namespace backend
 			FilterDefinition<BsonDocument> query 
 				= Builders<BsonDocument>.Filter.Eq("name", className);
 
-			FilterDefinition<BsonDocument> profQuery 
+			FilterDefinition<BsonDocument> classQuery 
 				= Builders<BsonDocument>.Filter.Eq("classes.name", className);
 			
 			// Actually delete the student if query finds result
 			if(classes.Find(query).CountDocuments() > 0)
 			{
 				classes.DeleteOne(query);
-				if(profs.Find(profQuery).CountDocuments() > 0)
+				if(profs.Find(classQuery).CountDocuments() > 0)
 				{
 					UpdateDefinition<BsonDocument> update = 
 						Builders<BsonDocument>.Update.Pull("classes", new BsonDocument{{"name", className}});
 
-					profs.UpdateOne(profQuery, update);
+					profs.UpdateOne(classQuery, update);
+				}
+				if(students.Find(classQuery).CountDocuments() > 0)
+				{
+					UpdateDefinition<BsonDocument> update = 
+						Builders<BsonDocument>.Update.Pull("classes", new BsonDocument{{"name", className}});
+
+					students.UpdateOne(classQuery, update);
 				}
 				return true;
 			}
