@@ -13,6 +13,7 @@ export var StateManager = {
 	numCols: 0,
 	seats: [],
 	mandatoryStatus: null,
+	isEditing: null,
 	wipe() {
 		this.classLayout = null;
 		this.accountState = null;
@@ -100,8 +101,14 @@ export var StateManager = {
 	setRows(numRows) {
 		this.numRows = numRows;
 	},
+	getRows(){
+		return this.numRows;
+	},
 	setCols(numCols) {
 		this.numCols = numCols;
+	},
+	getCols(){
+		return this.numCols;
 	},
 	getSeats() {
 		return this.seats;
@@ -117,6 +124,12 @@ export var StateManager = {
 	},
 	getSelectedSeat() {
 		return this.selectedSeat;
+	},
+	getIsEditing(){
+		return this.isEditing;
+	},
+	setIsEditing(isEditing){
+		this.isEditing = isEditing; 
 	}
 
 }

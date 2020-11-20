@@ -140,20 +140,40 @@ export default function InstructorHome() {
 
 	const [noClasses, setNoClasses] = useState(classList.length === 0 && StateManager.getClassLayout() === null);
 
-	const makeClass = () => {
+	const makeClass = async () => {
 		if(title === "--")
 		{
 			return;
 		}
-		var cols = layout[0].props.children.props.children[0].props.children.length;
-		var rows = layout[0].props.children.props.children.length;
+
+		var cols;
+		var rows;
+
+		if(layout[0].props == undefined)
+		{
+			cols = layout[0][0].props.children.props.children[0].props.children.length;
+			rows = layout[0][0].props.children.props.children.length;
+		}
+		else
+		{
+			cols = layout[0].props.children.props.children[0].props.children.length;
+			rows = layout[0].props.children.props.children.length;
+		}
+
 		var className = title;
 		var newClass = [{"className": className, "height": cols, "width": rows}];
-		AspNetConnector.makeClass(newClass);
+		var current = [{"className": className}];
+		let response = AspNetConnector.makeClass(newClass);
+		if(response[0].response === false) {
+			AspNetConnector.removeClass(current);
+			setTimeout(() => {
+				AspNetConnector.makeClass(newClass);
+			}, 500);
+		}
 		AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
 		addSeats();
 	}
-	
+
 	const addSeats = () => {
 		var currentLayout = StateManager.getSeats();
 		AspNetConnector.wipeSeats([{"className": title}]);
@@ -308,6 +328,49 @@ export default function InstructorHome() {
 			alert("Please save your class!")
 	}
 
+	const [editing, setEditing] = useState(StateManager.getIsEditing() != null);
+	var rowNum = StateManager.getRows();
+	var colNum = StateManager.getCols();
+
+	const showEditing = () =>
+	{
+		setEditing(true);
+	}
+
+	const changeSize = () =>
+	{
+		setLayout(layout => [createLayout(rowNum, colNum)]);
+		setEditing(false);
+	}
+
+	/*
+	anything entered in width and height textfields get saved into rowNum and colNum
+	that are going to be used later when the user hits the confirm button
+	*/
+	const handleRowTextFieldChange = x => {
+		if(isNumeric(x.target.value))
+			rowNum = x.target.value;
+		else if (x.target.value != "")
+		{
+			x.target.value = "";
+			window.alert("Please enter only numeric values!")
+		}
+	}
+	const handleColTextFieldChange = x => {
+		if(isNumeric(x.target.value))
+			colNum = x.target.value;
+		else if (x.target.value != "")
+		{
+			x.target.value = "";
+			window.alert("Please enter only numeric values!")
+		}
+	}
+
+	function isNumeric(str) {
+		if (typeof str != "string") return false
+		return !isNaN(str) && !isNaN(parseFloat(str))
+	}
+
 return (
     <div>
 		<div className="layoutHeader">
@@ -334,7 +397,16 @@ return (
 				<Legend/>
 			</div>
 			<div className="layoutFooter">
-				<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
+				{ (editing === false || editing === null) && 
+				<Button onClick={showEditing} variant="light">Edit Seat Plan</Button>
+				}
+				{ (editing === true) &&
+				<div>
+					<Button onClick={changeSize} variant="light">Apply</Button>
+					<TextField label="Enter number of rows" onChange={handleRowTextFieldChange} />
+                	<TextField label="Enter number of columns" onChange={handleColTextFieldChange} />
+				</div>
+				}
 				<DropdownButton 
 						onSelect={moreOptions.bind(this)}
 						title="More Options..."
@@ -356,7 +428,7 @@ return (
         style={{width: '250px', height: 'auto'}}
         defaultValue=""
         InputProps={{
-          readOnly: true,
+        	readOnly: true,
         }}
         />
 			</div>

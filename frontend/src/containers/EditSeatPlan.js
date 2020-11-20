@@ -15,7 +15,7 @@ export default function EditSeatPlan() {
 		StateManager.setRows(numRows);
 		StateManager.setCols(numCols);
 
-    let layout = [];
+    let editingLayout = [];
     let rows = [];
 
     for (var j = 0; j < numRows; j++) {
@@ -36,7 +36,7 @@ export default function EditSeatPlan() {
       );
     }
 
-    layout.push(
+    editingLayout.push(
       <div key="root" className="root">
         <Grid container spacing={3}>
           {rows}
@@ -44,14 +44,14 @@ export default function EditSeatPlan() {
       </div>
     );
 
-    return layout;
+    return editingLayout;
 	};
 
   const classSelected = StateManager.getSelectedClass();
   const history = useHistory();
   
-  var rowNum = StateManager.numRows;
-  var colNum = StateManager.numCols;
+  var rowNum = StateManager.getRows();
+  var colNum = StateManager.getCols();
   
   const [myLayouts, setLayouts] = useState(createLayout(rowNum, colNum));
 
@@ -71,20 +71,14 @@ export default function EditSeatPlan() {
 
 		var classToDelete = [{"className": classSelected}]
 		var newClass = [{"className": classSelected, "width": parseInt(colNum,10), "height": parseInt(rowNum,10)}]
-		var request = AspNetConnector.removeClass(classToDelete);
-		request.onload = function() {
-			JSON.parse(request.response)
-		}
-
-		var request2 = AspNetConnector.makeClass(newClass);
-		request2.onload = function() {
-			JSON.parse(request2.response)
-		}
-		StateManager.setSelectedClass(classSelected);
-    StateManager.setClassLayout(createLayout(rowNum, colNum));
+    AspNetConnector.removeClass(classToDelete);
+    AspNetConnector.makeClass(newClass);
+		//StateManager.setSelectedClass(classSelected);
+    //StateManager.setClassLayout(createLayout(rowNum, colNum));
     history.push("/InstructorHome");
   }
   function handleApplyButtonClick() {
+    StateManager.wipeSeats()
     setLayouts(myLayouts => [createLayout(rowNum, colNum)]);
   }
   function handleCancelButtonClick() {
@@ -95,12 +89,10 @@ export default function EditSeatPlan() {
       <div>
           <div className="editSeatPlan">
               <form autoComplete="off">
-                  <z className="rowTextField">
+                  <div className="rowTextField">
                       <TextField label="Enter number of rows" variant="outlined" onChange={handleRowTextFieldChange} />
-                  </z>
-                  <z>
                       <TextField label="Enter number of columns" variant="outlined" onChange={handleColTextFieldChange} />
-                  </z>
+                  </div>
               </form>
           </div>
           <div className="actionButtons">
