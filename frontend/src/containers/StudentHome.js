@@ -198,7 +198,7 @@ export default function StudentHome() {
 		
 		// check whether the user selected a seat to reserve
 		if(StateManager.getSelectedSeat() === null){
-			window.confirm("Please select a seat to reserve.");
+			window.alert("Please select a seat to reserve.");
 		} else {
 			response = window.confirm("Do you really want to reserve this seat?");
 
