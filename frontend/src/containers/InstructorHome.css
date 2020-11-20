@@ -68,3 +68,7 @@
   font: message-box !important;
   text-align: center !important;
 }
+
+.MuiAppBar-colorPrimary {
+  background-color: #cd5c5c !important;
+}

@@ -9,9 +9,26 @@ import { useHistory } from "react-router-dom";
 import { TextField } from "@material-ui/core";
 import Legend from "../components/Legend";
 
+// Material UI imports for attendance view
+import ButtonMatUI from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
+import Slide from '@material-ui/core/Slide';
+
 export default function InstructorHome() {
 
 	const history = useHistory();
+	const [attendancePopup, setAttendancePopup] = useState(false);
+
+	console.log(attendancePopup);
 
 	// If there is no prof object(not signed in) then return to the homepage
 	if(StateManager.getProf() == null)
@@ -308,6 +325,17 @@ export default function InstructorHome() {
 			alert("Please save your class!")
 	}
 
+	const openAttendancePopup = () => {
+		setAttendancePopup(true);
+	}
+	const closeAttendancePopup = () => {
+		setAttendancePopup(false);
+	}
+
+	const Transition = React.forwardRef(function Transition(props, ref) {
+		return <Slide direction="up" ref={ref} {...props} />;
+	});
+
 return (
     <div>
 		<div className="layoutHeader">
@@ -324,7 +352,8 @@ return (
 				</DropdownButton>
 				<div style={{width: "15px", height: "auto", display: "inline-block"}}/>
 				<Button onClick={newClass} variant="light">Add</Button>
-				<Button onClick={makeClass} variant="light" className="pull-right">Submit</Button>
+				<Button onClick={makeClass} variant="light" className="pull-right" style={{marginLeft: "15px"}}>Submit</Button>
+				<Button onClick={openAttendancePopup} variant="light" className="pull-right">Take Attendance</Button>
 			</div>
 		</div>
 		{ (noClasses === false) &&
@@ -368,6 +397,32 @@ return (
 				<h1 style= {{textAlign: 'center', padding: '50px' }}> There are no classes to display </h1>
 			</div> 
 		}
-    </div>
+		{attendancePopup &&
+			<Dialog fullScreen open={attendancePopup} onClose={closeAttendancePopup} TransitionComponent={Transition}>
+				<AppBar style={{position: 'relative', color: '#cd5c5c'}}>
+					<Toolbar>
+						<IconButton edge="start" color="white" onClick={closeAttendancePopup} aria-label="close">
+						<CloseIcon />
+						</IconButton>
+						<Typography variant="h6" style={{marginLeft: '15px', flex: 1}}>
+							Sound
+						</Typography>
+						<ButtonMatUI autoFocus color="white" onClick={closeAttendancePopup}>
+							save
+						</ButtonMatUI>
+					</Toolbar>
+				</AppBar>
+				<List>
+					<ListItem button>
+						<ListItemText primary="Phone ringtone" secondary="Titania" />
+						</ListItem>
+						<Divider />
+						<ListItem button>
+						<ListItemText primary="Default notification ringtone" secondary="Tethys" />
+					</ListItem>
+				</List>
+			</Dialog>
+		}
+	</div>
 );
 }
