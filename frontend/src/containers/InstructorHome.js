@@ -182,6 +182,12 @@ export default function InstructorHome() {
 
 				AspNetConnector.makeSeatAccessible(classDTO);
 			}
+			else if(currentLayout[i].seatType === "reserved"){
+				var reservedSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y};
+				classDTO[0].seat = reservedSeat;
+
+				AspNetConnector.reserveSeat(classDTO);
+			}
 		}
 	}
 
