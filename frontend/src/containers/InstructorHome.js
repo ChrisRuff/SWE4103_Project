@@ -375,7 +375,7 @@ return (
         <TextField
         className="pull-right"
         id="link-field"
-        style={{width: '250px', height: 'auto'}}
+        style={{width: '400px', height: 'auto'}}
         defaultValue=""
         InputProps={{
           readOnly: true,
