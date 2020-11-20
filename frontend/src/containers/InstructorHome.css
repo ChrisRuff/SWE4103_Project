@@ -49,7 +49,6 @@
   text-align: center;
 }
 
-
 .root {
   overflow: scroll;
   width: 800px;
@@ -62,4 +61,10 @@
 
 .seat {
   margin: auto;
+}
+
+.MuiInputBase-input {
+  height: fit-content !important;
+  font: message-box !important;
+  text-align: center !important;
 }
