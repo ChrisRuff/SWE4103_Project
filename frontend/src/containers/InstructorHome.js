@@ -420,22 +420,26 @@ return (
 				<Button onClick={showEditing} variant="light">Edit Seat Plan</Button>
 				}
 				{ (editing === true) &&
-				<div>
+				<div className="editSeatPlan">
 					<Button onClick={changeSize} variant="light">Apply</Button>
-					<TextField
-						variant="outlined"
-						onChange={handleRowTextFieldChange}
-						InputProps={{
-							endAdornment: <InputAdornment position="end">Row(s)</InputAdornment>
-						}}
-					/>
-                	<TextField
-						variant="outlined"
-						onChange={handleColTextFieldChange}
-						InputProps={{
-							endAdornment: <InputAdornment position="end">Col(s)</InputAdornment>
-						}}
-					/>
+					<span>
+						<TextField
+							variant="outlined"
+							onChange={handleRowTextFieldChange}
+							InputProps={{
+								endAdornment: <InputAdornment position="end">Row(s)</InputAdornment>
+							}}
+						/>
+					</span>
+					<span>
+						<TextField
+							variant="outlined"
+							onChange={handleColTextFieldChange}
+							InputProps={{
+								endAdornment: <InputAdornment position="end">Col(s)</InputAdornment>
+							}}
+						/>
+					</span>
 					<Button onClick={cancelEditSeatPlan} variant="light">X</Button>
 				</div>
 				}
