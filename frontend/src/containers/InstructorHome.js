@@ -12,10 +12,6 @@ import Legend from "../components/Legend";
 // Material UI imports for attendance view
 import ButtonMatUI from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -23,10 +19,18 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 
+// Material UI imports for date and time picker
+import DateFnsUtils from '@date-io/date-fns'; // choose your lib
+import {
+  DateTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+
 export default function InstructorHome() {
 
 	const history = useHistory();
 	const [attendancePopup, setAttendancePopup] = useState(false);
+	const [selectedDate, handleDateChange] = useState(new Date());
 
 	console.log(attendancePopup);
 
@@ -332,6 +336,11 @@ export default function InstructorHome() {
 		setAttendancePopup(false);
 	}
 
+	const saveAttendanceAndClose = () => {
+		makeClass();
+		setAttendancePopup(false);
+	}
+
 	const Transition = React.forwardRef(function Transition(props, ref) {
 		return <Slide direction="up" ref={ref} {...props} />;
 	});
@@ -401,26 +410,27 @@ return (
 			<Dialog fullScreen open={attendancePopup} onClose={closeAttendancePopup} TransitionComponent={Transition}>
 				<AppBar style={{position: 'relative', color: '#cd5c5c'}}>
 					<Toolbar>
-						<IconButton edge="start" color="white" onClick={closeAttendancePopup} aria-label="close">
+						<IconButton className="AttendanceTitle" edge="start" onClick={closeAttendancePopup} aria-label="close">
 						<CloseIcon />
 						</IconButton>
-						<Typography variant="h6" style={{marginLeft: '15px', flex: 1}}>
-							Sound
+						<Typography className="AttendanceTitle" variant="h3" style={{marginLeft: '15px', flex: 1}}>
+							Attendance
 						</Typography>
-						<ButtonMatUI autoFocus color="white" onClick={closeAttendancePopup}>
+						<ButtonMatUI className="AttendanceTitle" autoFocus onClick={saveAttendanceAndClose}>
 							save
 						</ButtonMatUI>
 					</Toolbar>
 				</AppBar>
-				<List>
-					<ListItem button>
-						<ListItemText primary="Phone ringtone" secondary="Titania" />
-						</ListItem>
-						<Divider />
-						<ListItem button>
-						<ListItemText primary="Default notification ringtone" secondary="Tethys" />
-					</ListItem>
-				</List>
+					<MuiPickersUtilsProvider utils={DateFnsUtils}>
+						<DateTimePicker value={selectedDate} onChange={handleDateChange} />
+					</MuiPickersUtilsProvider>
+				{ (noClasses === false) &&
+					<div className="Attendance">
+						{StateManager.setY(0)}
+						<Fragment>{layout}</Fragment>
+						<Legend/>
+					</div>
+				}
 			</Dialog>
 		}
 	</div>

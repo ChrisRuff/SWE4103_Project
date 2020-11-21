@@ -72,3 +72,74 @@
 .MuiAppBar-colorPrimary {
   background-color: #cd5c5c !important;
 }
+
+.AttendanceTitle {
+  color: white !important;
+}
+
+button.AttendanceTitle {
+  font: message-box;
+}
+
+.Attendance {
+  margin: 50px;
+  align-self: center;
+  display: flex;
+}
+
+.Attendance .legend {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border: 2px solid grey;
+  text-align: center;
+  margin-right: 100px;
+}
+
+.AttendanceLayout {
+  margin: 50px 50px !important;
+}
+
+.Attendance > .root {
+  margin: 50px;
+}
+
+.MuiInput-root :hover {
+  cursor: pointer;
+}
+
+.MuiPickersToolbar-toolbar {
+  background-color: #cd5c5c !important;
+}
+
+.MuiTypography-body1 {
+  font-size: 2rem !important;
+}
+
+.MuiTypography-body2 {
+  font-size: 2rem !important;
+}
+
+.MuiButton-root {
+  font-size: 1.5rem !important;
+}
+
+.MuiButton-textPrimary {
+  color: #cd5c5c !important;
+}
+
+.MuiPickersDay-daySelected {
+  background-color: #cd5c5c !important;
+}
+
+.MuiPickersClockPointer-pointer {
+  background-color: #cd5c5c !important;
+}
+
+.MuiPickersClock-pin {
+  background-color: #cd5c5c !important;
+}
+
+.MuiPickersClockPointer-thumb {
+  border: 14px solid #cd5c5c !important;
+}

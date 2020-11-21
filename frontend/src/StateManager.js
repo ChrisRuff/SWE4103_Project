@@ -97,6 +97,9 @@ export var StateManager = {
 	getY() {
 		return this.y;
 	},
+	setY(num) {
+		this.y = num;
+	},
 	setRows(numRows) {
 		this.numRows = numRows;
 	},
