@@ -273,13 +273,13 @@ export var AspNetConnector = {
 	}
 	*/
 	// reserve a seat
-	reserveSeat: function(students) {
+	reserveSeat: function(classes) {
 			
 		var request = new XMLHttpRequest();
         
 		request.open('POST', 'api/class/seat/reserve', false);
 		request.setRequestHeader('Content-type', 'application/json');
-		request.send(JSON.stringify(students));
+		request.send(JSON.stringify(classes));
 		
 		return request;
 	},

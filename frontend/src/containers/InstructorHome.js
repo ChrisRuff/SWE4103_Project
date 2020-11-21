@@ -8,6 +8,7 @@ import Seat from "../components/Seat.js";
 import { useHistory } from "react-router-dom";
 import { TextField } from "@material-ui/core";
 import Legend from "../components/Legend";
+import copy from 'copy-to-clipboard';
 
 // Material UI imports for attendance view
 import ButtonMatUI from '@material-ui/core/Button';
@@ -31,6 +32,7 @@ export default function InstructorHome() {
 	const history = useHistory();
 	const [attendancePopup, setAttendancePopup] = useState(false);
 	const [selectedDate, handleDateChange] = useState(new Date());
+	const [linkShown, setLinkShown] = useState(false);
 
 	// If there is no prof object(not signed in) then return to the homepage
 	if(StateManager.getProf() == null)
@@ -201,6 +203,12 @@ export default function InstructorHome() {
 
 				AspNetConnector.makeSeatAccessible(classDTO);
 			}
+			else if(currentLayout[i].seatType === "reserved"){
+				var reservedSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y};
+				classDTO[0].seat = reservedSeat;
+
+				AspNetConnector.reserveSeat(classDTO);
+			}
 		}
 	}
 
@@ -250,7 +258,14 @@ export default function InstructorHome() {
 			var url = window.location.href.split("/");
 			document.getElementById("link-field").value=`https://${url[2]}/StudentHome?code=${response[0].classCode}`;
 		}
+		setLinkShown(true);
 	}
+
+	const copyLink = () => {
+		var link = document.getElementById("link-field").value;
+		copy(link);
+	}
+
 	if (StateManager.getClassLayout() === null){
 		if (classList[0] !== null && classList[0] !== undefined){
 			let classLayout = JSON.parse(AspNetConnector.getClasses([{"className": classList[0]}]).response);
@@ -396,6 +411,10 @@ return (
           readOnly: true,
         }}
         />
+		{
+			(linkShown) &&
+			<Button className="pull-right" onClick={copyLink} varient="light">Copy Link</Button>
+		}
 			</div>
 		</div>
 		}
