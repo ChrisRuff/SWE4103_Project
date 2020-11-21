@@ -349,7 +349,7 @@ export default function InstructorHome() {
 		} else {
 			// Confirm user's change
 			let response = window.confirm("Are you sure you want to change the seat plan?");
-			
+
 			if(response) {
 				setLayout(layout => [createLayout(rowNum, colNum)]);
 				setEditing(false);
@@ -378,6 +378,10 @@ export default function InstructorHome() {
 			x.target.value = "";
 			window.alert("Please enter only numeric values!")
 		}
+	}
+
+	const cancelEditSeatPlan= () => {
+		setEditing(false);
 	}
 
 	function isNumeric(str) {
@@ -419,6 +423,7 @@ return (
 					<Button onClick={changeSize} variant="light">Apply</Button>
 					<TextField label="Enter number of rows" onChange={handleRowTextFieldChange} />
                 	<TextField label="Enter number of columns" onChange={handleColTextFieldChange} />
+					<Button onClick={cancelEditSeatPlan} variant="light">X</Button>
 				</div>
 				}
 				<DropdownButton 
