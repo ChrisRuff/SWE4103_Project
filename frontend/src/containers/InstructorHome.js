@@ -7,6 +7,7 @@ import { StateManager } from "../StateManager.js";
 import Seat from "../components/Seat.js";
 import { useHistory } from "react-router-dom";
 import { TextField } from "@material-ui/core";
+import InputAdornment from '@material-ui/core/InputAdornment';
 import Legend from "../components/Legend";
 
 export default function InstructorHome() {
@@ -421,8 +422,20 @@ return (
 				{ (editing === true) &&
 				<div>
 					<Button onClick={changeSize} variant="light">Apply</Button>
-					<TextField label="Enter number of rows" onChange={handleRowTextFieldChange} />
-                	<TextField label="Enter number of columns" onChange={handleColTextFieldChange} />
+					<TextField
+						variant="outlined"
+						onChange={handleRowTextFieldChange}
+						InputProps={{
+							endAdornment: <InputAdornment position="end">Row(s)</InputAdornment>
+						}}
+					/>
+                	<TextField
+						variant="outlined"
+						onChange={handleColTextFieldChange}
+						InputProps={{
+							endAdornment: <InputAdornment position="end">Col(s)</InputAdornment>
+						}}
+					/>
 					<Button onClick={cancelEditSeatPlan} variant="light">X</Button>
 				</div>
 				}
