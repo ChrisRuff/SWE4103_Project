@@ -343,8 +343,18 @@ export default function InstructorHome() {
 
 	const changeSize = () =>
 	{
-		setLayout(layout => [createLayout(rowNum, colNum)]);
-		setEditing(false);
+		// Check if the user has entered a new row and column number
+		if(StateManager.getRows() == rowNum && StateManager.getCols() == colNum) {
+			window.alert("Please enter a new row and column number.");
+		} else {
+			// Confirm user's change
+			let response = window.confirm("Are you sure you want to change the seat plan?");
+			
+			if(response) {
+				setLayout(layout => [createLayout(rowNum, colNum)]);
+				setEditing(false);
+			}
+		}
 	}
 
 	/*
