@@ -32,8 +32,6 @@ export default function InstructorHome() {
 	const [attendancePopup, setAttendancePopup] = useState(false);
 	const [selectedDate, handleDateChange] = useState(new Date());
 
-	console.log(attendancePopup);
-
 	// If there is no prof object(not signed in) then return to the homepage
 	if(StateManager.getProf() == null)
 	{
@@ -339,6 +337,7 @@ export default function InstructorHome() {
 	const saveAttendanceAndClose = () => {
 		makeClass();
 		setAttendancePopup(false);
+		window.location.reload();
 	}
 
 	const Transition = React.forwardRef(function Transition(props, ref) {
