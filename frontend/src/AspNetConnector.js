@@ -41,12 +41,13 @@ export var AspNetConnector = {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/add', true);
+		request.open('POST', 'api/student/add', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
-		return request;
-			
+		if (request.status === 200) { // That's HTTP for 'ok'
+			return JSON.parse(request.response);
+		}
 	},
 	
 	addClassToStudent: function(students) {
@@ -87,14 +88,30 @@ export var AspNetConnector = {
 		
 		return request;
 	},
+	/*  Sample call
+	 var prof = [{
+    	"profName": "profman",
+    	"email": "profman@unb.net",
+	  	"pass": "password",
+    	"response": false
+    }]
+	 
+	  var request = AspNetConnector.addProf(prof);
+	 
+	 	request.onload = function() {
+	 		console.log(JSON.parse(request.response));
+	 	}
+	*/
 	addProf: function(profs) {
 		var request = new XMLHttpRequest();
 
-		request.open('POST', 'api/prof/add', true);
+		request.open('POST', 'api/prof/add', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(profs));
 
-		return request;
+		if (request.status === 200) { // That's HTTP for 'ok'
+			return JSON.parse(request.response);
+		}
 	},
 	removeProf: function(profs) {
 		var request = new XMLHttpRequest();
@@ -284,30 +301,6 @@ export var AspNetConnector = {
 		return request;
 	},
 
-	/*  Sample call
-	 var prof = [{
-    	"profName": "profman",
-    	"email": "profman@unb.net",
-	  	"pass": "password",
-    	"response": false
-    }]
-	 
-	  var request = AspNetConnector.addProf(prof);
-	 
-	 	request.onload = function() {
-	 		console.log(JSON.parse(request.response));
-	 	}
-	*/
-	// add prof
-	addProf: function(profs) {
-		var request = new XMLHttpRequest();
-        
-		request.open('POST', 'api/prof/add', true);
-		request.setRequestHeader('Content-type', 'application/json');
-		request.send(JSON.stringify(profs));
-		
-		return request;
-	},
 
 	/*  Sample call
 	 var prof = [{
