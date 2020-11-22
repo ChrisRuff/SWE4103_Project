@@ -68,7 +68,8 @@ export default function Login() {
           else{
             onError("Invalid password or account selected");
             userHasAuthenticated(false);
-            history.push("/")
+            history.push("/login");
+            window.location.reload(false);
           }
         }
       }
@@ -88,9 +89,10 @@ export default function Login() {
             history.push("/InstructorHome"); 
           }
           else{
-            onError("Invalid password");
+            onError("Invalid password or account selected");
             userHasAuthenticated(false);
-            history.push("/")
+            history.push("/login");
+            window.location.reload(false);
           }
         }
       }
