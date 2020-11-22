@@ -13,8 +13,6 @@ import Legend from "../components/Legend";
 
 export default function StudentHome() {
 
-  var noClasses = false;
-
   const history = useHistory();
 
 	var url_string = window.location.href;
@@ -78,9 +76,8 @@ export default function StudentHome() {
 	if(student !== null)
 	{
 		student = JSON.parse(AspNetConnector.getStudents([StateManager.getStudent()]).response)[0];
-		console.log(student);
 		if (student.classes == null) {
-			noClasses = true;
+			setNoClasses(true);
 		}
 		else if (student.classes !== null) {
 			for(let i = 0; i < student.classes.length; i++){
@@ -88,6 +85,7 @@ export default function StudentHome() {
 			}
 		}
 	}
+	const [noClasses, setNoClasses] = useState(classList.length === 0 && StateManager.getClassLayout() === null);
 
 	const loadLayout = (classDTO) => {
 		StateManager.wipeSeats();
@@ -172,11 +170,7 @@ export default function StudentHome() {
 			}
 		}
 		else {
-			emptyLayout.push( //gives this statement if student has no classes
-				<div key="root" className="root">
-					<h1 style= {{textAlign: 'center', padding: '50px' }}> There are no classes to display </h1>
-				</div>
-				);
+			alert("Could not load class");
 		}
 	}
 
