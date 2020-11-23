@@ -135,6 +135,8 @@ namespace test
 			Assert.True(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
 			Assert.False(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
 
+			DatabaseConnector.Connector.AddStudent("Tester", "scole_test@unb.ca", "password");
+
 			Assert.True(DatabaseConnector.Connector.ReserveSeat("CS2043", 1, 1, "scole_test@unb.ca"));
 			Assert.False(DatabaseConnector.Connector.ReserveSeat("CS2043", 1, 1, "scole_test@unb.ca"));
 			Assert.False(DatabaseConnector.Connector.ReserveSeat("CS2043", 10, 10, "scole_test@unb.ca"));
