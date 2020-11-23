@@ -107,7 +107,6 @@ namespace backend
 			FilterDefinition<BsonDocument> query 
 				= Builders<BsonDocument>.Filter.Eq("name", className);
 
-
 			var foundClasses = classes.Find(query);
 			if(foundClasses.CountDocuments() <= 0)
 			{
@@ -124,6 +123,16 @@ namespace backend
 					return false;
 			}
 			var studentName = Connector.GetStudent(studentEmail).name;
+
+			// Adds the seat info to student in database
+			Connector.AddSeat(studentEmail, className, x, y);
+
+			var ddwd = Connector.GetStudent(studentEmail);
+
+			Console.WriteLine(ddwd.email);
+			Console.WriteLine(ddwd.classes.Length);
+			Console.WriteLine(ddwd.classes[0].seat.y);
+			Console.WriteLine(ddwd.name);
 			// Create a update routine that will add a class 
 			// (with absents field to the student document)
 			UpdateDefinition<BsonDocument> update = 
