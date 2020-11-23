@@ -195,7 +195,7 @@ export default function StudentHome() {
 			window.alert("Please select a seat to reserve.");
 		} else {
 			response = window.confirm("Do you really want to reserve this seat?");
-
+			}
 		if(response) {
 
 			try{
