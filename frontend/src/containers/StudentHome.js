@@ -196,9 +196,21 @@ export default function StudentHome() {
 	const handleSubmit = () => {
 		let response = null;
 
-		// check whether the user selected a seat to reserve
+		// check whether the student has already reserved a seat
+		let alreadyReservedSeat = false;
+		let seats = StateManager.getSeats();
+		for(let i = 0; i < seats.length; i++) {
+			if(seats[i].email === StateManager.getStudent().email) {
+				alreadyReservedSeat = true;
+				break;
+			}
+		}
+
+		// check whether the user actually selected a seat to reserve
 		if(StateManager.getSelectedSeat() === null){
 			window.alert("Please select a seat to reserve.");
+		} else if(alreadyReservedSeat) {
+			window.alert("You have already reserved a seat for this class."); // the student has already reserved a seat
 		} else {
 			response = window.confirm("Do you really want to reserve this seat?");
 
