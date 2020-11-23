@@ -111,7 +111,6 @@ export default function InstructorHome() {
 					if(classDTO.reservedSeats[k].x === i &&
 						classDTO.reservedSeats[k].y === j )
 					{
-						console.log(classDTO.reservedSeats[k]);
 						name = classDTO.reservedSeats[k].name;
 						email = classDTO.reservedSeats[k].email;
 						type = "reserved"
@@ -190,9 +189,7 @@ export default function InstructorHome() {
 				AspNetConnector.makeSeatAccessible(classDTO);
 			}
 			else if(currentLayout[i].seatType === "reserved"){
-				console.log(currentLayout[i])
 				var reservedSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y, "email": currentLayout[i].seat.state.email};
-				console.log(reservedSeat);
 				classDTO[0].seat = reservedSeat;
 
 				AspNetConnector.reserveSeat(classDTO);
