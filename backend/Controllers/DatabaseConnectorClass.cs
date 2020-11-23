@@ -107,7 +107,6 @@ namespace backend
 			FilterDefinition<BsonDocument> query 
 				= Builders<BsonDocument>.Filter.Eq("name", className);
 
-
 			var foundClasses = classes.Find(query);
 			if(foundClasses.CountDocuments() <= 0)
 			{
