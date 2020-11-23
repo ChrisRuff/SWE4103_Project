@@ -101,7 +101,7 @@ namespace backend
 
 			return true;
 		}
-		public bool ReserveSeat(string className, int x, int y)
+		public bool ReserveSeat(string className, int x, int y, string studentEmail)
 		{
 			// Create a filter that will find the student with the given email
 			FilterDefinition<BsonDocument> query 
@@ -123,10 +123,12 @@ namespace backend
 				if(i["x"] == x && i["y"] == y)
 					return false;
 			}
+			var studentName = Connector.GetStudent(studentEmail).name;
 			// Create a update routine that will add a class 
 			// (with absents field to the student document)
 			UpdateDefinition<BsonDocument> update = 
-				Builders<BsonDocument>.Update.AddToSet("rSeats", new BsonDocument{{"x", x}, {"y", y}});
+				Builders<BsonDocument>.Update.AddToSet("rSeats", new BsonDocument{{"x", x}, 
+						{"y", y}, {"name", studentName}, {"email", studentEmail}});
 			classes.UpdateOne(foundClass, update);
 
 			return true;
@@ -269,6 +271,8 @@ namespace backend
 				SeatDTO seat = new SeatDTO();
 				seat.x = s["x"].ToInt32();
 				seat.y = s["y"].ToInt32();
+				seat.email = s["email"].ToString();
+				seat.name = s["name"].ToString();
 				MrClassy.ReservedSeats[i] = seat;
 			}
 

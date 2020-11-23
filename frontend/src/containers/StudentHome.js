@@ -187,7 +187,7 @@ export default function StudentHome() {
 		}
 	}
 
-	const handleSubmit = () => {
+	const handleSubmit = () => { 
 		let response = null;
 		
 		// check whether the user selected a seat to reserve
@@ -195,20 +195,18 @@ export default function StudentHome() {
 			window.alert("Please select a seat to reserve.");
 		} else {
 			response = window.confirm("Do you really want to reserve this seat?");
-
-			if(response) {
-				try{
-					AspNetConnector.reserveSeat([{
-						"className": StateManager.getSelectedClass(),
-						"seat": {
-							"x": StateManager.getSelectedSeat().x,
-							"y": StateManager.getSelectedSeat().y,
-						}
-					}]);
-				} catch (e){
-						
-				}
-			}
+		}
+		if(response) {
+			try{
+				AspNetConnector.reserveSeat([{
+					"className": StateManager.getSelectedClass(),
+					"seat": {
+						"x": StateManager.getSelectedSeat().x,
+						"y": StateManager.getSelectedSeat().y,
+						"email": StateManager.getStudent().email
+					}
+				}]);
+			} catch (e){}
 		}
 	}
 
