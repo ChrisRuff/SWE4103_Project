@@ -4,7 +4,7 @@ import "./StudentSeat.css";
 import {StateManager} from "../StateManager.js"
 import { AspNetConnector } from "../AspNetConnector.js" 
 
-export default class Seat extends Component {
+export default class StudentSeat extends Component {
 	constructor(props) {
 		super(props);
 		this.y = StateManager.getY();

@@ -13,8 +13,6 @@ import Legend from "../components/Legend";
 
 export default function StudentHome() {
 
-  var noClasses = false;
-
   const history = useHistory();
 
 	var url_string = window.location.href;
@@ -78,9 +76,8 @@ export default function StudentHome() {
 	if(student !== null)
 	{
 		student = JSON.parse(AspNetConnector.getStudents([StateManager.getStudent()]).response)[0];
-		console.log(student);
 		if (student.classes == null) {
-			noClasses = true;
+			setNoClasses(true);
 		}
 		else if (student.classes !== null) {
 			for(let i = 0; i < student.classes.length; i++){
@@ -88,6 +85,7 @@ export default function StudentHome() {
 			}
 		}
 	}
+	const [noClasses, setNoClasses] = useState(classList.length === 0 && StateManager.getClassLayout() === null);
 
 	const loadLayout = (classDTO) => {
 		StateManager.wipeSeats();
@@ -120,20 +118,20 @@ export default function StudentHome() {
 						type = "open"
 					}
 				}
-				for(let k = 0; k < classDTO.reservedSeats.length; ++k)
-				{
-					if(classDTO.reservedSeats[k].x === i &&
-						classDTO.reservedSeats[k].y === j )
-					{
-						type = "reserved"
-					}
-				}
 				for(let k = 0; k < classDTO.accessibleSeats.length; ++k)
 				{
 					if(classDTO.accessibleSeats[k].x === i &&
 						classDTO.accessibleSeats[k].y === j )
 					{
 						type = "accessible"
+					}
+				}
+				for(let k = 0; k < classDTO.reservedSeats.length; ++k)
+				{
+					if(classDTO.reservedSeats[k].x === i &&
+						classDTO.reservedSeats[k].y === j )
+					{
+						type = "reserved"
 					}
 				}
 				// Add seat with specified seat type
@@ -172,11 +170,7 @@ export default function StudentHome() {
 			}
 		}
 		else {
-			emptyLayout.push( //gives this statement if student has no classes
-				<div key="root" className="root">
-					<h1 style= {{textAlign: 'center', padding: '50px' }}> There are no classes to display </h1>
-				</div>
-				);
+			alert("Could not load class");
 		}
 	}
 
@@ -193,9 +187,14 @@ export default function StudentHome() {
 		}
 	}
 
-	const handleSubmit = () => {
-       
-		let response = window.confirm("Do you really want to reserve this seat?");
+	const handleSubmit = () => { 
+		let response = null;
+		
+		// check whether the user selected a seat to reserve
+		if(StateManager.getSelectedSeat() === null){
+			window.alert("Please select a seat to reserve.");
+		} else {
+			response = window.confirm("Do you really want to reserve this seat?");
 
 		if(response) {
 
@@ -208,13 +207,8 @@ export default function StudentHome() {
 						"email": StateManager.getStudent().email
 					}
 				}]);
-			} catch (e){
-					
-			}
+			} catch (e){}
 		}
-	   
-		
-        
 	}
 
   return (
