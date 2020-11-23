@@ -118,20 +118,20 @@ export default function StudentHome() {
 						type = "open"
 					}
 				}
-				for(let k = 0; k < classDTO.reservedSeats.length; ++k)
-				{
-					if(classDTO.reservedSeats[k].x === i &&
-						classDTO.reservedSeats[k].y === j )
-					{
-						type = "reserved"
-					}
-				}
 				for(let k = 0; k < classDTO.accessibleSeats.length; ++k)
 				{
 					if(classDTO.accessibleSeats[k].x === i &&
 						classDTO.accessibleSeats[k].y === j )
 					{
 						type = "accessible"
+					}
+				}
+				for(let k = 0; k < classDTO.reservedSeats.length; ++k)
+				{
+					if(classDTO.reservedSeats[k].x === i &&
+						classDTO.reservedSeats[k].y === j )
+					{
+						type = "reserved"
 					}
 				}
 				// Add seat with specified seat type
