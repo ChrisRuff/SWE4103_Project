@@ -101,7 +101,9 @@ export default function StudentHome() {
 			for (var i = 0; i < classDTO.width; i++) {
 
 				// Find type of seat from classDTO
-				let type = ""
+				let type = "";
+				let name = "";
+				let email = "";
 				for(let k = 0; k < classDTO.disabledSeats.length; ++k)
 				{
 					if(classDTO.disabledSeats[k].x === i &&
@@ -131,13 +133,15 @@ export default function StudentHome() {
 					if(classDTO.reservedSeats[k].x === i &&
 						classDTO.reservedSeats[k].y === j )
 					{
+						name = classDTO.reservedSeats[k].name;
+						email = classDTO.reservedSeats[k].email;
 						type = "reserved"
 					}
 				}
 				// Add seat with specified seat type
 				cols.push(
 					<div key={i} className="StudentSeat">
-						<StudentSeat x={i} y={j} seatType={type}/>
+						<StudentSeat x={i} y={j} seatType={type} email={email} name={name}/>
 					</div>
 						);
 			}

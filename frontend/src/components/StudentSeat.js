@@ -14,13 +14,17 @@ export default class StudentSeat extends Component {
 			this.state = {
 				seatType: "available",
 				original: "available",
+				email: "",
+				name: ""
 			};
 		}
 		else
 		{
 			this.state = {
 				seatType: props.seatType,
-				original: props.seatType
+				original: props.seatType,
+				email: props.email,
+				name: props.name 
 			};
 		}
 		StateManager.incX();
@@ -33,12 +37,16 @@ export default class StudentSeat extends Component {
 		{
 			this.setState({
 				seatType: "available",
+				email: "",
+				name: ""
 			});
 		}
 		else
 		{
 			this.setState({
 				seatType: props.seatType,
+				email: props.email,
+				name: props.name === undefined ? "" : props.name
 			});
 		}
 		StateManager.incX();
@@ -53,8 +61,6 @@ export default class StudentSeat extends Component {
 	}
 
 	handleClick = () => {
-		
-        
 		
 		if(StateManager.getSelectedSeat() === null){
 		
@@ -86,18 +92,14 @@ export default class StudentSeat extends Component {
 			
 		}
 		
-		
-		
 		StateManager.setSelectedSeat(this);
 	}
-
-
 	
 	render() {
 		StateManager.addSeat(this.x, this.y, this.state.seatType, this)
 		return (
 			<Button className={this.state.seatType} onClick = {this.handleClick}>
-				Seat<br/>
+				{this.state.name === "" ? "Seat" : this.state.name }<br/>
 				X:{this.x}&nbsp;&nbsp;&nbsp;Y:{this.y}
 			</Button>
 		);
