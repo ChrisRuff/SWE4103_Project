@@ -9,6 +9,7 @@ export default class StudentSeat extends Component {
 		super(props);
 		this.y = StateManager.getY();
 		this.x = StateManager.getX();
+		var reg = new RegExp("[a-zA-Z]+[ a-zA-Z].");
 		if(props.seatType == null || props.seatType === "")
 		{
 			this.state = {
@@ -18,13 +19,23 @@ export default class StudentSeat extends Component {
 				name: ""
 			};
 		}
+		else if(props.name !== "")
+		{
+			this.state = {
+				seatType: props.seatType,
+				original: props.seatType,
+				email: props.email,
+				//displays only the first name & last name initial for privacy reasons
+				name: reg.exec(props.name) 
+			};
+		}
 		else
 		{
 			this.state = {
 				seatType: props.seatType,
 				original: props.seatType,
 				email: props.email,
-				name: props.name 
+				name: props.name
 			};
 		}
 		StateManager.incX();
@@ -33,6 +44,7 @@ export default class StudentSeat extends Component {
 	{
 		this.y = StateManager.getY();
 		this.x = StateManager.getX();
+		var reg = new RegExp("[a-zA-Z]+[ a-zA-Z].");
 		if(props.seatType == null || props.seatType === "")
 		{
 			this.setState({
@@ -40,6 +52,16 @@ export default class StudentSeat extends Component {
 				email: "",
 				name: ""
 			});
+		}
+		else if(props.name !== "")
+		{
+			this.state = {
+				seatType: props.seatType,
+				original: props.seatType,
+				email: props.email,
+				//displays only the first name & last name initial for privacy reasons
+				name: reg.exec(props.name) 
+			};
 		}
 		else
 		{

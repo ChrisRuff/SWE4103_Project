@@ -291,7 +291,7 @@ export default function InstructorHome() {
 	*/
 	const removeClass = () =>
 	{
-		if(StateManager.getSelectedClass() != null && StateManager.getSelectedClass() != "--") {
+		if(StateManager.getSelectedClass() !== null && StateManager.getSelectedClass() !== "--") {
 			var currentClass = [{"className": StateManager.getSelectedClass()}]
 			AspNetConnector.removeClass(currentClass);
 
