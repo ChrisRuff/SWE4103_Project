@@ -59,7 +59,6 @@ export default class StudentSeat extends Component {
 				seatType: props.seatType,
 				original: props.seatType,
 				email: props.email,
-				//displays only the first name & last name initial for privacy reasons
 				name: reg.exec(props.name) 
 			};
 		}
@@ -86,7 +85,7 @@ export default class StudentSeat extends Component {
 		
 		if(StateManager.getSelectedSeat() === null){
 		
-			if(this.state.seatType === "available" || this.state.seatType == "accessible"){
+			if(this.state.seatType === "available" || this.state.seatType === "accessible"){
 				this.setState({seatType: "reserved"}); 
 				StateManager.changeSeatType(this.x, this.y, "reserved");
 			}
