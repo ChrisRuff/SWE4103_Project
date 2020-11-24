@@ -39,8 +39,15 @@ export default function StudentHome() {
 		request.onload = async function() {
 			var response = await JSON.parse(request.response);
 			var classFromCode = response[0].className;
+			// check if student is already enrolled
+			var studentInClass = false;
+			for (var i=0; i < classListLength; i++) {
+				if (classList[i] == classFromCode) {
+					studentInClass = true;
+				}
+			}
 			// if valid class code, ask user if they would like to register
-			if (classFromCode!=null) {
+			if (classFromCode!=null && !studentInClass) {
 				let answer = window.confirm(`Would you like to register for ${classFromCode}?`);
 				// if they would like to register, call addClassToStudent
 				if (answer) {
@@ -53,6 +60,9 @@ export default function StudentHome() {
 						response = await JSON.parse(request.response);
 					}
 				}
+			}
+			else if (studentInClass) {
+				alert("You are already registered for this class");
 			}
 			else {
 				alert("Invalid registration link.");
@@ -73,6 +83,7 @@ export default function StudentHome() {
 
 	let student = StateManager.getStudent();
 	let classList = [];
+	let classListLength = 0;
 	if(student !== null)
 	{
 		student = JSON.parse(AspNetConnector.getStudents([StateManager.getStudent()]).response)[0];
@@ -82,6 +93,7 @@ export default function StudentHome() {
 		else if (student.classes !== null) {
 			for(let i = 0; i < student.classes.length; i++){
 				classList.push(student.classes[i].className);
+				classListLength++;
 			}
 		}
 	}
