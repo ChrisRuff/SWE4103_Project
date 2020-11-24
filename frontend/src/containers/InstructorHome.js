@@ -10,9 +10,28 @@ import { TextField } from "@material-ui/core";
 import Legend from "../components/Legend";
 import copy from 'copy-to-clipboard';
 
+// Material UI imports for attendance view
+import ButtonMatUI from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
+import Slide from '@material-ui/core/Slide';
+
+// Material UI imports for date and time picker
+import DateFnsUtils from '@date-io/date-fns'; // choose your lib
+import {
+  DateTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+
 export default function InstructorHome() {
 
 	const history = useHistory();
+	const [attendancePopup, setAttendancePopup] = useState(false);
+	const [selectedDate, handleDateChange] = useState(new Date());
 	const [linkShown, setLinkShown] = useState(false);
 
 	// If there is no prof object(not signed in) then return to the homepage
@@ -327,6 +346,23 @@ export default function InstructorHome() {
 			alert("Please save your class!")
 	}
 
+	const openAttendancePopup = () => {
+		setAttendancePopup(true);
+	}
+	const closeAttendancePopup = () => {
+		setAttendancePopup(false);
+	}
+
+	const saveAttendanceAndClose = () => {
+		makeClass();
+		setAttendancePopup(false);
+		window.location.reload();
+	}
+
+	const Transition = React.forwardRef(function Transition(props, ref) {
+		return <Slide direction="up" ref={ref} {...props} />;
+	});
+
 return (
     <div>
 		<div className="layoutHeader">
@@ -343,7 +379,8 @@ return (
 				</DropdownButton>
 				<div style={{width: "15px", height: "auto", display: "inline-block"}}/>
 				<Button onClick={newClass} variant="light">Add</Button>
-				<Button onClick={makeClass} variant="light" className="pull-right">Submit</Button>
+				<Button onClick={makeClass} variant="light" className="pull-right" style={{marginLeft: "15px"}}>Submit</Button>
+				<Button onClick={openAttendancePopup} variant="light" className="pull-right">Take Attendance</Button>
 			</div>
 		</div>
 		{ (noClasses === false) &&
@@ -391,6 +428,33 @@ return (
 				<h1 style= {{textAlign: 'center', padding: '50px' }}> There are no classes to display </h1>
 			</div> 
 		}
-    </div>
+		{attendancePopup &&
+			<Dialog fullScreen open={attendancePopup} onClose={closeAttendancePopup} TransitionComponent={Transition}>
+				<AppBar style={{position: 'relative', color: '#cd5c5c'}}>
+					<Toolbar>
+						<IconButton className="AttendanceTitle" edge="start" onClick={closeAttendancePopup} aria-label="close">
+						<CloseIcon />
+						</IconButton>
+						<Typography className="AttendanceTitle" variant="h3" style={{marginLeft: '15px', flex: 1}}>
+							Attendance
+						</Typography>
+						<ButtonMatUI className="AttendanceTitle" autoFocus onClick={saveAttendanceAndClose}>
+							save
+						</ButtonMatUI>
+					</Toolbar>
+				</AppBar>
+					<MuiPickersUtilsProvider utils={DateFnsUtils}>
+						<DateTimePicker value={selectedDate} onChange={handleDateChange} />
+					</MuiPickersUtilsProvider>
+				{ (noClasses === false) &&
+					<div className="Attendance">
+						{StateManager.setY(0)}
+						<Fragment>{layout}</Fragment>
+						<Legend/>
+					</div>
+				}
+			</Dialog>
+		}
+	</div>
 );
 }
