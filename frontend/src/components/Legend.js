@@ -1,6 +1,4 @@
-import React, { Component } from "react";
-import { Button } from "react-bootstrap";
-import { makeStyles } from '@material-ui/core/styles';
+import React from "react";
 import Tooltip from '@material-ui/core/Tooltip';
 import "./Legend.css";
 
