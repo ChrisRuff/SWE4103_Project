@@ -7,6 +7,7 @@ import Signup from "./containers/Signup";
 import StudentHome from "./containers/StudentHome";
 import InstructorHome from "./containers/InstructorHome";
 import EditSeatPlan from "./containers/EditSeatPlan";
+import Roster from "./containers/Roster";
 
 // These routes point to different pages within our website
 // ex. To look at the 'Login' page (Login.js), go to https://localhost:5001/login
@@ -25,6 +26,9 @@ export default function Routes() {
       </Route>
       <Route exact path="/EditSeatPlan">
         <EditSeatPlan />
+      </Route>
+      <Route exact path="/Roster">
+        <Roster />
       </Route>
       <Route exact path="/login">
         <Login />

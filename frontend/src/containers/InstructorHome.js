@@ -359,6 +359,10 @@ export default function InstructorHome() {
 		window.location.reload();
 	}
 
+	const openRoster = () => {
+		history.push("/Roster");
+	}
+
 	const Transition = React.forwardRef(function Transition(props, ref) {
 		return <Slide direction="up" ref={ref} {...props} />;
 	});
@@ -379,8 +383,9 @@ return (
 				</DropdownButton>
 				<div style={{width: "15px", height: "auto", display: "inline-block"}}/>
 				<Button onClick={newClass} variant="light">Add</Button>
-				<Button onClick={makeClass} variant="light" className="pull-right" style={{marginLeft: "15px"}}>Submit</Button>
-				<Button onClick={openAttendancePopup} variant="light" className="pull-right">Take Attendance</Button>
+				<Button onClick={makeClass} variant="light" className="pull-right">Submit</Button>
+				<Button onClick={openAttendancePopup} variant="light" className="pull-right" style={{marginRight: "15px"}}>Take Attendance</Button>
+				<Button onClick={openRoster} variant="light" className="pull-right" style={{marginRight: "15px"}}>View Roster</Button>
 			</div>
 		</div>
 		{ (noClasses === false) &&
