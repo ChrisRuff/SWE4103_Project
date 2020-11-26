@@ -211,9 +211,7 @@ export var AspNetConnector = {
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
-		if (request.status === 200) { // That's HTTP for 'ok'
-			return JSON.parse(request.response);
-		}
+		return request;
 	},
 
 	/* 
@@ -259,12 +257,10 @@ export var AspNetConnector = {
 		var request = new XMLHttpRequest();
         
 		request.open('POST', 'api/class/remove');
-		request.setRequestHeader('Content-type', 'application/json', false);
+		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
-		if (request.status === 200) { // That's HTTP for 'ok'
-			return JSON.parse(request.response);
-		}
+		return request;
 	},
 
 	/* 
