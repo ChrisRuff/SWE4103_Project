@@ -13,12 +13,14 @@ export default class Seat extends Component {
 		{
 			this.state = {
 				seatType: "available",
+				original: "available",
 			};
 		}
 		else
 		{
 			this.state = {
 				seatType: props.seatType,
+				original: props.seatType
 			};
 		}
 		StateManager.incX();
@@ -53,11 +55,10 @@ export default class Seat extends Component {
 	handleClick = () => {
 		
         
-		const currentState = this.state.seatType;
 		
 		if(StateManager.getSelectedSeat() === null){
 		
-			if(this.state.seatType === "available"){
+			if(this.state.seatType === "available" || this.state.seatType == "accessible"){
 				this.setState({seatType: "reserved"}); 
 				StateManager.changeSeatType(this.x, this.y, "reserved");
 			}
@@ -65,23 +66,19 @@ export default class Seat extends Component {
 				return;
 			}
 		}
-
 		else {
-			
 			if(this.x === StateManager.getSelectedSeat().x && this.y === StateManager.getSelectedSeat().y){
 				StateManager.setSelectedSeat(null);
-			
-				this.setState({seatType: "available"});
-				StateManager.changeSeatType(this.x, this.y, "available");
+				this.setState({seatType: this.state.original});
+				StateManager.changeSeatType(this.x, this.y, this.state.original);
 				return;
 			}
-			else if(this.state.seatType === "available"){
-
-			
+			else if(this.state.seatType === "available" || this.state.seatType === "accessible"){
 				this.setState({seatType: "reserved"}); 
 				StateManager.changeSeatType(this.x, this.y, "reserved");
-				StateManager.getSelectedSeat().setState({seatType: "available"});
-				StateManager.changeSeatType(StateManager.getSelectedSeat().x, StateManager.getSelectedSeat().y, "available");
+				StateManager.getSelectedSeat().setState({seatType: StateManager.getSelectedSeat().state.original});
+				StateManager.changeSeatType(StateManager.getSelectedSeat().x, StateManager.getSelectedSeat().y, 
+					StateManager.getSelectedSeat().state.original);
 			}
 			else{
 				return;

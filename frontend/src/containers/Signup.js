@@ -58,7 +58,7 @@ export default function Signup() {
     try {
       if(fields.account==="student"){
         const newUser = await AspNetConnector.addStudents([{
-          "studentName": fields.name,
+          "name": fields.name,
           "email": fields.email,
           "pass": hash,
         }]);
