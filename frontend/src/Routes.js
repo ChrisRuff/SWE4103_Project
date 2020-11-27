@@ -6,7 +6,6 @@ import Login from "./containers/Login";
 import Signup from "./containers/Signup";
 import StudentHome from "./containers/StudentHome";
 import InstructorHome from "./containers/InstructorHome";
-import EditSeatPlan from "./containers/EditSeatPlan";
 import Roster from "./containers/Roster";
 
 // These routes point to different pages within our website
@@ -23,9 +22,6 @@ export default function Routes() {
       </Route>
       <Route exact path="/InstructorHome">
         <InstructorHome />
-      </Route>
-      <Route exact path="/EditSeatPlan">
-        <EditSeatPlan />
       </Route>
       <Route exact path="/Roster">
         <Roster />

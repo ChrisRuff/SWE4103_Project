@@ -7,6 +7,7 @@ import { StateManager } from "../StateManager.js";
 import Seat from "../components/Seat.js";
 import { useHistory } from "react-router-dom";
 import { TextField } from "@material-ui/core";
+import InputAdornment from '@material-ui/core/InputAdornment';
 import Legend from "../components/Legend";
 import copy from 'copy-to-clipboard';
 
@@ -170,15 +171,39 @@ export default function InstructorHome() {
 		{
 			return;
 		}
-		var cols = layout[0].props.children.props.children[0].props.children.length;
-		var rows = layout[0].props.children.props.children.length;
+
+		var cols;
+		var rows;
+
+		if(layout[0].props == undefined)
+		{
+			cols = layout[0][0].props.children.props.children[0].props.children.length;
+			rows = layout[0][0].props.children.props.children.length;
+		}
+		else
+		{
+			cols = layout[0].props.children.props.children[0].props.children.length;
+			rows = layout[0].props.children.props.children.length;
+		}
+
 		var className = title;
-		var newClass = [{"className": className, "height": cols, "width": rows}];
-		AspNetConnector.makeClass(newClass);
-		AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
-		addSeats();
+		var newClass = [{"className": className, "height": rows, "width": cols}];
+		var current = [{"className": className}];
+		let response = AspNetConnector.makeClass(newClass);
+		if(response[0].response === false) {
+			AspNetConnector.removeClass(current);
+			setTimeout(() => {
+				AspNetConnector.makeClass(newClass);
+				AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
+				addSeats();
+			}, 500);
+		}
+		else{
+			AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
+			addSeats();
+		}
 	}
-	
+
 	const addSeats = () => {
 		var currentLayout = StateManager.getSeats();
 		AspNetConnector.wipeSeats([{"className": title}]);
@@ -346,6 +371,63 @@ export default function InstructorHome() {
 			alert("Please save your class!")
 	}
 
+	const [editing, setEditing] = useState(StateManager.getIsEditing() != null);
+	var rowNum = StateManager.getRows();
+	var colNum = StateManager.getCols();
+
+	const showEditing = () =>
+	{
+		setEditing(true);
+	}
+
+	const changeSize = () =>
+	{
+		// Check if the user has entered a new row and column number
+		if(StateManager.getRows() == rowNum && StateManager.getCols() == colNum) {
+			window.alert("Please enter a new row and column number.");
+		} else {
+			// Confirm user's change
+			let response = window.confirm("Are you sure you want to change the seat plan?");
+
+			if(response) {
+				setLayout(layout => [createLayout(rowNum, colNum)]);
+				setEditing(false);
+			}
+		}
+	}
+
+	/*
+	anything entered in width and height textfields get saved into rowNum and colNum
+	that are going to be used later when the user hits the confirm button
+	*/
+	const handleRowTextFieldChange = x => {
+		if(isNumeric(x.target.value))
+			rowNum = x.target.value;
+		else if (x.target.value != "")
+		{
+			x.target.value = "";
+			window.alert("Please enter only numeric values!")
+		}
+	}
+	const handleColTextFieldChange = x => {
+		if(isNumeric(x.target.value))
+			colNum = x.target.value;
+		else if (x.target.value != "")
+		{
+			x.target.value = "";
+			window.alert("Please enter only numeric values!")
+		}
+	}
+
+	const cancelEditSeatPlan= () => {
+		setEditing(false);
+	}
+
+	function isNumeric(str) {
+		if (typeof str != "string") return false
+		return !isNaN(str) && !isNaN(parseFloat(str))
+	}
+  
 	const openAttendancePopup = () => {
 		setAttendancePopup(true);
 	}
@@ -395,7 +477,33 @@ return (
 				<Legend/>
 			</div>
 			<div className="layoutFooter">
-				<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
+				{ (editing === false || editing === null) && 
+				<Button onClick={showEditing} variant="light">Edit Seat Plan</Button>
+				}
+				{ (editing === true) &&
+				<div className="editSeatPlan">
+					<Button onClick={changeSize} variant="light">Apply</Button>
+					<span>
+						<TextField
+							variant="outlined"
+							onChange={handleRowTextFieldChange}
+							InputProps={{
+								endAdornment: <InputAdornment position="end">Row(s)</InputAdornment>
+							}}
+						/>
+					</span>
+					<span>
+						<TextField
+							variant="outlined"
+							onChange={handleColTextFieldChange}
+							InputProps={{
+								endAdornment: <InputAdornment position="end">Col(s)</InputAdornment>
+							}}
+						/>
+					</span>
+					<Button onClick={cancelEditSeatPlan} variant="light">X</Button>
+				</div>
+				}
 				<DropdownButton 
 						onSelect={moreOptions.bind(this)}
 						title="More Options..."
@@ -417,7 +525,7 @@ return (
         style={{width: '400px', height: 'auto'}}
         defaultValue=""
         InputProps={{
-          readOnly: true,
+        	readOnly: true,
         }}
         />
 		{
