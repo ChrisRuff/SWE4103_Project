@@ -264,7 +264,8 @@ namespace test
 			// Ensure there aren't any test classes out there 
 			while(DatabaseConnector.Connector.RemoveClass("Cool_Test_Class"));
 
-			DatabaseConnector.Connector.MakeClass("Cool_Test_Class", 5, 5); 
+			DatabaseConnector.Connector.MakeClass("Cool_Test_Class", 5, 5);
+			DatabaseConnector.Connector.AddClassProf("bestbuytest2@hotmail.com", "Cool_Test_Class"); 
 
 			string[] test = new string[] {"Stephen Cole", "Chris Ruff"};
 			var addedAttendance = DatabaseConnector.Connector.AddAttendance("Cool_Test_Class", "Nov 23", test);
