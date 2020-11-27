@@ -54,7 +54,6 @@ namespace backend
 
 			// Insert it into the database
 			students.InsertOne(newStudent);
-			Console.WriteLine("AHH");
 			return true;
 		}
 

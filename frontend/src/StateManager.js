@@ -13,6 +13,7 @@ export var StateManager = {
 	numCols: 0,
 	seats: [],
 	mandatoryStatus: null,
+	isEditing: null,
 	wipe() {
 		this.classLayout = null;
 		this.accountState = null;
@@ -62,11 +63,12 @@ export var StateManager = {
 	addSeat(x, y, seatType, seat) {
 		this.seats.push({"seatType": seatType, "x": x, "y": y, "seat": seat});
 
+
 		if(this.seats.length > this.numCols * this.numRows)
 			this.seats.pop(this.numCols * this.numRows);
 	},
 	changeSeatType(x, y, seatType) {
-		var seatLoc = y * this.numRows + x; 
+		var seatLoc = (this.numCols * y) + x; 
 		this.seats[seatLoc].seatType = seatType;
 	},
 	getSeat(x,y) {
@@ -103,8 +105,14 @@ export var StateManager = {
 	setRows(numRows) {
 		this.numRows = numRows;
 	},
+	getRows(){
+		return this.numRows;
+	},
 	setCols(numCols) {
 		this.numCols = numCols;
+	},
+	getCols(){
+		return this.numCols;
 	},
 	getSeats() {
 		return this.seats;
@@ -120,6 +128,12 @@ export var StateManager = {
 	},
 	getSelectedSeat() {
 		return this.selectedSeat;
+	},
+	getIsEditing(){
+		return this.isEditing;
+	},
+	setIsEditing(isEditing){
+		this.isEditing = isEditing; 
 	}
 
 }
