@@ -21,6 +21,16 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 
+// Material UI imports for roster view
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import StyledTableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
 // Material UI imports for date and time picker
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
 import {
@@ -32,6 +42,7 @@ export default function InstructorHome() {
 
 	const history = useHistory();
 	const [attendancePopup, setAttendancePopup] = useState(false);
+	const [rosterPopup, setRosterPopup] = useState(false);
 	const [selectedDate, handleDateChange] = useState(new Date());
 	const [linkShown, setLinkShown] = useState(false);
 
@@ -441,13 +452,26 @@ export default function InstructorHome() {
 		window.location.reload();
 	}
 
-	const openRoster = () => {
-		history.push("/Roster");
-	}
-
 	const Transition = React.forwardRef(function Transition(props, ref) {
 		return <Slide direction="up" ref={ref} {...props} />;
 	});
+
+	const closeRosterPopup = () => {
+		setRosterPopup(false);
+	}
+
+	const openRosterPopup = () => {
+		setRosterPopup(true);
+	}
+
+	// styles for the Roster View
+	const useStyles = makeStyles({
+		RosterTable: {
+		  minWidth: 650,
+		},
+	  });
+	
+	const Roster = useStyles();
 
 return (
     <div>
@@ -467,7 +491,7 @@ return (
 				<Button onClick={newClass} variant="light">Add</Button>
 				<Button onClick={makeClass} variant="light" className="pull-right">Submit</Button>
 				<Button onClick={openAttendancePopup} variant="light" className="pull-right" style={{marginRight: "15px"}}>Take Attendance</Button>
-				<Button onClick={openRoster} variant="light" className="pull-right" style={{marginRight: "15px"}}>View Roster</Button>
+				<Button onClick={openRosterPopup} variant="light" className="pull-right" style={{marginRight: "15px"}}>View Roster</Button>
 			</div>
 		</div>
 		{ (noClasses === false) &&
@@ -568,6 +592,37 @@ return (
 				}
 			</Dialog>
 		}
+		{rosterPopup &&
+		<Dialog fullScreen open={rosterPopup} onClose={closeRosterPopup} TransitionComponent={Transition}>
+			<AppBar style={{ position: 'relative', color: '#cd5c5c' }}>
+				<Toolbar>
+					<IconButton className="RosterTitle" edge="start" onClick={closeRosterPopup} aria-label="close">
+						<CloseIcon />
+					</IconButton>
+					<Typography className="RosterTitle" variant="h3" style={{ marginLeft: '15px', flex: 1 }}>
+						Roster
+					</Typography>
+				</Toolbar>
+			</AppBar>
+
+			<TableContainer component={Paper}>
+				<Table className={Roster.table} aria-label="Custom roster table">
+					<TableHead>
+						<TableRow>
+							<StyledTableCell>Name</StyledTableCell>
+							<StyledTableCell align="right">Email</StyledTableCell>
+							<StyledTableCell align="right">Blah</StyledTableCell>
+							<StyledTableCell align="right">Blah</StyledTableCell>
+							<StyledTableCell align="right">Blah</StyledTableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+					</TableBody>
+				</Table>
+			</TableContainer>
+			
+		</Dialog>
+	}
 	</div>
 );
 }
