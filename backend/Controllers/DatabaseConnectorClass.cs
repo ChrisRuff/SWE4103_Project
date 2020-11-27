@@ -251,17 +251,21 @@ namespace backend
 			MrClassy.notificationFreq = foundClass["notificationFreq"].ToInt32();
 			
 			var roster = foundClass["roster"].AsBsonArray;
-			MrClassy.roster = new StudentRosterDTO[roster.Count];
-			for(int i = 0; i < roster.Count; ++i)
+			if(roster.Count != 0)
 			{
-				StudentRosterDTO rStudent = new StudentRosterDTO();
-				rStudent.studentName = (string)roster["name"];
-				var daysMissed = roster["daysMissed"].AsBsonArray;
-				rStudent.daysMissed = new string[daysMissed.Count];
-				for(int j = 0; j < daysMissed.Count; j++)
-					rStudent.daysMissed[i] = (string)daysMissed[i];
+				MrClassy.roster = new StudentRosterDTO[roster.Count];
+				for(int i = 0; i < roster.Count; ++i)
+				{
+					StudentRosterDTO rStudent = new StudentRosterDTO();
+					rStudent.studentName = (string)roster[i]["name"];
+					var daysMissed = roster[i]["daysMissed"].AsBsonArray;
+					rStudent.daysMissed = new string[daysMissed.Count];
+					for(int j = 0; j < daysMissed.Count; j++)
+						rStudent.daysMissed[j] = (string)daysMissed[j];
+					
+					MrClassy.roster[i] = rStudent;
+				}
 
-				MrClassy.roster[i] = rStudent;
 			}
 			
 			try { MrClassy.mandatory = foundClass["mandatory"].ToBoolean(); } catch(Exception e) {}

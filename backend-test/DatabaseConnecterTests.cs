@@ -271,9 +271,10 @@ namespace test
 			var addedAttendance = DatabaseConnector.Connector.AddAttendance("Cool_Test_Class", "Nov 23", test);
 
 			var addedAttendance2 = DatabaseConnector.Connector.AddAttendance("Cool_Test_Class", "Nov 25", test);
+
 			string[] test2 = new string[] {"Stephen Cole", "Reid HURLBURT"};
 			var addedAttendance3 = DatabaseConnector.Connector.AddAttendance("Cool_Test_Class", "Nov 26", test2);
-
+			
 			Assert.True(addedAttendance);
 			Assert.True(addedAttendance2);
 			Assert.True(addedAttendance3);
