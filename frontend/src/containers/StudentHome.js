@@ -222,6 +222,7 @@ export default function StudentHome() {
 		} else if(alreadyReservedSeat) {
 			window.alert("You have already reserved a seat for this class."); // the student has already reserved a seat
 			StateManager.getSelectedSeat().setState({seatType: StateManager.getSelectedSeat().state.original}); // change color of clicked seat back to unreserved
+			StateManager.setSelectedSeat(null);
 		} else {
 			response = window.confirm("Do you really want to reserve this seat?");
 
