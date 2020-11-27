@@ -5,6 +5,8 @@ export var StateManager = {
 	classLayout: null,
 	selectedClass: "--",
 	selectedSeat: null,
+	trackingMode: false,
+	submitted: false,
 	prof: null,
 	student: null,
 	x: 0,
@@ -19,10 +21,24 @@ export var StateManager = {
 		this.accountState = null;
 		this.selectedClass = "--";
 		this.prof = null;
+		this.submitted = false;
 		this.student = null;
 		this.numRows = 0;
 		this.numCols = 0;
+		this.trackingMode = false;
 		this.wipeSeats();
+	},
+	setSubmitted(s) {
+		this.submitted = s;
+	},
+	isSubmitted() {
+		return this.submitted;
+	},
+	setTrackingMode(m) {
+		this.trackingMode = m;
+	},
+	getTrackingMode() {
+		return this.trackingMode;
 	},
 	setExampleData(data) {
 		this.exampleData = data;
