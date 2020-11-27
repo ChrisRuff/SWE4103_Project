@@ -188,20 +188,12 @@ export default function InstructorHome() {
 
 		var className = title;
 		var newClass = [{"className": className, "height": rows, "width": cols}];
-		var current = [{"className": className}];
 		let response = AspNetConnector.makeClass(newClass);
 		if(response[0].response === false) {
-			AspNetConnector.removeClass(current);
-			setTimeout(() => {
-				AspNetConnector.makeClass(newClass);
-				AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
-				addSeats();
-			}, 500);
+			AspNetConnector.editClasses(newClass);
 		}
-		else{
-			AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
-			addSeats();
-		}
+		AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
+		addSeats();
 	}
 
 	const addSeats = () => {

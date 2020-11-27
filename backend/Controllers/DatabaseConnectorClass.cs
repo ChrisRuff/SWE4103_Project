@@ -354,5 +354,30 @@ namespace backend
 
 			return true;
 		}
+		public bool EditClass(string className, int width, int height)
+		{
+			// Create a filter that will find the class with the given name
+			FilterDefinition<BsonDocument> query 
+				= Builders<BsonDocument>.Filter.Eq("name", className);
+
+
+			var foundClasses = classes.Find(query);
+			if(foundClasses.CountDocuments() <= 0)
+			{
+				return false;
+			}
+			var foundClass = foundClasses.First();
+
+			// Create a update routine that will update a class 
+			UpdateDefinition<BsonDocument> update = 
+				Builders<BsonDocument>.Update.Set("height", height);
+			classes.UpdateOne(foundClass, update);
+
+			update = 
+				Builders<BsonDocument>.Update.Set("width", width);
+			classes.UpdateOne(foundClass, update);
+
+			return WipeSeats(className);
+		}
 	}
 }
