@@ -13,8 +13,6 @@ import Legend from "../components/Legend";
 
 export default function StudentHome() {
 
-  var noClasses = false;
-
   const history = useHistory();
 
 	var url_string = window.location.href;
@@ -41,8 +39,15 @@ export default function StudentHome() {
 		request.onload = async function() {
 			var response = await JSON.parse(request.response);
 			var classFromCode = response[0].className;
+			// check if student is already enrolled
+			var studentInClass = false;
+			for (var i=0; i < classListLength; i++) {
+				if (classList[i] == classFromCode) {
+					studentInClass = true;
+				}
+			}
 			// if valid class code, ask user if they would like to register
-			if (classFromCode!=null) {
+			if (classFromCode!=null && !studentInClass) {
 				let answer = window.confirm(`Would you like to register for ${classFromCode}?`);
 				// if they would like to register, call addClassToStudent
 				if (answer) {
@@ -55,6 +60,9 @@ export default function StudentHome() {
 						response = await JSON.parse(request.response);
 					}
 				}
+			}
+			else if (studentInClass) {
+				alert("You are already registered for this class");
 			}
 			else {
 				alert("Invalid registration link.");
@@ -75,19 +83,21 @@ export default function StudentHome() {
 
 	let student = StateManager.getStudent();
 	let classList = [];
+	let classListLength = 0;
 	if(student !== null)
 	{
 		student = JSON.parse(AspNetConnector.getStudents([StateManager.getStudent()]).response)[0];
-		console.log(student);
 		if (student.classes == null) {
-			noClasses = true;
+			setNoClasses(true);
 		}
 		else if (student.classes !== null) {
 			for(let i = 0; i < student.classes.length; i++){
 				classList.push(student.classes[i].className);
+				classListLength++;
 			}
 		}
 	}
+	const [noClasses, setNoClasses] = useState(classList.length === 0 && StateManager.getClassLayout() === null);
 
 	const loadLayout = (classDTO) => {
 		StateManager.wipeSeats();
@@ -103,7 +113,9 @@ export default function StudentHome() {
 			for (var i = 0; i < classDTO.width; i++) {
 
 				// Find type of seat from classDTO
-				let type = ""
+				let type = "";
+				let name = "";
+				let email = "";
 				for(let k = 0; k < classDTO.disabledSeats.length; ++k)
 				{
 					if(classDTO.disabledSeats[k].x === i &&
@@ -120,14 +132,6 @@ export default function StudentHome() {
 						type = "open"
 					}
 				}
-				for(let k = 0; k < classDTO.reservedSeats.length; ++k)
-				{
-					if(classDTO.reservedSeats[k].x === i &&
-						classDTO.reservedSeats[k].y === j )
-					{
-						type = "reserved"
-					}
-				}
 				for(let k = 0; k < classDTO.accessibleSeats.length; ++k)
 				{
 					if(classDTO.accessibleSeats[k].x === i &&
@@ -136,10 +140,20 @@ export default function StudentHome() {
 						type = "accessible"
 					}
 				}
+				for(let k = 0; k < classDTO.reservedSeats.length; ++k)
+				{
+					if(classDTO.reservedSeats[k].x === i &&
+						classDTO.reservedSeats[k].y === j )
+					{
+						name = classDTO.reservedSeats[k].name;
+						email = classDTO.reservedSeats[k].email;
+						type = "reserved"
+					}
+				}
 				// Add seat with specified seat type
 				cols.push(
 					<div key={i} className="StudentSeat">
-						<StudentSeat x={i} y={j} seatType={type}/>
+						<StudentSeat x={i} y={j} seatType={type} email={email} name={name}/>
 					</div>
 						);
 			}
@@ -172,11 +186,7 @@ export default function StudentHome() {
 			}
 		}
 		else {
-			emptyLayout.push( //gives this statement if student has no classes
-				<div key="root" className="root">
-					<h1 style= {{textAlign: 'center', padding: '50px' }}> There are no classes to display </h1>
-				</div>
-				);
+			alert("Could not load class");
 		}
 	}
 
@@ -193,7 +203,7 @@ export default function StudentHome() {
 		}
 	}
 
-	const handleSubmit = () => {
+	const handleSubmit = () => { 
 		let response = null;
 		
 		// check whether the user selected a seat to reserve
@@ -201,20 +211,18 @@ export default function StudentHome() {
 			window.alert("Please select a seat to reserve.");
 		} else {
 			response = window.confirm("Do you really want to reserve this seat?");
-
-			if(response) {
-				try{
-					AspNetConnector.reserveSeat([{
-						"className": StateManager.getSelectedClass(),
-						"seat": {
-							"x": StateManager.getSelectedSeat().x,
-							"y": StateManager.getSelectedSeat().y,
-						}
-					}]);
-				} catch (e){
-						
-				}
-			}
+		}
+		if(response) {
+			try{
+				AspNetConnector.reserveSeat([{
+					"className": StateManager.getSelectedClass(),
+					"seat": {
+						"x": StateManager.getSelectedSeat().x,
+						"y": StateManager.getSelectedSeat().y,
+						"email": StateManager.getStudent().email
+					}
+				}]);
+			} catch (e){}
 		}
 	}
 
