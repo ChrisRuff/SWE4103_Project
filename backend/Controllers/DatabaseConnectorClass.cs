@@ -356,7 +356,6 @@ namespace backend
 
 			return true;
 		}
-		// Bad comment v3
 		public bool AddAttendance(string className, string date, string[] students)
 		{
 			FilterDefinition<BsonDocument> query 
@@ -371,19 +370,18 @@ namespace backend
 			var foundClass = foundClasses.First();
 
 			var roster = foundClass["roster"].AsBsonArray;
+
+			// if there are no students in the roster create a new roster
 			if( roster.Count == 0)
 			{
-				ArrayList newRoster = new ArrayList();
+				BsonArray newRoster = new BsonArray();
 				for(int i = 0; i < students.Length; i++)
 				{
-					StudentRosterDTO rosterStudent = new StudentRosterDTO();
-					rosterStudent.daysMissed = new ArrayList();
-					rosterStudent.daysMissed.Add(date);
-					rosterStudent.name = students[i];
-					newRoster.Add(rosterStudent);
+					BsonArray  daysMissed = new BsonArray { BsonValue.Create(date) };
+					BsonDocument bStudent = new BsonDocument{{"name", students[i]}, {"daysMissed", daysMissed}};
+					newRoster.Add(bStudent);
 				}
 
-				Console.WriteLine(newRoster);
 				UpdateDefinition<BsonDocument> update =
 					Builders<BsonDocument>.Update.Set("roster", newRoster);
 
@@ -423,27 +421,9 @@ namespace backend
 					}
 				}
 
-
-				/*ArrayList newRoster = new ArrayList();
-				for(int i = 0; i < roster.Count; i++)
-				{
-					StudentRosterDTO rosterStudent = new StudentRosterDTO();
-					rosterStudent.daysMissed = new ArrayList();
-					var daysMissed = roster[i]["daysMissed"].AsBsonArray;
-
-					for(int j=0; j < daysMissed.Count; j++)
-					{
-						rosterStudent.daysMissed.Add(daysMissed[j]);
-					}
-					rosterStudent.name = (string)roster[i]["name"];
-					newRoster.Add(rosterStudent);
-				}*/
-
-				Console.WriteLine(roster);
-				UpdateDefinition<BsonDocument> update =
-					Builders<BsonDocument>.Update.Set("roster", roster);
-
-				classes.UpdateOne(foundClass, update);
+				// Replace current roster with new roster
+				foundClass["roster"] = roster;
+				classes.FindOneAndReplace(query, foundClass);
 			}
 			return true;
 		}

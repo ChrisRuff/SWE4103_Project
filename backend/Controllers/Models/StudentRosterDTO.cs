@@ -6,7 +6,9 @@ namespace backend.Controllers.Models
 {
 	public class StudentRosterDTO
 	{
-		public string name { get; set; }
-		public ArrayList daysMissed { get; set; }
+		public string[] studentNames { get; set; }
+		public string date { get; set; }
+		public string className { get; set; }
+		public bool response { get; set; }
 	}
 } 
