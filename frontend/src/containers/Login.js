@@ -86,6 +86,8 @@ export default function Login() {
 						localStorage.setItem('user', JSON.stringify(obj[0]));
 						localStorage.setItem('type', "prof");
             history.push("/InstructorHome"); 
+            
+            
           }
           else{
             onError("Invalid password");

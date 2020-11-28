@@ -212,7 +212,7 @@ export default function StudentHome() {
 			}
 		}
 	   
-		
+		console.log(StateManager.getStudent())
         
 	}
 
@@ -230,6 +230,7 @@ export default function StudentHome() {
           ))}
         </DropdownButton>
           <Button onClick={handleSubmit} className="pull-right" variant="light">Submit</Button>
+		  <h4 style={{marginLeft: '25px'}}>Hello, {StateManager.getStudent().name}</h4>
       </div>
 	  	{!noClasses && (
             <div className="main">
