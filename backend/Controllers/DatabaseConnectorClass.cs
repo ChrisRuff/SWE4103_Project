@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using backend.Controllers.Models;
 
 using MongoDB.Driver;
@@ -33,7 +34,8 @@ namespace backend
 				{ "dSeats", new BsonArray{}},
 				{ "rSeats", new BsonArray{}},
 				{ "aSeats", new BsonArray{}},
-				{ "oSeats", new BsonArray{}}
+				{ "oSeats", new BsonArray{}},
+				{ "roster", new BsonArray{}}
 			};
 
 			// Insert it into the database
