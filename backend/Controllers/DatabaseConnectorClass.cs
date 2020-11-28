@@ -354,9 +354,81 @@ namespace backend
 
 			return true;
 		}
-		public bool EditClass(string className, int width, int height)
+		public bool AddAttendance(string className, string date, string[] students)
 		{
 			// Create a filter that will find the class with the given name
+			FilterDefinition<BsonDocument> query 
+				= Builders<BsonDocument>.Filter.Eq("name", className);
+
+
+			var foundClasses = classes.Find(query);
+			if(foundClasses.CountDocuments() <= 0)
+			{
+				return false;
+			}
+			var foundClass = foundClasses.First();
+
+			var roster = foundClass["roster"].AsBsonArray;
+
+			// if there are no students in the roster create a new roster
+			if( roster.Count == 0)
+			{
+				BsonArray newRoster = new BsonArray();
+				for(int i = 0; i < students.Length; i++)
+				{
+					BsonArray  daysMissed = new BsonArray { BsonValue.Create(date) };
+					BsonDocument bStudent = new BsonDocument{{"name", students[i]}, {"daysMissed", daysMissed}};
+					newRoster.Add(bStudent);
+				}
+
+				UpdateDefinition<BsonDocument> update =
+					Builders<BsonDocument>.Update.Set("roster", newRoster);
+
+				classes.UpdateOne(foundClass, update);
+
+
+			}
+			else
+			{
+
+				//Deal with students who have missed a class before
+				for(int i = 0; i < students.Length; i++)
+				{
+					for(int j = 0; j < roster.Count; j++)
+					{
+
+						if(students[i] == roster[j]["name"])
+						{	
+							if(roster[j]["daysMissed"].AsBsonArray.Contains(date) == false)
+							{
+								roster[j]["daysMissed"].AsBsonArray.Add(date);
+							}
+							students[i] = "included";
+						}
+						
+					}
+				}
+
+				//Deal with new delinquents
+				for(int i = 0; i < students.Length; i++)
+				{
+					if(students[i] != "included")
+					{
+						BsonArray  daysMissed = new BsonArray { BsonValue.Create(date) };
+						BsonDocument bStudent = new BsonDocument{{"name", students[i]}, {"daysMissed", daysMissed}};
+						roster.Add(bStudent);
+					}
+				}
+
+				// Replace current roster with new roster
+				foundClass["roster"] = roster;
+				classes.FindOneAndReplace(query, foundClass);
+			}
+			return true;
+		}
+        public bool EditClass(string className, int width, int height)
+        {
+            // Create a filter that will find the class with the given name
 			FilterDefinition<BsonDocument> query 
 				= Builders<BsonDocument>.Filter.Eq("name", className);
 

@@ -461,5 +461,17 @@ export var AspNetConnector = {
 		if (request.status === 200) { // That's HTTP for 'ok'
 			return JSON.parse(request.response);
 		}
+	},
+	},
+	AddAttendanceRoster: function(studentRoster) {
+		var request = new XMLHttpRequest();
+
+		request.open('POST', 'api/class/add/attendance', false);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(studentRoster));
+
+		if (request.status === 200) {
+			return JSON.parse(request.response);
+		}
 	}
 }
