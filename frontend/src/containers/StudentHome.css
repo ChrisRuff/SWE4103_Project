@@ -55,3 +55,8 @@
   pointer-events: none;
   margin: auto;
 }
+
+.removeClass {
+  padding: 10px;
+  margin: 10px;
+}

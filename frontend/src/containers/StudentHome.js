@@ -259,10 +259,13 @@ export default function StudentHome() {
           <Button onClick={handleSubmit} className="pull-right" variant="light">Submit</Button>
       </div>
 	  	{!noClasses && (
-            <div className="main">
-			<Fragment>{layout}</Fragment>
-			<Legend/>
-		    </div>
+			<div>
+				<div className="main">
+				<Fragment>{layout}</Fragment>
+				<Legend/>
+				</div>
+				<Button onClick={handleSubmit} className="removeClass" variant="light">Remove Class</Button>
+			</div>
           )}
         {noClasses && (
             <div key="root" className="root">
