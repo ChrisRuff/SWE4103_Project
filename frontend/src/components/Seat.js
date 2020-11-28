@@ -67,11 +67,13 @@ export default class Seat extends Component {
 		{
 			if(currentState === "reserved")
 			{
+				StateManager.addAbsentSeat(this);
 				this.setState({seatType: "absent"}); 
 				StateManager.changeSeatType(this.x, this.y, "absent")
 			}
 			else if(currentState === "absent")
 			{
+				StateManager.removeAbsentSeat(this);
 				this.setState({seatType: "reserved"}); 
 				StateManager.changeSeatType(this.x, this.y, "reserved")
 			}

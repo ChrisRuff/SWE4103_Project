@@ -7,6 +7,7 @@ export var StateManager = {
 	selectedSeat: null,
 	trackingMode: false,
 	submitted: false,
+	absentSeats: [],
 	prof: null,
 	student: null,
 	x: 0,
@@ -30,6 +31,24 @@ export var StateManager = {
 	},
 	setSubmitted(s) {
 		this.submitted = s;
+	},
+	addAbsentSeat(seat)
+	{
+		this.absentSeats.push(seat.state.name);
+	},
+	getAbsentSeats()
+	{
+		return this.absentSeats;
+	},
+	removeAbsentSeat(seat)
+	{
+		for(let i = 0; i < this.absentSeats.length; ++i)
+		{
+			if(this.absentSeats[i].name == seat.name)
+			{
+				this.absentSeats.splice(i, 1);
+			}
+		}
 	},
 	isSubmitted() {
 		return this.submitted;

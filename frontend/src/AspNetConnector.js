@@ -462,7 +462,6 @@ export var AspNetConnector = {
 			return JSON.parse(request.response);
 		}
 	},
-	},
 	AddAttendanceRoster: function(studentRoster) {
 		var request = new XMLHttpRequest();
 

@@ -442,7 +442,18 @@ export default function InstructorHome() {
 	}
 
 	const markAbsents = () => {
+		let absents = StateManager.getAbsentSeats();
+		let obj = 
+			[{
+				"studentNames": absents, 
+				"date": selectedDate, 
+				"className": title
+			}];
+
+		console.log(obj);
+		AspNetConnector.AddAttendanceRoster(obj)
 	}
+
 	const saveAttendanceAndClose = () => {
 		markAbsents();
 		StateManager.setTrackingMode(false);
