@@ -446,7 +446,7 @@ export default function InstructorHome() {
 		let obj = 
 			[{
 				"studentNames": absents, 
-				"date": selectedDate, 
+				"date": (selectedDate.getDay() + "/" + selectedDate.getMonth() + "/" + selectedDate.getYear()), 
 				"className": title
 			}];
 
