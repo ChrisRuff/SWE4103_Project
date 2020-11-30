@@ -135,10 +135,12 @@ namespace test
 			Assert.True(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
 			Assert.False(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
 
-			Assert.True(DatabaseConnector.Connector.ReserveSeat("CS2043", 1, 1));
-			Assert.False(DatabaseConnector.Connector.ReserveSeat("CS2043", 1, 1));
-			Assert.False(DatabaseConnector.Connector.ReserveSeat("CS2043", 10, 10));
-			Assert.False(DatabaseConnector.Connector.ReserveSeat("CS243", 10, 10));
+			DatabaseConnector.Connector.AddStudent("Tester", "scole_test@unb.ca", "password");
+
+			Assert.True(DatabaseConnector.Connector.ReserveSeat("CS2043", 1, 1, "scole_test@unb.ca"));
+			Assert.False(DatabaseConnector.Connector.ReserveSeat("CS2043", 1, 1, "scole_test@unb.ca"));
+			Assert.False(DatabaseConnector.Connector.ReserveSeat("CS2043", 10, 10, "scole_test@unb.ca"));
+			Assert.False(DatabaseConnector.Connector.ReserveSeat("CS243", 10, 10, "scole_test@unb.ca"));
 
 			Assert.True(DatabaseConnector.Connector.RemoveClass("CS2043"));
 
@@ -254,6 +256,46 @@ namespace test
 			Assert.True(stephen.classes[1].seat.y == 5);
 			
 			DatabaseConnector.Connector.RemoveStudent("scole_test@unb.ca");
+		}
+
+		[Fact]
+		public void AddAttendance()
+		{
+			// Ensure there aren't any test classes out there 
+			while(DatabaseConnector.Connector.RemoveClass("Cool_Test_Class"));
+
+			DatabaseConnector.Connector.MakeClass("Cool_Test_Class", 5, 5); 
+
+			string[] test = new string[] {"Stephen Cole", "Chris Ruff"};
+			var addedAttendance = DatabaseConnector.Connector.AddAttendance("Cool_Test_Class", "Nov 23", test);
+
+			var addedAttendance2 = DatabaseConnector.Connector.AddAttendance("Cool_Test_Class", "Nov 25", test);
+			string[] test2 = new string[] {"Stephen Cole", "Reid HURLBURT"};
+			var addedAttendance3 = DatabaseConnector.Connector.AddAttendance("Cool_Test_Class", "Nov 26", test2);
+
+			Assert.True(addedAttendance);
+			Assert.True(addedAttendance2);
+			Assert.True(addedAttendance3);
+		}
+		[Fact]
+		public void EditSeatPlan()
+		{
+			// Ensure there aren't any test classes out there 
+			while(DatabaseConnector.Connector.RemoveClass("Cool_Test_Class"));
+
+			DatabaseConnector.Connector.MakeClass("Cool_Test_Class", 5, 5); 
+
+			var cooltestclass = DatabaseConnector.Connector.GetClass("Cool_Test_Class");
+			Assert.True(cooltestclass.height == 5 && cooltestclass.width == 5);
+
+			Assert.True(DatabaseConnector.Connector.EditClass("Cool_Test_Class", 10, 10));
+
+			cooltestclass = DatabaseConnector.Connector.GetClass("Cool_Test_Class");
+			Console.WriteLine(cooltestclass.height);
+			Console.WriteLine(cooltestclass.width);
+			Assert.True(cooltestclass.height == 10 && cooltestclass.width == 10);
+
+
 		}
 	}
 }

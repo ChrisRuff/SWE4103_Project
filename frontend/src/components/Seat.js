@@ -8,16 +8,20 @@ export default class Seat extends Component {
 		super(props);
 		this.y = StateManager.getY();
 		this.x = StateManager.getX();
-		if(props.seatType == null || props.seatType === "")
+		if(props.seatType === undefined || props.seatType === "")
 		{
 			this.state = {
 				seatType: "available",
+				email: "",
+				name: ""
 			};
 		}
 		else
 		{
 			this.state = {
 				seatType: props.seatType,
+				email: props.email,
+				name: props.name 
 			};
 		}
 		StateManager.incX();
@@ -30,12 +34,16 @@ export default class Seat extends Component {
 		{
 			this.setState({
 				seatType: "available",
+				email: "",
+				name: ""
 			});
 		}
 		else
 		{
 			this.setState({
 				seatType: props.seatType,
+				email: props.email,
+				name: props.name === undefined ? "" : props.name
 			});
 		}
 		StateManager.incX();
@@ -55,31 +63,52 @@ export default class Seat extends Component {
 
 	handleClick = () => {
 		const currentState = this.state.seatType;
-		switch(currentState) {
-			case "available":
-				this.setState({seatType: "accessible"}); 
-				StateManager.changeSeatType(this.x, this.y, "accessible")
-				break;
-			case "accessible":
-				this.open();
-				break;
-			case "open":
-				this.disable();
-				break;
-			case "disabledSeat":
-				this.setState({seatType: "available"});
-				StateManager.changeSeatType(this.x, this.y, "available")
-				break;
-			default:
-				this.disable();
-		} 
+		if(StateManager.getTrackingMode())
+		{
+			if(currentState === "reserved")
+			{
+				StateManager.addAbsentSeat(this);
+				this.setState({seatType: "absent"}); 
+				StateManager.changeSeatType(this.x, this.y, "absent")
+			}
+			else if(currentState === "absent")
+			{
+				StateManager.removeAbsentSeat(this);
+				this.setState({seatType: "reserved"}); 
+				StateManager.changeSeatType(this.x, this.y, "reserved")
+			}
+		}
+		else
+		{
+			switch(currentState) {
+				case "available":
+					this.setState({seatType: "accessible"}); 
+					StateManager.changeSeatType(this.x, this.y, "accessible")
+					break;
+				case "accessible":
+					this.open();
+					break;
+				case "open":
+					this.disable();
+					break;
+				case "disabledSeat":
+					this.setState({seatType: "available"});
+					StateManager.changeSeatType(this.x, this.y, "available")
+					break;
+				default:
+					this.setState({seatType: "available"});
+					StateManager.changeSeatType(this.x, this.y, "available")
+					break;
+			} 
+		}
+		console.log(currentState);
 	}
 	
 	render() {
 		StateManager.addSeat(this.x, this.y, this.state.seatType, this)
 		return (
 			<Button className={this.state.seatType} onClick = {this.handleClick}>
-				Seat<br/>
+				{this.state.name === "" ? "Seat" : this.state.name }<br/>
 				X:{this.x}&nbsp;&nbsp;&nbsp;Y:{this.y}
 			</Button>
 		);

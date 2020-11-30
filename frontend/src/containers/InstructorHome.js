@@ -7,11 +7,33 @@ import { StateManager } from "../StateManager.js";
 import Seat from "../components/Seat.js";
 import { useHistory } from "react-router-dom";
 import { TextField } from "@material-ui/core";
+import InputAdornment from '@material-ui/core/InputAdornment';
 import Legend from "../components/Legend";
+import copy from 'copy-to-clipboard';
+
+// Material UI imports for attendance view
+import ButtonMatUI from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
+import Slide from '@material-ui/core/Slide';
+
+// Material UI imports for date and time picker
+import DateFnsUtils from '@date-io/date-fns'; // choose your lib
+import {
+  DateTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 
 export default function InstructorHome() {
 
 	const history = useHistory();
+	const [attendancePopup, setAttendancePopup] = useState(false);
+	const [selectedDate, handleDateChange] = useState(new Date());
+	const [linkShown, setLinkShown] = useState(false);
 
 	// If there is no prof object(not signed in) then return to the homepage
 	if(StateManager.getProf() == null)
@@ -40,7 +62,7 @@ export default function InstructorHome() {
 		for (var i = 0; i < numCols; i++) {
 			cols.push(
 			<div key={i} className="seat">
-				<Seat key={i} x={i} y={j} />
+				<Seat key={i} x={i} y={j} name={""}/>
 			</div>
 			);
 		}
@@ -77,7 +99,9 @@ export default function InstructorHome() {
 			for (var i = 0; i < classDTO.width; i++) {
 
 				// Find type of seat from classDTO
-				let type = ""
+				let type = "";
+				let name = "";
+				let email = "";
 				for(let k = 0; k < classDTO.disabledSeats.length; ++k)
 				{
 					if(classDTO.disabledSeats[k].x === i &&
@@ -94,14 +118,6 @@ export default function InstructorHome() {
 						type = "open"
 					}
 				}
-				for(let k = 0; k < classDTO.reservedSeats.length; ++k)
-				{
-					if(classDTO.reservedSeats[k].x === i &&
-						classDTO.reservedSeats[k].y === j )
-					{
-						type = "reserved"
-					}
-				}
 				for(let k = 0; k < classDTO.accessibleSeats.length; ++k)
 				{
 					if(classDTO.accessibleSeats[k].x === i &&
@@ -110,10 +126,20 @@ export default function InstructorHome() {
 						type = "accessible"
 					}
 				}
+				for(let k = 0; k < classDTO.reservedSeats.length; ++k)
+				{
+					if(classDTO.reservedSeats[k].x === i &&
+						classDTO.reservedSeats[k].y === j )
+					{
+						name = classDTO.reservedSeats[k].name;
+						email = classDTO.reservedSeats[k].email;
+						type = "reserved"
+					}
+				}
 				// Add seat with specified seat type
 				cols.push(
 					<div key={i} className="seat">
-						<Seat x={i} y={j} seatType={type}/>
+						<Seat x={i} y={j} seatType={type} email={email} name={name}/>
 					</div>
 						);
 			}
@@ -145,15 +171,32 @@ export default function InstructorHome() {
 		{
 			return;
 		}
-		var cols = layout[0].props.children.props.children[0].props.children.length;
-		var rows = layout[0].props.children.props.children.length;
+
+		var cols;
+		var rows;
+
+		if(layout[0].props == undefined)
+		{
+			cols = layout[0][0].props.children.props.children[0].props.children.length;
+			rows = layout[0][0].props.children.props.children.length;
+		}
+		else
+		{
+			cols = layout[0].props.children.props.children[0].props.children.length;
+			rows = layout[0].props.children.props.children.length;
+		}
+
 		var className = title;
-		var newClass = [{"className": className, "height": cols, "width": rows}];
-		AspNetConnector.makeClass(newClass);
+		var newClass = [{"className": className, "height": rows, "width": cols}];
+		let response = AspNetConnector.makeClass(newClass);
+		if(response[0].response === false) {
+			AspNetConnector.editClasses(newClass);
+		}
 		AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
 		addSeats();
+		StateManager.setSubmitted(true);
 	}
-	
+
 	const addSeats = () => {
 		var currentLayout = StateManager.getSeats();
 		AspNetConnector.wipeSeats([{"className": title}]);
@@ -182,6 +225,12 @@ export default function InstructorHome() {
 
 				AspNetConnector.makeSeatAccessible(classDTO);
 			}
+			else if(currentLayout[i].seatType === "reserved"){
+				var reservedSeat = {"x": currentLayout[i].x, "y": currentLayout[i].y, "email": currentLayout[i].seat.state.email};
+				classDTO[0].seat = reservedSeat;
+
+				AspNetConnector.reserveSeat(classDTO);
+			}
 		}
 	}
 
@@ -194,11 +243,13 @@ export default function InstructorHome() {
 			StateManager.setClassLayout(classLayout[0]);
 			setLayout(loadLayout(classLayout[0]));
 		}
+		StateManager.setSubmitted(true);
 	}
 	const newClass = () =>
 	{
 		let name = prompt("New Class Name (Enter section as well e.g. SWE4103_FR01A)");
 		
+		StateManager.setSubmitted(false);
 		for(let i = 0; i < cs.length; ++i)
 		{
 			if(cs[i] === name)
@@ -231,7 +282,14 @@ export default function InstructorHome() {
 			var url = window.location.href.split("/");
 			document.getElementById("link-field").value=`https://${url[2]}/StudentHome?code=${response[0].classCode}`;
 		}
+		setLinkShown(true);
 	}
+
+	const copyLink = () => {
+		var link = document.getElementById("link-field").value;
+		copy(link);
+	}
+
 	if (StateManager.getClassLayout() === null){
 		if (classList[0] !== null && classList[0] !== undefined){
 			let classLayout = JSON.parse(AspNetConnector.getClasses([{"className": classList[0]}]).response);
@@ -240,6 +298,7 @@ export default function InstructorHome() {
 				StateManager.setClassLayout(classLayout[0]);
 				setTitle(StateManager.getSelectedClass());
 				setLayout(loadLayout(classLayout[0]));
+				StateManager.setSubmitted(true);
 			}
 			else
 			{
@@ -272,7 +331,7 @@ export default function InstructorHome() {
 	*/
 	const removeClass = () =>
 	{
-		if(StateManager.getSelectedClass() != null && StateManager.getSelectedClass() != "--") {
+		if(StateManager.getSelectedClass() !== null && StateManager.getSelectedClass() !== "--") {
 			var currentClass = [{"className": StateManager.getSelectedClass()}]
 			AspNetConnector.removeClass(currentClass);
 
@@ -308,6 +367,103 @@ export default function InstructorHome() {
 			alert("Please save your class!")
 	}
 
+	const [editing, setEditing] = useState(StateManager.getIsEditing() != null);
+	var rowNum = StateManager.getRows();
+	var colNum = StateManager.getCols();
+
+	const showEditing = () =>
+	{
+		setEditing(true);
+	}
+
+	const changeSize = () =>
+	{
+		// Check if the user has entered a new row and column number
+		if(StateManager.getRows() == rowNum && StateManager.getCols() == colNum) {
+			window.alert("Please enter a new row and column number.");
+		} else {
+			// Confirm user's change
+			let response = window.confirm("Are you sure you want to change the seat plan?");
+
+			if(response) {
+				setLayout(layout => [createLayout(rowNum, colNum)]);
+				StateManager.setClassLayout(layout);
+				setEditing(false);
+			}
+		}
+	}
+
+	/*
+	anything entered in width and height textfields get saved into rowNum and colNum
+	that are going to be used later when the user hits the confirm button
+	*/
+	const handleRowTextFieldChange = x => {
+		if(isNumeric(x.target.value))
+			rowNum = x.target.value;
+		else if (x.target.value != "")
+		{
+			x.target.value = "";
+			window.alert("Please enter only numeric values!")
+		}
+	}
+	const handleColTextFieldChange = x => {
+		if(isNumeric(x.target.value))
+			colNum = x.target.value;
+		else if (x.target.value != "")
+		{
+			x.target.value = "";
+			window.alert("Please enter only numeric values!")
+		}
+	}
+
+	const cancelEditSeatPlan= () => {
+		setEditing(false);
+	}
+
+	function isNumeric(str) {
+		if (typeof str != "string") return false
+		return !isNaN(str) && !isNaN(parseFloat(str))
+	}
+  
+	const openAttendancePopup = () => {
+		if(StateManager.isSubmitted())
+		{
+			setAttendancePopup(true);
+			StateManager.setTrackingMode(true);
+		}
+		else
+		{
+			alert("You must create a class and submit it before tracking");
+		}
+	}
+	const closeAttendancePopup = () => {
+		setAttendancePopup(false);
+		StateManager.setTrackingMode(false);
+	}
+
+	const markAbsents = () => {
+		let absents = StateManager.getAbsentSeats();
+		let obj = 
+			[{
+				"studentNames": absents, 
+				"date": (selectedDate.getDay() + "/" + selectedDate.getMonth() + "/" + selectedDate.getFullYear()), 
+				"className": title
+			}];
+
+		console.log(obj);
+		AspNetConnector.AddAttendanceRoster(obj)
+	}
+
+	const saveAttendanceAndClose = () => {
+		markAbsents();
+		StateManager.setTrackingMode(false);
+		setAttendancePopup(false);
+	}
+
+	const Transition = React.forwardRef(function Transition(props, ref) {
+		return <Slide direction="up" ref={ref} {...props} />;
+	});
+
 return (
     <div>
 		<div className="layoutHeader">
@@ -323,8 +479,9 @@ return (
 					))}
 				</DropdownButton>
 				<div style={{width: "15px", height: "auto", display: "inline-block"}}/>
-				<Button onClick={newClass} variant="light">Add</Button>				
-				<Button onClick={makeClass} variant="light" className="pull-right">Submit</Button>
+				<Button onClick={newClass} variant="light">Add</Button>
+				<Button onClick={makeClass} variant="light" className="pull-right" style={{marginLeft: "15px"}}>Submit</Button>
+				<Button onClick={openAttendancePopup} variant="light" className="pull-right">Take Attendance</Button>
 			</div>
 			<h4 style={{marginLeft: '25px'}}>Hello {StateManager.getProf().email}</h4>
 		</div>
@@ -335,7 +492,33 @@ return (
 				<Legend/>
 			</div>
 			<div className="layoutFooter">
-				<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
+				{ (editing === false || editing === null) && 
+				<Button onClick={showEditing} variant="light">Edit Seat Plan</Button>
+				}
+				{ (editing === true) &&
+				<div className="editSeatPlan">
+					<Button onClick={changeSize} variant="light">Apply</Button>
+					<span>
+						<TextField
+							variant="outlined"
+							onChange={handleRowTextFieldChange}
+							InputProps={{
+								endAdornment: <InputAdornment position="end">Row(s)</InputAdornment>
+							}}
+						/>
+					</span>
+					<span>
+						<TextField
+							variant="outlined"
+							onChange={handleColTextFieldChange}
+							InputProps={{
+								endAdornment: <InputAdornment position="end">Col(s)</InputAdornment>
+							}}
+						/>
+					</span>
+					<Button onClick={cancelEditSeatPlan} variant="light">X</Button>
+				</div>
+				}
 				<DropdownButton 
 						onSelect={moreOptions.bind(this)}
 						title="More Options..."
@@ -354,12 +537,16 @@ return (
         <TextField
         className="pull-right"
         id="link-field"
-        style={{width: '250px', height: 'auto'}}
+        style={{width: '400px', height: 'auto'}}
         defaultValue=""
         InputProps={{
-          readOnly: true,
+        	readOnly: true,
         }}
         />
+		{
+			(linkShown) &&
+			<Button className="pull-right" onClick={copyLink} varient="light">Copy Link</Button>
+		}
 			</div>
 		</div>
 		}
@@ -369,6 +556,33 @@ return (
 				<h1 style= {{textAlign: 'center', padding: '50px' }}> There are no classes to display </h1>
 			</div> 
 		}
-    </div>
+		{attendancePopup &&
+			<Dialog fullScreen open={attendancePopup} onClose={closeAttendancePopup} TransitionComponent={Transition}>
+				<AppBar style={{position: 'relative', color: '#cd5c5c'}}>
+					<Toolbar>
+						<IconButton className="AttendanceTitle" edge="start" onClick={closeAttendancePopup} aria-label="close">
+						<CloseIcon />
+						</IconButton>
+						<Typography className="AttendanceTitle" variant="h3" style={{marginLeft: '15px', flex: 1}}>
+							Attendance
+						</Typography>
+						<ButtonMatUI className="AttendanceTitle" autoFocus onClick={saveAttendanceAndClose}>
+							save
+						</ButtonMatUI>
+					</Toolbar>
+				</AppBar>
+					<MuiPickersUtilsProvider utils={DateFnsUtils}>
+						<DateTimePicker value={selectedDate} onChange={handleDateChange} />
+					</MuiPickersUtilsProvider>
+				{ (noClasses === false) &&
+					<div className="Attendance">
+						{StateManager.setY(0)}
+						<Fragment>{layout}</Fragment>
+						<Legend/>
+					</div>
+				}
+			</Dialog>
+		}
+	</div>
 );
 }
