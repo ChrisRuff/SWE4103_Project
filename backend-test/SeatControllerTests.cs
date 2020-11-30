@@ -56,6 +56,7 @@ namespace test
 
 			// attempt to disable non existent seat
 			DatabaseConnector.Connector.RemoveClass(testClass[0].className);
+
 			var request = seatController.DisableSeatAPI(testClass);
 			Assert.False(request[0].response);
 
@@ -76,6 +77,7 @@ namespace test
 		{
 			var testStudent = GetTestStudents();
 			var testClass = GetTestClass();
+			var testStudent = GetTestStudents();
 			var seatController = new SeatController(_seatLogger);
 			var studentController = new StudentController(_studentLogger);
 			var classController = new ClassController(_classLogger);
@@ -148,6 +150,7 @@ namespace test
 							x = 5,
 							y = 10,
 							email = "email@email.com"
+
 						}
 					});
 
