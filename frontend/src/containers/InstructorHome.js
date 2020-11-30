@@ -188,20 +188,13 @@ export default function InstructorHome() {
 
 		var className = title;
 		var newClass = [{"className": className, "height": rows, "width": cols}];
-		var current = [{"className": className}];
 		let response = AspNetConnector.makeClass(newClass);
 		if(response[0].response === false) {
-			AspNetConnector.removeClass(current);
-			setTimeout(() => {
-				AspNetConnector.makeClass(newClass);
-				AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
-				addSeats();
-			}, 500);
+			AspNetConnector.editClasses(newClass);
 		}
-		else{
-			AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
-			addSeats();
-		}
+		AspNetConnector.profAddClass([{"email": StateManager.getProf().email, "classes" : [{"className": title}]}]);
+		addSeats();
+		StateManager.setSubmitted(true);
 	}
 
 	const addSeats = () => {
@@ -250,11 +243,13 @@ export default function InstructorHome() {
 			StateManager.setClassLayout(classLayout[0]);
 			setLayout(loadLayout(classLayout[0]));
 		}
+		StateManager.setSubmitted(true);
 	}
 	const newClass = () =>
 	{
 		let name = prompt("New Class Name (Enter section as well e.g. SWE4103_FR01A)");
 		
+		StateManager.setSubmitted(false);
 		for(let i = 0; i < cs.length; ++i)
 		{
 			if(cs[i] === name)
@@ -303,6 +298,7 @@ export default function InstructorHome() {
 				StateManager.setClassLayout(classLayout[0]);
 				setTitle(StateManager.getSelectedClass());
 				setLayout(loadLayout(classLayout[0]));
+				StateManager.setSubmitted(true);
 			}
 			else
 			{
@@ -391,6 +387,7 @@ export default function InstructorHome() {
 
 			if(response) {
 				setLayout(layout => [createLayout(rowNum, colNum)]);
+				StateManager.setClassLayout(layout);
 				setEditing(false);
 			}
 		}
@@ -429,16 +426,38 @@ export default function InstructorHome() {
 	}
   
 	const openAttendancePopup = () => {
-		setAttendancePopup(true);
+		if(StateManager.isSubmitted())
+		{
+			setAttendancePopup(true);
+			StateManager.setTrackingMode(true);
+		}
+		else
+		{
+			alert("You must create a class and submit it before tracking");
+		}
 	}
 	const closeAttendancePopup = () => {
 		setAttendancePopup(false);
+		StateManager.setTrackingMode(false);
+	}
+
+	const markAbsents = () => {
+		let absents = StateManager.getAbsentSeats();
+		let obj = 
+			[{
+				"studentNames": absents, 
+				"date": (selectedDate.getDay() + "/" + selectedDate.getMonth() + "/" + selectedDate.getFullYear()), 
+				"className": title
+			}];
+
+		console.log(obj);
+		AspNetConnector.AddAttendanceRoster(obj)
 	}
 
 	const saveAttendanceAndClose = () => {
-		makeClass();
+		markAbsents();
+		StateManager.setTrackingMode(false);
 		setAttendancePopup(false);
-		window.location.reload();
 	}
 
 	const Transition = React.forwardRef(function Transition(props, ref) {

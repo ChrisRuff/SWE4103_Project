@@ -15,6 +15,7 @@ namespace backend.Controllers.Models
 		public SeatDTO[] AccessibleSeats { get; set; }
 		public SeatDTO[] OpenSeats { get; set; }
 		public string classCode { get; set; }
+		public StudentRosterDTO[] roster { get; set; }
 		public bool response { get; set; }
 	}
 }	

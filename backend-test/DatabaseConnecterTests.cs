@@ -257,5 +257,45 @@ namespace test
 			
 			DatabaseConnector.Connector.RemoveStudent("scole_test@unb.ca");
 		}
+
+		[Fact]
+		public void AddAttendance()
+		{
+			// Ensure there aren't any test classes out there 
+			while(DatabaseConnector.Connector.RemoveClass("Cool_Test_Class"));
+
+			DatabaseConnector.Connector.MakeClass("Cool_Test_Class", 5, 5); 
+
+			string[] test = new string[] {"Stephen Cole", "Chris Ruff"};
+			var addedAttendance = DatabaseConnector.Connector.AddAttendance("Cool_Test_Class", "Nov 23", test);
+
+			var addedAttendance2 = DatabaseConnector.Connector.AddAttendance("Cool_Test_Class", "Nov 25", test);
+			string[] test2 = new string[] {"Stephen Cole", "Reid HURLBURT"};
+			var addedAttendance3 = DatabaseConnector.Connector.AddAttendance("Cool_Test_Class", "Nov 26", test2);
+
+			Assert.True(addedAttendance);
+			Assert.True(addedAttendance2);
+			Assert.True(addedAttendance3);
+		}
+		[Fact]
+		public void EditSeatPlan()
+		{
+			// Ensure there aren't any test classes out there 
+			while(DatabaseConnector.Connector.RemoveClass("Cool_Test_Class"));
+
+			DatabaseConnector.Connector.MakeClass("Cool_Test_Class", 5, 5); 
+
+			var cooltestclass = DatabaseConnector.Connector.GetClass("Cool_Test_Class");
+			Assert.True(cooltestclass.height == 5 && cooltestclass.width == 5);
+
+			Assert.True(DatabaseConnector.Connector.EditClass("Cool_Test_Class", 10, 10));
+
+			cooltestclass = DatabaseConnector.Connector.GetClass("Cool_Test_Class");
+			Console.WriteLine(cooltestclass.height);
+			Console.WriteLine(cooltestclass.width);
+			Assert.True(cooltestclass.height == 10 && cooltestclass.width == 10);
+
+
+		}
 	}
 }
