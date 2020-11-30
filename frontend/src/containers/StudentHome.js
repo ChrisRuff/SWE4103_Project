@@ -197,7 +197,6 @@ export default function StudentHome() {
 			response = window.confirm("Do you really want to reserve this seat?");
 
 			}
-		
 		if(response) {
 			try{
 				AspNetConnector.reserveSeat([{
