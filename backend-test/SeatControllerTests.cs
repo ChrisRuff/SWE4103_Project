@@ -77,7 +77,6 @@ namespace test
 		{
 			var testStudent = GetTestStudents();
 			var testClass = GetTestClass();
-			var testStudent = GetTestStudents();
 			var seatController = new SeatController(_seatLogger);
 			var studentController = new StudentController(_studentLogger);
 			var classController = new ClassController(_classLogger);
