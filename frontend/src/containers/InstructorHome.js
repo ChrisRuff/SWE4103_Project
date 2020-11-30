@@ -326,7 +326,7 @@ return (
 				<Button onClick={newClass} variant="light">Add</Button>				
 				<Button onClick={makeClass} variant="light" className="pull-right">Submit</Button>
 			</div>
-			<h4 style={{marginLeft: '25px'}}>Hello, {StateManager.getProf().email}</h4>
+			<h4 style={{marginLeft: '25px'}}>Hello {StateManager.getProf().email}</h4>
 		</div>
 		{ (noClasses === false) &&
 		<div>

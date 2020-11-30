@@ -78,7 +78,6 @@ export default function StudentHome() {
 	if(student !== null)
 	{
 		student = JSON.parse(AspNetConnector.getStudents([StateManager.getStudent()]).response)[0];
-		console.log(student);
 		if (student.classes == null) {
 			noClasses = true;
 		}
@@ -219,6 +218,7 @@ export default function StudentHome() {
   return (
     <div className="StudentHome">
       <div className="layoutHeader">
+	  <h4 style={{marginLeft: '15px'}}>Hello {student.name}!</h4>
         <DropdownButton 
           title={StateManager.getSelectedClass()}
 		  id="classDropdown"
@@ -230,7 +230,6 @@ export default function StudentHome() {
           ))}
         </DropdownButton>
           <Button onClick={handleSubmit} className="pull-right" variant="light">Submit</Button>
-		  <h4 style={{marginLeft: '25px'}}>Hello, {StateManager.getStudent().name}</h4>
       </div>
 	  	{!noClasses && (
             <div className="main">
