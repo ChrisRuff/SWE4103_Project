@@ -242,6 +242,19 @@ export default function StudentHome() {
 			}
 		}
 	}
+	const handleRemove = () =>
+	{
+		if(StateManager.getSelectedClass() !== null && StateManager.getSelectedClass() !== "--") {
+			var currentClass = [{"className": StateManager.getSelectedClass()}]
+			AspNetConnector.removeClass(currentClass);
+
+			setNoClasses(true)
+			StateManager.setSelectedClass("--");
+			setTitle("--");
+		}
+		else 
+			alert("Please select a class!")
+	}
 
   return (
     <div className="StudentHome">
@@ -264,7 +277,7 @@ export default function StudentHome() {
 				<Fragment>{layout}</Fragment>
 				<Legend/>
 				</div>
-				<Button onClick={handleSubmit} className="removeClass" variant="light">Remove Class</Button>
+				<Button onClick={handleRemove} className="removeClass" variant="light">Remove Class</Button>
 			</div>
           )}
         {noClasses && (
