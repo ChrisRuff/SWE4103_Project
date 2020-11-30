@@ -75,8 +75,8 @@ namespace test
 		[Fact]
 		public void ReserveSeat()
 		{
-			var testClass = GetTestClass();
 			var testStudent = GetTestStudents();
+			var testClass = GetTestClass();
 			var seatController = new SeatController(_seatLogger);
 			var studentController = new StudentController(_studentLogger);
 			var classController = new ClassController(_classLogger);
