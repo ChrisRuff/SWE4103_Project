@@ -59,6 +59,7 @@ export default function StudentHome() {
 					request.onload = async function() {
 						response = await JSON.parse(request.response);
 					}
+					window.location.reload(false);
 				}
 			}
 			else if (studentInClass) {
@@ -236,6 +237,7 @@ export default function StudentHome() {
 							"email": StateManager.getStudent().email
 						}
 					}]);
+					window.location.reload(false);
 				} catch (e) {
 
 				}
