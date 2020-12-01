@@ -41,7 +41,7 @@ export var AspNetConnector = {
 			
 		var request = new XMLHttpRequest();
         
-		request.open('POST', 'api/student/add', false);
+		request.open('POST', 'api/student/add',	 false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
@@ -203,6 +203,34 @@ export var AspNetConnector = {
 		var request = new XMLHttpRequest();
         
 		request.open('POST', 'api/student/get', false);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(students));
+		
+		return request;
+			
+	},
+		
+	/* var student = [{
+      	"name": "cruff",
+      	"classes":[{"className": "SWE4103", "seat":{"x":1,"y":1}}], 
+      	"email": "cruffy_test@unb.net",
+	  	"pass": "password",
+      	"response": false
+	  }]
+
+	var request = AspNetConnector.addStudents(student);
+	request = AspNetConnector.removeClassFromStudent(student);
+	
+	request.onload = function() {
+	console.log(JSON.parse(request.response));
+    }
+	*/
+	// remove class from student
+	removeClassFromStudent : function(students) {
+			
+		var request = new XMLHttpRequest();
+        
+		request.open('POST', 'api/student/class/remove', false);
 		request.setRequestHeader('Content-type', 'application/json');
 		request.send(JSON.stringify(students));
 		
