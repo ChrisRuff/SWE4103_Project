@@ -42,7 +42,7 @@ export default function StudentHome() {
 			// check if student is already enrolled
 			var studentInClass = false;
 			for (var i=0; i < classListLength; i++) {
-				if (classList[i] == classFromCode) {
+				if (classList[i] === classFromCode) {
 					studentInClass = true;
 				}
 			}
@@ -245,12 +245,24 @@ export default function StudentHome() {
 	const handleRemove = () =>
 	{
 		if(StateManager.getSelectedClass() !== null && StateManager.getSelectedClass() !== "--") {
-			var currentClass = [{"className": StateManager.getSelectedClass()}]
-			AspNetConnector.removeClass(currentClass);
+			let test = StateManager.getStudent();
+			if(test !== null){
+				test = JSON.parse(AspNetConnector.getStudents([StateManager.getStudent()]).response)[0];
+				if (test.classes == null) {
+					setNoClasses(true);
+				}
+				else if (test.classes !== null) {
+					test.classes = [test.classes[0]];
+				}
+			}
+			AspNetConnector.removeClassFromStudent([test]);
 
-			setNoClasses(true)
-			StateManager.setSelectedClass("--");
-			setTitle("--");
+			if (test.classes.length === 0 ){
+				setNoClasses(true)
+			    StateManager.setSelectedClass("--");
+			    setTitle("--");
+			}
+			window.location.reload(false);
 		}
 		else 
 			alert("Please select a class!")
