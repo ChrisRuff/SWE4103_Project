@@ -246,15 +246,17 @@ export default function StudentHome() {
 	{
 		if(StateManager.getSelectedClass() !== null && StateManager.getSelectedClass() !== "--") {
 			let test = StateManager.getStudent();
+			var currentClass = [{"className": StateManager.getSelectedClass()}];
 			if(test !== null){
 				test = JSON.parse(AspNetConnector.getStudents([StateManager.getStudent()]).response)[0];
 				if (test.classes == null) {
 					setNoClasses(true);
 				}
 				else if (test.classes !== null) {
-					test.classes = [test.classes[0]];
+					test.classes = currentClass;
 				}
 			}
+
 			AspNetConnector.removeClassFromStudent([test]);
 
 			if (test.classes.length === 0 ){
