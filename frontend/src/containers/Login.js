@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
@@ -21,6 +21,23 @@ export default function Login() {
     password: "",
     account: "",
   });
+
+  var url_string = window.location.href;
+  var url = new URL(url_string);
+  let code = url.searchParams.get("code");
+  useEffect(() => {
+    if (code != null) {
+      handleLogout();
+      alert("You must be logged into a student account to access this link.");
+    }
+  },[]);
+
+  function handleLogout() {
+    userHasAuthenticated(false);
+		localStorage.removeItem('user');
+		localStorage.removeItem('type');
+		StateManager.wipe();
+  }
 
   const handleChange = (event) => {
     fields.account = event.target.value;  
@@ -87,6 +104,8 @@ export default function Login() {
 						localStorage.setItem('user', JSON.stringify(obj[0]));
 						localStorage.setItem('type', "prof");
             history.push("/InstructorHome"); 
+            
+            
           }
           else{
             onError("Invalid password or account selected");

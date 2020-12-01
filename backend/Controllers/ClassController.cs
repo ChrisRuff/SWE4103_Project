@@ -99,6 +99,21 @@ namespace backend
 		}
 
 		/*
+		 * Takes a object like [{"className": "CS2043", "height": 5, "width": 5}]
+		 */
+		[HttpPost, Route("api/class/edit")]
+		public List<ClassDTO> EditClassAPI(List<ClassDTO> classes)
+		{
+			for(int i = 0; i < classes.Count; i++)
+			{
+				classes[i].response = 
+					DatabaseConnector.Connector.EditClass(classes[i].className, classes[i].width, classes[i].height);
+
+			}
+			return classes;
+		}
+
+		/*
 		 * Takes a object like [{"className": "CS2043", "date": "Nov 24", "students": ["Chris Ruff"]}]
 		 */
 		[HttpPost, Route("api/class/add/attendance")]

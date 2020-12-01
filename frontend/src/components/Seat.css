@@ -48,6 +48,27 @@ button.reserved:focus {
   cursor: pointer;
   outline: none;
 }
+button.absent {
+  padding: 3px;
+  width: 100px;
+  height: 50px;
+  align-items: "center";
+  background-color: #f9dede;
+	outline-color: red;
+  outline-style: solid;
+}
+button.absent:hover {
+  background-color: #f9dede;
+  cursor: pointer;
+	outline-color: red;
+  outline-style: solid;
+}
+button.absent:focus {
+  background-color: #f9dede;
+  cursor: pointer;
+	outline-color: red;
+  outline-style: solid;
+}
 button.accessible {
   padding: 3px;
   width: 100px;

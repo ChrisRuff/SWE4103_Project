@@ -5,6 +5,9 @@ export var StateManager = {
 	classLayout: null,
 	selectedClass: "--",
 	selectedSeat: null,
+	trackingMode: false,
+	submitted: false,
+	absentSeats: [],
 	prof: null,
 	student: null,
 	x: 0,
@@ -13,15 +16,48 @@ export var StateManager = {
 	numCols: 0,
 	seats: [],
 	mandatoryStatus: null,
+	isEditing: null,
 	wipe() {
 		this.classLayout = null;
 		this.accountState = null;
 		this.selectedClass = "--";
 		this.prof = null;
+		this.submitted = false;
 		this.student = null;
 		this.numRows = 0;
 		this.numCols = 0;
+		this.trackingMode = false;
 		this.wipeSeats();
+	},
+	setSubmitted(s) {
+		this.submitted = s;
+	},
+	addAbsentSeat(seat)
+	{
+		this.absentSeats.push(seat.state.name);
+	},
+	getAbsentSeats()
+	{
+		return this.absentSeats;
+	},
+	removeAbsentSeat(seat)
+	{
+		for(let i = 0; i < this.absentSeats.length; ++i)
+		{
+			if(this.absentSeats[i].name == seat.name)
+			{
+				this.absentSeats.splice(i, 1);
+			}
+		}
+	},
+	isSubmitted() {
+		return this.submitted;
+	},
+	setTrackingMode(m) {
+		this.trackingMode = m;
+	},
+	getTrackingMode() {
+		return this.trackingMode;
 	},
 	setExampleData(data) {
 		this.exampleData = data;
@@ -62,11 +98,12 @@ export var StateManager = {
 	addSeat(x, y, seatType, seat) {
 		this.seats.push({"seatType": seatType, "x": x, "y": y, "seat": seat});
 
+
 		if(this.seats.length > this.numCols * this.numRows)
 			this.seats.pop(this.numCols * this.numRows);
 	},
 	changeSeatType(x, y, seatType) {
-		var seatLoc = y * this.numRows + x; 
+		var seatLoc = (this.numCols * y) + x; 
 		this.seats[seatLoc].seatType = seatType;
 	},
 	getSeat(x,y) {
@@ -103,8 +140,14 @@ export var StateManager = {
 	setRows(numRows) {
 		this.numRows = numRows;
 	},
+	getRows(){
+		return this.numRows;
+	},
 	setCols(numCols) {
 		this.numCols = numCols;
+	},
+	getCols(){
+		return this.numCols;
 	},
 	getSeats() {
 		return this.seats;
@@ -120,6 +163,12 @@ export var StateManager = {
 	},
 	getSelectedSeat() {
 		return this.selectedSeat;
+	},
+	getIsEditing(){
+		return this.isEditing;
+	},
+	setIsEditing(isEditing){
+		this.isEditing = isEditing; 
 	}
 
 }

@@ -63,6 +63,18 @@
   margin: auto;
 }
 
+.editSeatPlan {
+  margin: 0px 0px 15px 0px;
+}
+
+.editSeatPlan > button {
+  margin: 6px 0px 0px 0px;
+}
+
+.editSeatPlan > span {
+  margin: 15px;
+}
+
 .MuiInputBase-input {
   height: fit-content !important;
   font: message-box !important;

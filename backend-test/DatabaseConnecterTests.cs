@@ -246,7 +246,6 @@ namespace test
 
 			Assert.True(stephen.name == "Stephen Cole - Test");
 			Assert.True(stephen.email == "scole_test@unb.ca");
-			Assert.True(stephen.pass == "pass");
 
 			Assert.True(stephen.classes[0].className == "CS2043");
 			Assert.True(stephen.classes[0].seat.x == 1);
@@ -274,9 +273,31 @@ namespace test
 			string[] test2 = new string[] {"Stephen Cole", "Reid HURLBURT"};
 			var addedAttendance3 = DatabaseConnector.Connector.AddAttendance("Cool_Test_Class2", "Nov 26", test2);
 
+
 			Assert.True(addedAttendance);
 			Assert.True(addedAttendance2);
 			Assert.True(addedAttendance3);
+		}
+    
+		[Fact]
+		public void EditSeatPlan()
+		{
+			// Ensure there aren't any test classes out there 
+			while(DatabaseConnector.Connector.RemoveClass("Cool_Test_Class"));
+
+			DatabaseConnector.Connector.MakeClass("Cool_Test_Class", 5, 5); 
+
+			var cooltestclass = DatabaseConnector.Connector.GetClass("Cool_Test_Class");
+			Assert.True(cooltestclass.height == 5 && cooltestclass.width == 5);
+
+			Assert.True(DatabaseConnector.Connector.EditClass("Cool_Test_Class", 10, 10));
+
+			cooltestclass = DatabaseConnector.Connector.GetClass("Cool_Test_Class");
+			Console.WriteLine(cooltestclass.height);
+			Console.WriteLine(cooltestclass.width);
+			Assert.True(cooltestclass.height == 10 && cooltestclass.width == 10);
+
+
 		}
 	}
 }

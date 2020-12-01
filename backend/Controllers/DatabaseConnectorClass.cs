@@ -376,6 +376,7 @@ namespace backend
 		}
 		public bool AddAttendance(string className, string date, string[] students)
 		{
+			// Create a filter that will find the class with the given name
 			FilterDefinition<BsonDocument> query 
 				= Builders<BsonDocument>.Filter.Eq("name", className);
 
@@ -444,6 +445,31 @@ namespace backend
 				classes.FindOneAndReplace(query, foundClass);
 			}
 			return true;
+		}
+    
+		public bool EditClass(string className, int width, int height)
+		{
+			// Create a filter that will find the class with the given name
+			FilterDefinition<BsonDocument> query 
+				= Builders<BsonDocument>.Filter.Eq("name", className);
+
+
+			var foundClasses = classes.Find(query);
+			if(foundClasses.CountDocuments() <= 0)
+			{
+				return false;
+			}
+
+			// Create a update routine that will update a class 
+			UpdateDefinition<BsonDocument> update = 
+				Builders<BsonDocument>.Update.Set("height", height);
+			classes.UpdateOne(query, update);
+
+			update = 
+				Builders<BsonDocument>.Update.Set("width", width);
+			classes.UpdateOne(query, update);
+
+			return WipeSeats(className);
 		}
 	}
 }
