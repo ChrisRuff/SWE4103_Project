@@ -280,7 +280,7 @@ export default function InstructorHome() {
 		request.onload = async function() {
 			var response = await JSON.parse(request.response);
 			var url = window.location.href.split("/");
-			document.getElementById("link-field").value=`https://${url[2]}/StudentHome?code=${response[0].classCode}`;
+			document.getElementById("link-field").value=`https://${url[2]}/Login?code=${response[0].classCode}`;
 		}
 		setLinkShown(true);
 	}
