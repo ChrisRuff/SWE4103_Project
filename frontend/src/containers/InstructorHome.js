@@ -483,6 +483,7 @@ return (
 				<Button onClick={makeClass} variant="light" className="pull-right" style={{marginLeft: "15px"}}>Submit</Button>
 				<Button onClick={openAttendancePopup} variant="light" className="pull-right">Take Attendance</Button>
 			</div>
+			<h4 style={{marginLeft: '25px'}}>Hello {StateManager.getProf().name}</h4>
 		</div>
 		{ (noClasses === false) &&
 		<div>

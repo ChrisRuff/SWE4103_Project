@@ -246,7 +246,6 @@ namespace test
 
 			Assert.True(stephen.name == "Stephen Cole - Test");
 			Assert.True(stephen.email == "scole_test@unb.ca");
-			Assert.True(stephen.pass == "pass");
 
 			Assert.True(stephen.classes[0].className == "CS2043");
 			Assert.True(stephen.classes[0].seat.x == 1);

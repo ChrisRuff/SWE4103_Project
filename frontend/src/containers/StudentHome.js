@@ -246,6 +246,7 @@ export default function StudentHome() {
   return (
     <div className="StudentHome">
       <div className="layoutHeader">
+	  <h4 style={{marginLeft: '15px'}}>Hello {student.name}!</h4>
         <DropdownButton 
           title={StateManager.getSelectedClass()}
 		  id="classDropdown"
