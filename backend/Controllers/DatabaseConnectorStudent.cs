@@ -186,7 +186,6 @@ namespace backend
 			StudentDTO data = new StudentDTO();
 			data.name = student["name"].ToString();
 			data.email = student["email"].ToString();
-			data.pass = student["pass"].ToString();
 			ClassDTO[] classes = new ClassDTO[student["classes"].AsBsonArray.Count];
 
 			int idx = 0;
