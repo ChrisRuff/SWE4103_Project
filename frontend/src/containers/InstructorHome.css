@@ -143,3 +143,7 @@ button.AttendanceTitle {
 .MuiPickersClockPointer-thumb {
   border: 14px solid #cd5c5c !important;
 }
+
+.RosterTitle {
+  color: white !important;
+}
