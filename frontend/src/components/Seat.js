@@ -96,9 +96,12 @@ export default class Seat extends Component {
 					StateManager.changeSeatType(this.x, this.y, "available")
 					break;
 				default:
-					this.setState({seatType: "available"});
-					StateManager.changeSeatType(this.x, this.y, "available")
-					break;
+					if(window.confirm("Do you want to unreserve this seat") === true)
+					{
+						this.setState({seatType: "available"});
+						StateManager.changeSeatType(this.x, this.y, "available")
+						break;
+					}
 			} 
 		}
 		console.log(currentState);
