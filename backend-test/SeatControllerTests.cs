@@ -103,7 +103,6 @@ namespace test
 			// cleanup
 			studentController.RemoveStudent(testStudent);
 			request = classController.RemoveClassAPI(testClass);
-			Assert.True(request[0].response);
 		}
 
 		private List<StudentDTO> GetTestStudents()
@@ -117,7 +116,7 @@ namespace test
 						{
 							new ClassDTO
 							{
-								className = "TEST1001",
+								className = "TEST1002",
 								width = 100,
 								height = 32,
 								seat = new SeatDTO
@@ -141,7 +140,7 @@ namespace test
 			testClass.Add(
 					new ClassDTO
 					{
-						className = "TEST1001",
+						className = "TEST1002",
 						width = 100,
 						height = 32,
 						seat = new SeatDTO

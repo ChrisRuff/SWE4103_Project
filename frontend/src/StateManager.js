@@ -107,8 +107,6 @@ export var StateManager = {
 		this.seats[seatLoc].seatType = seatType;
 	},
 	getSeat(x,y) {
-		console.log("Seats");
-		console.log(this.seats);
 		for (var i=0; i<=this.seats.length; i++) {
 			if (this.seats[i].x === x && this.seats[i].y === y)
 				return this.seats[i].seat

@@ -75,6 +75,33 @@ namespace backend
 			}
 		}
 
+		public bool RemoveClassFromStudent(string email, string className)
+		{// Create a filter that finds the student
+			FilterDefinition<BsonDocument> query = 
+				Builders<BsonDocument>.Filter.Eq("email", email);
+
+			var studentsFound = students.Find(query);
+			if(studentsFound.CountDocuments() <= 0)
+			{
+				throw new System.Exception("Could not find student");
+			}
+			var student = studentsFound.First();
+			var classListStudent = student["classes"].AsBsonArray;
+
+			foreach (var classStudent in classListStudent)
+            {
+				if (classStudent["name"] == className)
+                {
+					classListStudent.Remove(classStudent);
+					UpdateDefinition<BsonDocument> update =
+						Builders<BsonDocument>.Update.Set("classes", classListStudent);
+					students.UpdateOne(query, update);
+					return true;
+                }
+            }
+			return false;
+		}
+
 		public bool AddClass(string studentEmail, string className)
 		{
 			// Create a filter that will find the student with the given email
