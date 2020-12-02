@@ -88,9 +88,9 @@ export default class StudentSeat extends Component {
 				this.state.original = this.state.seatType;
 				this.setState({seatType: "reserved"}); 
 				StateManager.changeSeatType(this.x, this.y, "reserved");
-			} else if(this.state.seatType === "reserved") {
-				this.setState({seatType: this.state.original});
-				StateManager.changeSeatType(this.x, this.y, this.state.original);
+			} else if(this.state.seatType === "reserved" && this.state.email == StateManager.getStudent().email) {
+				this.setState({seatType: "available"});
+				StateManager.changeSeatType(this.x, this.y, "available");
 			}
 			else {
 				return;
