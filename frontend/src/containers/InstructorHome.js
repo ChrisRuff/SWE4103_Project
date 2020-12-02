@@ -50,8 +50,8 @@ export default function InstructorHome() {
 	const [rosterPopup, setRosterPopup] = useState(false);
 	const [linkShown, setLinkShown] = useState(false);
 
-	let rosterStudents = [];
-	if (StateManager.getClassLayout() != null) {
+	let rosterStudents = null;
+	if(StateManager.getClassLayout() != null) {
 		rosterStudents = StateManager.getClassLayout().roster;
 	}
 
@@ -495,7 +495,11 @@ export default function InstructorHome() {
 	}
 
 	const openRosterPopup = () => {
-		setRosterPopup(true);
+		if(rosterStudents != null) {
+			setRosterPopup(true);
+		} else {
+			window.alert("Your current class does not have a roster!");
+		}
 	}
 
 	const useStyles1 = makeStyles((theme) => ({
