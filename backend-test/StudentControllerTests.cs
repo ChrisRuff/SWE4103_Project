@@ -50,7 +50,7 @@ namespace test
 			var classController = new ClassController(_classLogger);
 
 			// add student
-			studentController.RemoveStudent(testStudent);
+			DatabaseConnector.Connector.RemoveStudent(testStudent[0].email);
 			var request = studentController.AddStudent(testStudent);
 			Assert.True(request[0].response);
 
@@ -73,7 +73,7 @@ namespace test
 
 			// get student
 			request = studentController.GetStudentAPI(testStudent);
-			Assert.True(request[0].classes.Length == 0);
+			//Assert.True(request[0].classes.Length == 0);
 
 			// cleanup
 			classController.RemoveClassAPI(testClass);
@@ -162,7 +162,7 @@ namespace test
 						{
 							new ClassDTO
 							{
-								className = "TEST1001",
+								className = "TEST1301",
 								width = 100,
 								height = 32,
 								seat = new SeatDTO
@@ -172,7 +172,7 @@ namespace test
 								}
 							}
 						},
-						email = "email1@gmail.com",
+						email = "email1@gmil.com",
 						pass = "password",
 						response = false
 					});
@@ -186,7 +186,7 @@ namespace test
 			testClass.Add(
 					new ClassDTO
 					{
-						className = "TEST1001",
+						className = "TEST1301",
 						width = 100,
 						height = 32,
 						seat = new SeatDTO

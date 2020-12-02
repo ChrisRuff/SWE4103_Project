@@ -80,26 +80,48 @@ namespace backend
 			FilterDefinition<BsonDocument> query = 
 				Builders<BsonDocument>.Filter.Eq("email", email);
 
+			var filter = Builders<BsonDocument>.Filter;
+			FilterDefinition<BsonDocument> studentQuery =
+				filter.And(filter.Eq("rSeats.email", email), 
+				filter.Eq("name", className));
+			var foundClasses = classes.Find(studentQuery);
+			if(foundClasses.CountDocuments() > 0)
+			{
+				BsonArray oldVals = new BsonArray();
+				int idx = 0;
+				foreach(var i in foundClasses.First()["rSeats"].AsBsonArray)
+				{
+					if(i["email"].ToString() != email)
+					{
+						oldVals[idx] = i;
+						idx++;
+					}
+				}
+				UpdateDefinition<BsonDocument> classUpdate =
+					Builders<BsonDocument>.Update.Set("rSeats", oldVals);
+				
+				classes.UpdateOne(studentQuery, classUpdate);
+			}
+
 			var studentsFound = students.Find(query);
 			if(studentsFound.CountDocuments() <= 0)
 			{
 				throw new System.Exception("Could not find student");
 			}
 			var student = studentsFound.First();
-			var classListStudent = student["classes"].AsBsonArray;
 
-			foreach (var classStudent in classListStudent)
-            {
-				if (classStudent["name"] == className)
-                {
-					classListStudent.Remove(classStudent);
-					UpdateDefinition<BsonDocument> update =
-						Builders<BsonDocument>.Update.Set("classes", classListStudent);
-					students.UpdateOne(query, update);
-					return true;
-                }
-            }
-			return false;
+			BsonArray oldClasses = new BsonArray();
+			foreach (var classStudent in oldClasses)
+			{
+				if (classStudent["name"].ToString() != className)
+				{
+					oldClasses.Add(classStudent);
+				}
+			}
+			UpdateDefinition<BsonDocument> update =
+				Builders<BsonDocument>.Update.Set("classes", oldClasses);
+			students.UpdateOne(query, update);
+			return true;
 		}
 
 		public bool AddClass(string studentEmail, string className)
