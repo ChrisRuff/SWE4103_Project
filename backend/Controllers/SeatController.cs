@@ -100,6 +100,18 @@ namespace backend
 			}
 			return classDTOs;
 		}
+
+		[HttpPost, Route("api/class/seat/unreserve")]
+		public List<ClassDTO> UnReserveSeatAPI(List<ClassDTO> classDTOs)
+		{
+			for (int i = 0; i < classDTOs.Count; i++)
+			{
+				bool res = DatabaseConnector.Connector.UnReserveSeat(classDTOs[i].className,
+									classDTOs[i].seat.x, classDTOs[i].seat.y);
+				classDTOs[i].response = res;
+			}
+			return classDTOs;
+		}
 		[HttpPost, Route("api/class/seat/accessible")]
 		public List<ClassDTO> AccessibleSeatAPI(List<ClassDTO> classDTOs)
 		{
