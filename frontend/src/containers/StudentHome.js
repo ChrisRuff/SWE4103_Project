@@ -226,7 +226,13 @@ export default function StudentHome() {
 			if(StateManager.getSelectedSeat().x === reservedSeat.x && StateManager.getSelectedSeat().y === reservedSeat.y) {
 				response = window.confirm("Do you really want to unreserve this seat?");
 				if(response) {
-					// call back-end function for unreserving seat in the db
+					AspNetConnector.unReserveSeat([{
+						"className": StateManager.getSelectedClass(),
+						"seat": {
+							"x": StateManager.getSelectedSeat().x,
+							"y": StateManager.getSelectedSeat().y
+						}
+					}]);
 				}
 			} else {
 				window.alert("You have already reserved a seat for this class."); // the student has already reserved a seat
