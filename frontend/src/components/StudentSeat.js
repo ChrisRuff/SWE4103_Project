@@ -16,7 +16,8 @@ export default class StudentSeat extends Component {
 				seatType: "available",
 				original: "available",
 				email: "",
-				name: ""
+				name: "",
+				typeBeforeReserve = "available"
 			};
 		}
 		else if(props.name !== "")
@@ -26,7 +27,8 @@ export default class StudentSeat extends Component {
 				original: props.seatType,
 				email: props.email,
 				//displays only the first name & last name initial for privacy reasons
-				name: reg.exec(props.name) 
+				name: reg.exec(props.name),
+				typeBeforeReserve = props.seatType
 			};
 		}
 		else
@@ -35,7 +37,8 @@ export default class StudentSeat extends Component {
 				seatType: props.seatType,
 				original: props.seatType,
 				email: props.email,
-				name: props.name
+				name: props.name,
+				typeBeforeReserve = props.seatType
 			};
 		}
 		StateManager.incX();
@@ -50,7 +53,8 @@ export default class StudentSeat extends Component {
 			this.setState({
 				seatType: "available",
 				email: "",
-				name: ""
+				name: "",
+				typeBeforeReserve = "available"
 			});
 		}
 		else if(props.name !== "")
@@ -59,7 +63,8 @@ export default class StudentSeat extends Component {
 				seatType: props.seatType,
 				original: props.seatType,
 				email: props.email,
-				name: reg.exec(props.name) 
+				name: reg.exec(props.name),
+				typeBeforeReserve = props.seatType
 			};
 		}
 		else
@@ -67,7 +72,8 @@ export default class StudentSeat extends Component {
 			this.setState({
 				seatType: props.seatType,
 				email: props.email,
-				name: props.name === undefined ? "" : props.name
+				name: props.name === undefined ? "" : props.name,
+				typeBeforeReserve = props.seatType
 			});
 		}
 		StateManager.incX();
@@ -77,19 +83,22 @@ export default class StudentSeat extends Component {
 		StateManager.changeSeatType(this.x, this.y, "disabled")
 	}
 	reserve = () => {
+		this.typeBeforeReserve = this.state.seatType;
 		this.setState({seatType: "reserved"}); 
 		StateManager.changeSeatType(this.x, this.y, "reserved")
 	}
 
 	handleClick = () => {
-		
 		if(StateManager.getSelectedSeat() === null){
-		
 			if(this.state.seatType === "available" || this.state.seatType === "accessible"){
+				this.typeBeforeReserve = this.state.seatType;
 				this.setState({seatType: "reserved"}); 
 				StateManager.changeSeatType(this.x, this.y, "reserved");
+			} else if(this.state.seatType === "reserved") {
+				this.setState({seatType: this.typeBeforeReserve});
+				StateManager.changeSeatType(this.x, this.y, this.typeBeforeReserve);
 			}
-			else{
+			else {
 				return;
 			}
 		}
@@ -101,6 +110,7 @@ export default class StudentSeat extends Component {
 				return;
 			}
 			else if(this.state.seatType === "available" || this.state.seatType === "accessible"){
+				this.typeBeforeReserve = this.state.seatType;
 				this.setState({seatType: "reserved"}); 
 				StateManager.changeSeatType(this.x, this.y, "reserved");
 				StateManager.getSelectedSeat().setState({seatType: StateManager.getSelectedSeat().state.original});
