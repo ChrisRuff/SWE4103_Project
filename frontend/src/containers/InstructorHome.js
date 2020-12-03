@@ -11,6 +11,20 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Legend from "../components/Legend";
 import copy from 'copy-to-clipboard';
 
+// Material UI imports for roster view
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import StyledTableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import PropTypes from 'prop-types'
+import { useTheme } from '@material-ui/core/styles';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
+
 // Material UI imports for attendance view
 import ButtonMatUI from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -33,7 +47,13 @@ export default function InstructorHome() {
 	const history = useHistory();
 	const [attendancePopup, setAttendancePopup] = useState(false);
 	const [selectedDate, handleDateChange] = useState(new Date());
+	const [rosterPopup, setRosterPopup] = useState(false);
 	const [linkShown, setLinkShown] = useState(false);
+
+	let rosterStudents = null;
+	if(StateManager.getClassLayout() != null) {
+		rosterStudents = StateManager.getClassLayout().roster;
+	}
 
 	// If there is no prof object(not signed in) then return to the homepage
 	if(StateManager.getProf() === null)
@@ -461,11 +481,163 @@ export default function InstructorHome() {
 		markAbsents();
 		StateManager.setTrackingMode(false);
 		setAttendancePopup(false);
+		window.location.reload(false);
 	}
 
 	const Transition = React.forwardRef(function Transition(props, ref) {
 		return <Slide direction="up" ref={ref} {...props} />;
 	});
+
+	// columns is used for roster view
+	const columns = [
+		{ field: 'studentName', headerName: 'Student Name', width: 130 },
+		{ field: 'date', headerName: 'Date of Absence', width: 130 }
+	];
+
+	const closeRosterPopup = () => {
+		setRosterPopup(false);
+	}
+
+	const openRosterPopup = () => {
+		if(rosterStudents != null) {
+			setRosterPopup(true);
+		} else {
+			window.alert("Your current class does not have a roster!");
+		}
+	}
+
+	const useStyles1 = makeStyles((theme) => ({
+		root: {
+			flexShrink: 0,
+			marginLeft: theme.spacing(2.5),
+		},
+	}));
+
+	const useStyles2 = makeStyles({
+		table: {
+			minWidth: 500,
+		},
+	});
+
+	const classes = useStyles2();
+	const [page, setPage] = React.useState(0);
+	const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+	var emptyRows;
+	if(rosterStudents != null) {
+		emptyRows = rowsPerPage - Math.min(rowsPerPage, rosterStudents.length - page * rowsPerPage);
+	}
+
+	const translate = (parameter) => {
+		if(!parameter[0].includes(",")) {
+			// translate each day missed for each student
+			var tempDate = "";
+			for (let j = 0; j < parameter.length; j++) {
+				tempDate = parameter[j].split("/");
+				parameter[j] = tempDate[0];
+				parameter[j] = parameter[j].concat("/");
+				parameter[j] = parameter[j].concat(Number(tempDate[1]) + 1);
+				parameter[j] = parameter[j].concat("/");
+				parameter[j] = parameter[j].concat(tempDate[2]);
+				if (j != parameter.length - 1) {
+					parameter[j] = parameter[j].concat(", ");
+				}
+			}
+		}
+		return parameter;
+	}
+
+	const handleChangePage = (event, newPage) => {
+		setPage(newPage);
+	};
+
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
+	};
+
+	function TablePaginationActions(props) {
+		const classes = useStyles1();
+		const theme = useTheme();
+		const { count, page, rowsPerPage, onChangePage } = props;
+
+		const handleFirstPageButtonClick = (event) => {
+			onChangePage(event, 0);
+		};
+
+		const handleBackButtonClick = (event) => {
+			onChangePage(event, page - 1);
+		};
+
+		const handleNextButtonClick = (event) => {
+			onChangePage(event, page + 1);
+		};
+
+		const handleLastPageButtonClick = (event) => {
+			onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+		};
+
+		function LastPageIcon(props) {
+			return (
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z" /></svg>
+			);
+		}
+
+		function FirstPageIcon(props) {
+			return (
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z" /></svg>
+			);
+		}
+
+		function KeyboardArrowRight(props) {
+			return (
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z" /></svg>
+			);
+		}
+
+		function KeyboardArrowLeft(props) {
+			return (
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z" /></svg>
+			);
+		}
+
+		return (
+			<div className={classes.root}>
+				<IconButton
+					onClick={handleFirstPageButtonClick}
+					disabled={page === 0}
+					aria-label="first page"
+				>
+					{theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+				</IconButton>
+				<IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+					{theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+				</IconButton>
+				<IconButton
+					onClick={handleNextButtonClick}
+					disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+					aria-label="next page"
+				>
+					{theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+				</IconButton>
+				<IconButton
+					onClick={handleLastPageButtonClick}
+					disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+					aria-label="last page"
+				>
+					{theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+				</IconButton>
+			</div>
+		);
+	}
+
+	TablePaginationActions.propTypes = {
+		count: PropTypes.number.isRequired,
+		onChangePage: PropTypes.func.isRequired,
+		page: PropTypes.number.isRequired,
+		rowsPerPage: PropTypes.number.isRequired,
+	};
+
 
 return (
     <div>
@@ -483,8 +655,9 @@ return (
 				</DropdownButton>
 				<div style={{width: "15px", height: "auto", display: "inline-block"}}/>
 				<Button onClick={newClass} variant="light">Add</Button>
-				<Button onClick={makeClass} variant="light" className="pull-right" style={{marginLeft: "15px"}}>Submit</Button>
-				<Button onClick={openAttendancePopup} variant="light" className="pull-right">Take Attendance</Button>
+				<Button onClick={makeClass} variant="light" className="pull-right">Submit</Button>
+				<Button onClick={openAttendancePopup} variant="light" className="pull-right" style={{marginRight: "15px"}}>Take Attendance</Button>
+				<Button onClick={openRosterPopup} variant="light" className="pull-right" style={{marginRight: "15px"}}>View Roster</Button>
 			</div>
 			<h4 style={{marginLeft: '25px'}}>Hello {StateManager.getProf().name}</h4>
 		</div>
@@ -584,6 +757,59 @@ return (
 						<Legend/>
 					</div>
 				}
+			</Dialog>
+		}
+		{rosterPopup &&
+			<Dialog fullScreen open={rosterPopup} onClose={closeRosterPopup} TransitionComponent={Transition}>
+				<AppBar style={{ position: 'relative', color: '#cd5c5c' }}>
+					<Toolbar>
+						<IconButton className="RosterTitle" edge="start" onClick={closeRosterPopup} aria-label="close">
+							<CloseIcon />
+						</IconButton>
+						<Typography className="RosterTitle" variant="h3" style={{ marginLeft: '15px', flex: 1 }}>
+							Roster
+								</Typography>
+					</Toolbar>
+				</AppBar>
+				<TableContainer component={Paper}>
+					<Table>
+						<TableHead>
+							<TableRow>
+								<StyledTableCell style={{ fontSize: 30, color: 'black' }} align="left"><b>Student Name</b></StyledTableCell>
+								<StyledTableCell style={{ fontSize: 30, color: 'black' }} align="left"><b>Date of Absence</b></StyledTableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{(rowsPerPage > 0
+								? rosterStudents.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+								: rosterStudents
+							).map((row) => (
+								<TableRow key={row.studentName}>
+									<StyledTableCell style={{ fontSize: 30, color: 'black' }} align="left">{row.studentName}</StyledTableCell>
+									<StyledTableCell style={{ fontSize: 30, color: 'black' }} align="left">{translate(row.daysMissed)}</StyledTableCell>
+								</TableRow>
+							))}
+						</TableBody>
+						<TableFooter>
+							<TableRow>
+								<TablePagination
+									rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+									colSpan={2}
+									count={rosterStudents.length}
+									rowsPerPage={rowsPerPage}
+									page={page}
+									SelectProps={{
+										inputProps: { 'aria-label': 'rows per page' },
+										native: true,
+									}}
+									onChangePage={handleChangePage}
+									onChangeRowsPerPage={handleChangeRowsPerPage}
+									ActionsComponent={TablePaginationActions}
+								/>
+							</TableRow>
+						</TableFooter>
+					</Table>
+				</TableContainer>
 			</Dialog>
 		}
 	</div>

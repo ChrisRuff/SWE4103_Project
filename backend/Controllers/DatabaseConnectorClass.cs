@@ -293,6 +293,24 @@ namespace backend
 			MrClassy.width = foundClass["width"].ToInt32();
 			MrClassy.notificationFreq = foundClass["notificationFreq"].ToInt32();
 			
+			var roster = foundClass["roster"].AsBsonArray;
+			if(roster.Count != 0)
+			{
+				MrClassy.roster = new StudentRosterDTO[roster.Count];
+				for(int i = 0; i < roster.Count; ++i)
+				{
+					StudentRosterDTO rStudent = new StudentRosterDTO();
+					rStudent.studentName = (string)roster[i]["name"];
+					var daysMissed = roster[i]["daysMissed"].AsBsonArray;
+					rStudent.daysMissed = new string[daysMissed.Count];
+					for(int j = 0; j < daysMissed.Count; j++)
+						rStudent.daysMissed[j] = (string)daysMissed[j];
+					
+					MrClassy.roster[i] = rStudent;
+				}
+
+			}
+			
 			try { MrClassy.mandatory = foundClass["mandatory"].ToBoolean(); } catch(Exception e) {}
 
 			// Get disabled seats
@@ -471,6 +489,7 @@ namespace backend
 			}
 			return true;
 		}
+    
 		public bool EditClass(string className, int width, int height)
 		{
 			// Create a filter that will find the class with the given name
