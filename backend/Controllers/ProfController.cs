@@ -65,14 +65,21 @@ namespace backend
 		}
 
 		[HttpPost, Route("api/prof/login")]
-        public List<ProfDTO> LoginProf(List<ProfDTO> profs)
-        {
-            for (int i = 0; i < profs.Count; i++)
-            {
-                bool res = DatabaseConnector.Connector.CheckPassProf(profs[i].email, profs[i].pass);
-                profs[i].response = res;
-            }
-            return profs;
-        }
+		public List<ProfDTO> LoginProf(List<ProfDTO> profs)
+		{
+			for (int i = 0; i < profs.Count; i++)
+			{
+				bool res = DatabaseConnector.Connector.CheckPassProf(profs[i].email, profs[i].pass);
+				if(res)
+				{
+					ProfDTO prof = DatabaseConnector.Connector.GetProf(profs[i].email);
+					profs[i].name = prof.name;
+					profs[i].classes = prof.classes;
+					profs[i].email = prof.email;
+				}
+				profs[i].response = res;
+			}
+			return profs;
+		}
 	}
 }

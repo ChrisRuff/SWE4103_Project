@@ -55,11 +55,12 @@ namespace test
 			var classController = new ClassController(_classLogger);
 
 			// attempt to disable non existent seat
+			DatabaseConnector.Connector.RemoveClass(testClass[0].className);
+
 			var request = seatController.DisableSeatAPI(testClass);
 			Assert.False(request[0].response);
 
 			// add class
-			DatabaseConnector.Connector.RemoveClass(testClass[0].className);
 			request = classController.MakeClassAPI(testClass);
 			Assert.True(request[0].response);
 
@@ -75,10 +76,17 @@ namespace test
 		public void ReserveSeat()
 		{
 			var testClass = GetTestClass();
+			var testStudent = GetTestStudents();
 			var seatController = new SeatController(_seatLogger);
+			var studentController = new StudentController(_studentLogger);
 			var classController = new ClassController(_classLogger);
 
 			DatabaseConnector.Connector.RemoveClass(testClass[0].className);
+
+			// add student
+			studentController.RemoveStudent(testStudent);
+			var request2 = studentController.AddStudent(testStudent);
+			Assert.True(request2[0].response);
 
 			// add class
 			var request = classController.MakeClassAPI(testClass);
@@ -93,8 +101,8 @@ namespace test
 			Assert.False(request[0].response);
 
 			// cleanup
+			studentController.RemoveStudent(testStudent);
 			request = classController.RemoveClassAPI(testClass);
-			Assert.True(request[0].response);
 		}
 
 		private List<StudentDTO> GetTestStudents()
@@ -108,7 +116,7 @@ namespace test
 						{
 							new ClassDTO
 							{
-								className = "TEST1001",
+								className = "TEST1002",
 								width = 100,
 								height = 32,
 								seat = new SeatDTO
@@ -132,13 +140,15 @@ namespace test
 			testClass.Add(
 					new ClassDTO
 					{
-						className = "TEST1001",
+						className = "TEST1002",
 						width = 100,
 						height = 32,
 						seat = new SeatDTO
 						{
 							x = 5,
-							y = 10
+							y = 10,
+							email = "email@email.com"
+
 						}
 					});
 

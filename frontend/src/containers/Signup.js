@@ -56,23 +56,32 @@ export default function Signup() {
     event.preventDefault();
     setIsLoading(true);
     try {
+			var newUser = null;
       if(fields.account==="student"){
-        const newUser = await AspNetConnector.addStudents([{
-          "studentName": fields.name,
-          "email": fields.email,
-          "pass": hash,
-        }]);
-      }
-      else{
-        const newUser = await AspNetConnector.addProf([{
+        newUser = await AspNetConnector.addStudents([{
           "name": fields.name,
           "email": fields.email,
           "pass": hash,
         }]);
       }
-      setNewUser(newUser);
-      userHasAuthenticated(true);
-      history.push("/login");
+      else{
+        newUser = await AspNetConnector.addProf([{
+          "name": fields.name,
+          "email": fields.email,
+          "pass": hash,
+        }]);
+      }
+			if(!newUser[0].response)
+			{
+				alert("Could not create account, try using a different email");
+				window.location.reload(false);
+			}
+			else
+			{
+				setNewUser(newUser);
+				userHasAuthenticated(true);
+				history.push("/login");
+			}
     } catch (e) {
       onError(e);
       setIsLoading(false);

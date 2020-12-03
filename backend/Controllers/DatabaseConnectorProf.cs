@@ -112,5 +112,32 @@ namespace backend
 			}
 			return classes;
 		}
+		public ProfDTO GetProf(string email)
+		{
+			FilterDefinition<BsonDocument> query = 
+				Builders<BsonDocument>.Filter.Eq("email", email);
+
+			var profs_found = profs.Find(query);
+			if(profs_found.CountDocuments() <= 0)
+			{
+				throw new System.Exception("Could not find prof");
+			}
+			var prof = profs_found.First();
+			ProfDTO data = new ProfDTO();
+			data.name = prof["name"].ToString();
+			data.email = prof["email"].ToString();
+			ClassDTO[] classes = new ClassDTO[prof["classes"].AsBsonArray.Count];
+
+			int idx = 0;
+			foreach(var i in prof["classes"].AsBsonArray)
+			{
+				var c = new ClassDTO();
+				c.className = i["name"].ToString();
+				classes[idx] = c;
+				idx++;
+			}
+			data.classes = classes;
+			return data;
+		}
 	}
 }
