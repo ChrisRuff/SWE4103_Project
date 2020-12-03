@@ -772,8 +772,8 @@ return (
 					<Table>
 						<TableHead>
 							<TableRow>
-								<StyledTableCell style={{ fontSize: 30, color: 'black' }} align="left">Student Name</StyledTableCell>
-								<StyledTableCell style={{ fontSize: 30, color: 'black' }} align="left">Date of Absence</StyledTableCell>
+								<StyledTableCell style={{ fontSize: 30, color: 'black' }} align="left"><b>Student Name</b></StyledTableCell>
+								<StyledTableCell style={{ fontSize: 30, color: 'black' }} align="left"><b>Date of Absence</b></StyledTableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -782,8 +782,8 @@ return (
 								: rosterStudents
 							).map((row) => (
 								<TableRow key={row.studentName}>
-									<StyledTableCell style={{ fontSize: 30, color: 'gray' }} align="left">{row.studentName}</StyledTableCell>
-									<StyledTableCell style={{ fontSize: 30, color: 'gray' }} align="left">{row.daysMissed}</StyledTableCell>
+									<StyledTableCell style={{ fontSize: 30, color: 'black' }} align="left">{row.studentName}</StyledTableCell>
+									<StyledTableCell style={{ fontSize: 30, color: 'black' }} align="left">{row.daysMissed}</StyledTableCell>
 								</TableRow>
 							))}
 						</TableBody>
