@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 import "./Seat.css";
 import {StateManager} from "../StateManager.js"
+import { AspNetConnector } from "../AspNetConnector.js";
 
 export default class Seat extends Component {
 	constructor(props) {
@@ -98,6 +99,11 @@ export default class Seat extends Component {
 				default:
 					if(window.confirm("Do you want to unreserve this seat") === true)
 					{
+						AspNetConnector.unReserveSeat([{
+							"className": StateManager.getSelectedClass(), 
+							"seat": {"x": this.x, "y": this.y 
+							}}]);
+
 						this.setState({seatType: "available"});
 						StateManager.changeSeatType(this.x, this.y, "available")
 						break;
