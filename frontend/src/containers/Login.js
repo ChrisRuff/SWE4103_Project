@@ -27,8 +27,13 @@ export default function Login() {
   let code = url.searchParams.get("code");
   useEffect(() => {
     if (code != null) {
-      handleLogout();
-      alert("You must be logged into a student account to access this link.");
+      if (localStorage.getItem('type') != 'student') {
+        handleLogout();
+        alert("You must be logged into a student account to access this link.");
+      }
+      else {
+        history.push(`/StudentHome?code=${code}`);
+      }
     }
   },[]);
 

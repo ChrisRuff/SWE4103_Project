@@ -56,10 +56,10 @@ export default function InstructorHome() {
 	}
 
 	// If there is no prof object(not signed in) then return to the homepage
-	if(StateManager.getProf() == null)
+	if(StateManager.getProf() === null)
 	{
 		StateManager.setProf(JSON.parse(localStorage.getItem('user')));
-		if(StateManager.getProf() == null)
+		if(StateManager.getProf() === null)
 		{
 			history.push("/");
 		}
@@ -104,7 +104,7 @@ export default function InstructorHome() {
     return layout;
 	};
 
-	const [layout, setLayout] = useState(StateManager.getClassLayout() == null ? createLayout(5,5) : StateManager.getClassLayout());
+	const [layout, setLayout] = useState(StateManager.getClassLayout() === null ? createLayout(5,5) : StateManager.getClassLayout());
 	const loadLayout = (classDTO) => {
 		StateManager.wipeSeats();
 		StateManager.setRows(classDTO.height);
@@ -195,7 +195,7 @@ export default function InstructorHome() {
 		var cols;
 		var rows;
 
-		if(layout[0].props == undefined)
+		if(layout[0].props === undefined)
 		{
 			cols = layout[0][0].props.children.props.children[0].props.children.length;
 			rows = layout[0][0].props.children.props.children.length;
@@ -355,9 +355,12 @@ export default function InstructorHome() {
 			var currentClass = [{"className": StateManager.getSelectedClass()}]
 			AspNetConnector.removeClass(currentClass);
 
-			setNoClasses(true)
-			StateManager.setSelectedClass("--");
-			setTitle("--");
+			if (classList.length === 0 ){
+				setNoClasses(true)
+			    StateManager.setSelectedClass("--");
+			    setTitle("--");
+			}
+			window.location.reload(false);
 		}
 		else 
 			alert("Please select a class!")
@@ -399,7 +402,7 @@ export default function InstructorHome() {
 	const changeSize = () =>
 	{
 		// Check if the user has entered a new row and column number
-		if(StateManager.getRows() == rowNum && StateManager.getCols() == colNum) {
+		if(StateManager.getRows() === rowNum && StateManager.getCols() === colNum) {
 			window.alert("Please enter a new row and column number.");
 		} else {
 			// Confirm user's change
@@ -420,7 +423,7 @@ export default function InstructorHome() {
 	const handleRowTextFieldChange = x => {
 		if(isNumeric(x.target.value))
 			rowNum = x.target.value;
-		else if (x.target.value != "")
+		else if (x.target.value !== "")
 		{
 			x.target.value = "";
 			window.alert("Please enter only numeric values!")
@@ -429,7 +432,7 @@ export default function InstructorHome() {
 	const handleColTextFieldChange = x => {
 		if(isNumeric(x.target.value))
 			colNum = x.target.value;
-		else if (x.target.value != "")
+		else if (x.target.value !== "")
 		{
 			x.target.value = "";
 			window.alert("Please enter only numeric values!")

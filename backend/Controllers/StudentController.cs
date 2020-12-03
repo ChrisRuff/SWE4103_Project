@@ -59,8 +59,22 @@ namespace backend
 		}
 		return students;
 	  }
-	  
-	  [HttpPost, Route("api/student/get")]
+
+		[HttpPost, Route("api/student/class/remove")]
+		public List<StudentDTO> RemoveClassFromStudent(List<StudentDTO> students)
+		{
+			for (int i = 0; i < students.Count; i++)
+			{
+				for (int j = 0; j < students[i].classes.Length; j++)
+				{
+					bool res = DatabaseConnector.Connector.RemoveClassFromStudent(students[i].email, students[i].classes[j].className);
+					students[i].response = res;
+                }
+			}
+			return students;
+		}
+
+		[HttpPost, Route("api/student/get")]
 	  public List<StudentDTO> GetStudentAPI(List<StudentDTO> students)
 	  {
 		for (int i = 0; i < students.Count; i++)
