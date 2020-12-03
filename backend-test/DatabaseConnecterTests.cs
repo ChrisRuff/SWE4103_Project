@@ -296,5 +296,19 @@ namespace test
 
 
 		}
+		[Fact]
+		public void UnReserveSeat()
+		{
+			DatabaseConnector.Connector.RemoveClass("CS2043");
+
+			Assert.True(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
+			Assert.False(DatabaseConnector.Connector.MakeClass("CS2043", 5, 5));
+
+			DatabaseConnector.Connector.AddStudent("Tester", "scole_test@unb.ca", "password");
+
+			Assert.True(DatabaseConnector.Connector.ReserveSeat("CS2043", 1, 1, "scole_test@unb.ca"));
+			Assert.True(DatabaseConnector.Connector.UnReserveSeat("CS2043", 1, 1));
+			Assert.False(DatabaseConnector.Connector.UnReserveSeat("CS2043", 1, 1));
+		}
 	}
 }

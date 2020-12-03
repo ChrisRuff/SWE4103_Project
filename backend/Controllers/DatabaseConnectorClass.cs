@@ -135,6 +135,49 @@ namespace backend
 
 			return true;
 		}
+		public bool UnReserveSeat(string className, int x, int y)
+		{
+			// Create a filter that will find the student with the given email
+			FilterDefinition<BsonDocument> query 
+				= Builders<BsonDocument>.Filter.Eq("name", className);
+
+
+			var foundClasses = classes.Find(query);
+			if(foundClasses.CountDocuments() <= 0)
+			{
+				return false;
+			}
+			var foundClass = foundClasses.First();
+			if(foundClass["width"] < x || foundClass["height"] < y)
+			{
+				return false;
+			}
+			var seats = new BsonArray();
+			var worked = false;
+			foreach(var i in foundClass["rSeats"].AsBsonArray)
+			{
+				if(i["x"] != x && i["y"] != y)
+				{
+					seats.Add(i);
+				}
+				else
+				{
+					worked = true;
+				}
+			}
+			if(!worked)
+			{
+				return false;
+			}
+
+			// Create a update routine that will add a class 
+			// (with absents field to the student document)
+			UpdateDefinition<BsonDocument> update = 
+				Builders<BsonDocument>.Update.Set("rSeats", seats);
+			classes.UpdateOne(foundClass, update);
+
+			return true;
+		}
 		public List<String> GetAllClasses()
 		{
 			List<String> cls = new List<String>();

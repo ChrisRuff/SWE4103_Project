@@ -157,7 +157,7 @@ namespace test
 			testStudents.Add(
 					new StudentDTO
 					{
-						name = "Test Student",
+						name = "Tes Student",
 						classes = new ClassDTO[]
 						{
 							new ClassDTO

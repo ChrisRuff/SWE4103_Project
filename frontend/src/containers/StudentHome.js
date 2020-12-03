@@ -209,10 +209,12 @@ export default function StudentHome() {
 
 		// check whether the student has already reserved a seat
 		let alreadyReservedSeat = false;
+		let reservedSeat = null;
 		let seats = StateManager.getSeats();
 		for(let i = 0; i < seats.length; i++) {
 			if(seats[i].seat.state.email === StateManager.getStudent().email) {
 				alreadyReservedSeat = true;
+				reservedSeat = seats[i];
 				break;
 			}
 		}
@@ -221,9 +223,22 @@ export default function StudentHome() {
 		if(StateManager.getSelectedSeat() === null){
 			window.alert("Please select a seat to reserve.");
 		} else if(alreadyReservedSeat) {
-			window.alert("You have already reserved a seat for this class."); // the student has already reserved a seat
-			StateManager.getSelectedSeat().setState({seatType: StateManager.getSelectedSeat().state.original}); // change color of clicked seat back to unreserved
-			StateManager.setSelectedSeat(null);
+			if(StateManager.getSelectedSeat().x === reservedSeat.x && StateManager.getSelectedSeat().y === reservedSeat.y) {
+				response = window.confirm("Do you really want to unreserve this seat?");
+				if(response) {
+					AspNetConnector.unReserveSeat([{
+						"className": StateManager.getSelectedClass(),
+						"seat": {
+							"x": StateManager.getSelectedSeat().x,
+							"y": StateManager.getSelectedSeat().y
+						}
+					}]);
+				}
+			} else {
+				window.alert("You have already reserved a seat for this class."); // the student has already reserved a seat
+				StateManager.getSelectedSeat().setState({seatType: StateManager.getSelectedSeat().state.original}); // change color of clicked seat back to unreserved
+				StateManager.setSelectedSeat(null);
+			}
 		} else {
 			response = window.confirm("Do you really want to reserve this seat?");
 

@@ -500,5 +500,16 @@ export var AspNetConnector = {
 		if (request.status === 200) {
 			return JSON.parse(request.response);
 		}
+	},
+	unReserveSeat: function(classes) {
+		var request = new XMLHttpRequest();
+
+		request.open('POST', 'api/class/seat/unreserve', false);
+		request.setRequestHeader('Content-type', 'application/json');
+		request.send(JSON.stringify(classes));
+
+		if (request.status === 200) {
+			return JSON.parse(request.response);
+		}
 	}
 }
