@@ -529,7 +529,7 @@ export default function InstructorHome() {
 
 		// translate each day missed for each student
 		var tempDate = "";
-		for(let i = 0; i < rosterStudents.length; i++) {
+		for(let i = 0; i < rosterStudents.length && rosterPopup === true; i++) {
 			for(let j = 0; j < rosterStudents[i].daysMissed.length; j++) {
 				tempDate = rosterStudents[i].daysMissed[j].split("/");
 				rosterStudents[i].daysMissed[j] = tempDate[0];
