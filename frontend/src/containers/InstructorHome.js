@@ -481,6 +481,7 @@ export default function InstructorHome() {
 		markAbsents();
 		StateManager.setTrackingMode(false);
 		setAttendancePopup(false);
+		window.location.reload(false);
 	}
 
 	const Transition = React.forwardRef(function Transition(props, ref) {
