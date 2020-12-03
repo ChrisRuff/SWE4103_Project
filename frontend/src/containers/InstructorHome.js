@@ -526,22 +526,23 @@ export default function InstructorHome() {
 	var emptyRows;
 	if(rosterStudents != null) {
 		emptyRows = rowsPerPage - Math.min(rowsPerPage, rosterStudents.length - page * rowsPerPage);
+	}
 
+	const translate = (parameter) => {
 		// translate each day missed for each student
 		var tempDate = "";
-		for(let i = 0; i < rosterStudents.length && rosterPopup === true && !rosterStudents[0].daysMissed[0].includes(","); i++) {
-			for(let j = 0; j < rosterStudents[i].daysMissed.length; j++) {
-				tempDate = rosterStudents[i].daysMissed[j].split("/");
-				rosterStudents[i].daysMissed[j] = tempDate[0];
-				rosterStudents[i].daysMissed[j] = rosterStudents[i].daysMissed[j].concat("/");
-				rosterStudents[i].daysMissed[j] = rosterStudents[i].daysMissed[j].concat(Number(tempDate[1]) + 1);
-				rosterStudents[i].daysMissed[j] = rosterStudents[i].daysMissed[j].concat("/");
-				rosterStudents[i].daysMissed[j] = rosterStudents[i].daysMissed[j].concat(tempDate[2]);
-				if(j != rosterStudents[i].daysMissed.length - 1) {
-					rosterStudents[i].daysMissed[j] = rosterStudents[i].daysMissed[j].concat(", ");
-				}
+		for (let j = 0; j < parameter.length; j++) {
+			tempDate = parameter[j].split("/");
+			parameter[j] = tempDate[0];
+			parameter[j] = parameter[j].concat("/");
+			parameter[j] = parameter[j].concat(Number(tempDate[1]) + 1);
+			parameter[j] = parameter[j].concat("/");
+			parameter[j] = parameter[j].concat(tempDate[2]);
+			if (j != parameter.length - 1) {
+				parameter[j] = parameter[j].concat(", ");
 			}
 		}
+		return parameter;
 	}
 
 	const handleChangePage = (event, newPage) => {
@@ -783,7 +784,7 @@ return (
 							).map((row) => (
 								<TableRow key={row.studentName}>
 									<StyledTableCell style={{ fontSize: 30, color: 'black' }} align="left">{row.studentName}</StyledTableCell>
-									<StyledTableCell style={{ fontSize: 30, color: 'black' }} align="left">{row.daysMissed}</StyledTableCell>
+									<StyledTableCell style={{ fontSize: 30, color: 'black' }} align="left">{translate(row.daysMissed)}</StyledTableCell>
 								</TableRow>
 							))}
 						</TableBody>
