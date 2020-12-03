@@ -778,7 +778,10 @@ return (
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{rosterStudents.map((row) => (
+							{(rowsPerPage > 0
+								? rosterStudents.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+								: rosterStudents
+							).map((row) => (
 								<TableRow key={row.studentName}>
 									<StyledTableCell style={{ fontSize: 30, color: 'gray' }} align="left">{row.studentName}</StyledTableCell>
 									<StyledTableCell style={{ fontSize: 30, color: 'gray' }} align="left">{row.daysMissed}</StyledTableCell>
@@ -789,7 +792,7 @@ return (
 							<TableRow>
 								<TablePagination
 									rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-									colSpan={3}
+									colSpan={2}
 									count={rosterStudents.length}
 									rowsPerPage={rowsPerPage}
 									page={page}
