@@ -7,7 +7,6 @@ import { StateManager } from "../StateManager.js";
 import Seat from "../components/Seat.js";
 import { useHistory } from "react-router-dom";
 import { TextField } from "@material-ui/core";
-import InputAdornment from '@material-ui/core/InputAdornment';
 import Legend from "../components/Legend";
 import copy from 'copy-to-clipboard';
 
@@ -191,7 +190,6 @@ export default function InstructorHome() {
 		{
 			return;
 		}
-
 		var cols;
 		var rows;
 
@@ -216,7 +214,7 @@ export default function InstructorHome() {
 		addSeats();
 		StateManager.setSubmitted(true);
 	}
-
+	
 	const addSeats = () => {
 		var currentLayout = StateManager.getSeats();
 		AspNetConnector.wipeSeats([{"className": title}]);
@@ -638,7 +636,6 @@ export default function InstructorHome() {
 		rowsPerPage: PropTypes.number.isRequired,
 	};
 
-
 return (
     <div>
 		<div className="layoutHeader">
@@ -668,33 +665,7 @@ return (
 				<Legend/>
 			</div>
 			<div className="layoutFooter">
-				{ (editing === false || editing === null) && 
-				<Button onClick={showEditing} variant="light">Edit Seat Plan</Button>
-				}
-				{ (editing === true) &&
-				<div className="editSeatPlan">
-					<Button onClick={changeSize} variant="light">Apply</Button>
-					<span>
-						<TextField
-							variant="outlined"
-							onChange={handleRowTextFieldChange}
-							InputProps={{
-								endAdornment: <InputAdornment position="end">Row(s)</InputAdornment>
-							}}
-						/>
-					</span>
-					<span>
-						<TextField
-							variant="outlined"
-							onChange={handleColTextFieldChange}
-							InputProps={{
-								endAdornment: <InputAdornment position="end">Col(s)</InputAdornment>
-							}}
-						/>
-					</span>
-					<Button onClick={cancelEditSeatPlan} variant="light">X</Button>
-				</div>
-				}
+				<Button onClick={directToEditSeatPlanPage} variant="light">Edit Seat Plan</Button>
 				<DropdownButton 
 						onSelect={moreOptions.bind(this)}
 						title="More Options..."
@@ -716,7 +687,7 @@ return (
         style={{width: '400px', height: 'auto'}}
         defaultValue=""
         InputProps={{
-        	readOnly: true,
+          readOnly: true,
         }}
         />
 		{
