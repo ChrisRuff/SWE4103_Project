@@ -526,6 +526,22 @@ export default function InstructorHome() {
 	var emptyRows;
 	if(rosterStudents != null) {
 		emptyRows = rowsPerPage - Math.min(rowsPerPage, rosterStudents.length - page * rowsPerPage);
+
+		// translate each day missed for each student
+		var tempDate = "";
+		for(let i = 0; i < rosterStudents.length; i++) {
+			for(let j = 0; j < rosterStudents[i].daysMissed.length; j++) {
+				tempDate = rosterStudents[i].daysMissed[j].split("/");
+				rosterStudents[i].daysMissed[j] = tempDate[0];
+				rosterStudents[i].daysMissed[j] = rosterStudents[i].daysMissed[j].concat("/");
+				rosterStudents[i].daysMissed[j] = rosterStudents[i].daysMissed[j].concat(Number(tempDate[1]) + 1);
+				rosterStudents[i].daysMissed[j] = rosterStudents[i].daysMissed[j].concat("/");
+				rosterStudents[i].daysMissed[j] = rosterStudents[i].daysMissed[j].concat(tempDate[2]);
+				if(j != rosterStudents[i].daysMissed.length - 1) {
+					rosterStudents[i].daysMissed[j] = rosterStudents[i].daysMissed[j].concat(", ");
+				}
+			}
+		}
 	}
 
 	const handleChangePage = (event, newPage) => {
