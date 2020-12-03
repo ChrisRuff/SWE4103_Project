@@ -496,7 +496,6 @@ export default function InstructorHome() {
 
 	const closeRosterPopup = () => {
 		setRosterPopup(false);
-		window.location.reload(false); // TODO: this is not a real fix, it is only a temporary bandaid
 	}
 
 	const openRosterPopup = () => {
@@ -530,7 +529,7 @@ export default function InstructorHome() {
 
 		// translate each day missed for each student
 		var tempDate = "";
-		for(let i = 0; i < rosterStudents.length && rosterPopup === true; i++) {
+		for(let i = 0; i < rosterStudents.length && rosterPopup === true && !rosterStudents[0].daysMissed[0].includes(","); i++) {
 			for(let j = 0; j < rosterStudents[i].daysMissed.length; j++) {
 				tempDate = rosterStudents[i].daysMissed[j].split("/");
 				rosterStudents[i].daysMissed[j] = tempDate[0];
