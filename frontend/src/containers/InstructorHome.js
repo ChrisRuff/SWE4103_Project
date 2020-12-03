@@ -529,17 +529,19 @@ export default function InstructorHome() {
 	}
 
 	const translate = (parameter) => {
-		// translate each day missed for each student
-		var tempDate = "";
-		for (let j = 0; j < parameter.length; j++) {
-			tempDate = parameter[j].split("/");
-			parameter[j] = tempDate[0];
-			parameter[j] = parameter[j].concat("/");
-			parameter[j] = parameter[j].concat(Number(tempDate[1]) + 1);
-			parameter[j] = parameter[j].concat("/");
-			parameter[j] = parameter[j].concat(tempDate[2]);
-			if (j != parameter.length - 1) {
-				parameter[j] = parameter[j].concat(", ");
+		if(!parameter[0].includes(",")) {
+			// translate each day missed for each student
+			var tempDate = "";
+			for (let j = 0; j < parameter.length; j++) {
+				tempDate = parameter[j].split("/");
+				parameter[j] = tempDate[0];
+				parameter[j] = parameter[j].concat("/");
+				parameter[j] = parameter[j].concat(Number(tempDate[1]) + 1);
+				parameter[j] = parameter[j].concat("/");
+				parameter[j] = parameter[j].concat(tempDate[2]);
+				if (j != parameter.length - 1) {
+					parameter[j] = parameter[j].concat(", ");
+				}
 			}
 		}
 		return parameter;
