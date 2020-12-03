@@ -496,6 +496,7 @@ export default function InstructorHome() {
 
 	const closeRosterPopup = () => {
 		setRosterPopup(false);
+		window.location.reload(false); // TODO: this is not a real fix, it is only a temporary bandaid
 	}
 
 	const openRosterPopup = () => {
